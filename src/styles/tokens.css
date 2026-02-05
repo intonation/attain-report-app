@@ -1,0 +1,157 @@
+/* =====================================
+   DESIGN TOKENS
+   Based on Attain Design System
+   ===================================== */
+
+:root {
+  /* Core Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-dark: #0d243b;
+
+  /* Grey Ramp */
+  --color-grey-dark: #e0e0e0;
+  --color-grey-mid: #e2e2e2;
+  --color-grey-light: #f5f3f1;
+
+  /* Accent Colors */
+  --color-accent: #248790;
+  --color-accent-subtle: rgba(36, 135, 144, 0.1);
+
+  /* Semantic Aliases */
+  --color-canvas: var(--color-grey-light);
+  --color-paper: var(--color-white);
+  --color-text: var(--color-dark);
+  --color-text-muted: #64748b;
+  --color-border: var(--color-grey-mid);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Font Sizes */
+  --font-size-h1: 2rem;
+  --font-size-h2: 1.5rem;
+  --font-size-h3: 1.25rem;
+  --font-size-h4: 1.125rem;
+  --font-size-body: 0.875rem;
+  --font-size-small: 0.8125rem;
+  --font-size-xsmall: 0.75rem;
+
+  /* Line Heights */
+  --line-height-h1: 2.5rem;
+  --line-height-h2: 2rem;
+  --line-height-h3: 1.75rem;
+  --line-height-body: 1.5rem;
+  --line-height-small: 1.25rem;
+
+  /* Spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+
+  /* Layout */
+  --sidebar-width: 220px;
+  --sidebar-width-collapsed: 56px;
+  --right-column-width: 280px;
+  --main-content-max-width: 680px;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  background-color: var(--color-canvas);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.fade-in-delay-1 { animation-delay: 0.05s; }
+.fade-in-delay-2 { animation-delay: 0.1s; }
+.fade-in-delay-3 { animation-delay: 0.15s; }
+.fade-in-delay-4 { animation-delay: 0.2s; }
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-grey-light) 25%,
+    var(--color-grey-mid) 50%,
+    var(--color-grey-light) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Typewriter cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0; }
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

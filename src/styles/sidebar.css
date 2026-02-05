@@ -1,0 +1,133 @@
+.sidebarContainer {
+  width: 280px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.sidebarContainer.collapsed {
+  width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebarLogo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 16px;
+}
+
+.sidebarLogoIcon {
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-dark);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.sidebarLogoText {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+.sidebarHeader {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 16px 0 8px;
+  padding: 0 10px;
+  min-height: 16px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebarHeader.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 150ms ease;
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+  text-align: left;
+}
+
+.sidebarItem.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sidebarItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.sidebarItem.active {
+  background-color: rgba(0, 0, 0, 0.06);
+  font-weight: 500;
+}
+
+.sidebarItem svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.sidebarCollapseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #e5e5e5;
+  background: white;
+  cursor: pointer;
+  margin-left: auto;
+  transition: background-color 150ms ease;
+}
+
+.sidebarCollapseBtn:hover {
+  background-color: #f0f0f0;
+}
+
+.sidebarTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
