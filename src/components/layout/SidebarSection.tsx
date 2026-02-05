@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ScrambleHeading } from "../primitives/ScrambleHeading";
 
 type Item = {
   id: string;
@@ -14,24 +15,6 @@ interface SidebarSectionProps {
   onNavigate: (itemId: string) => void;
 }
 
-function useTypewriterOnce(text: string, speed: number, active: boolean) {
-  const [value, setValue] = useState(active ? "" : text);
-
-  useEffect(() => {
-    if (!active) return;
-    let i = 0;
-    const id = setInterval(() => {
-      i++;
-      setValue(text.slice(0, i));
-      if (i >= text.length) clearInterval(id);
-    }, speed);
-    return () => clearInterval(id);
-  }, [text, speed, active]);
-
-  const finish = () => setValue(text);
-  return { value, finish };
-}
-
 export function SidebarSection({
   title,
   items,
@@ -41,23 +24,17 @@ export function SidebarSection({
 }: SidebarSectionProps) {
   const [visibleCount, setVisibleCount] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
-  const [startTyping, setStartTyping] = useState(false);
+  const [showHeader, setShowHeader] = useState(false);
 
   const hasAnimatedRef = useRef(false);
-
-  const { value, finish } = useTypewriterOnce(
-    title,
-    18,
-    startTyping && !hasAnimatedRef.current
-  );
 
   useEffect(() => {
     if (hasAnimatedRef.current) return;
 
     const t = setTimeout(() => {
-      setStartTyping(true);
+      setShowHeader(true);
 
-      // Start item reveal at same time as typing
+      // Start item reveal at same time as scramble
       items.forEach((_, i) => {
         setTimeout(() => {
           setVisibleCount((v) => v + 1);
@@ -71,13 +48,26 @@ export function SidebarSection({
   }, [startDelay, items.length]);
 
   return (
-    <div onMouseEnter={finish}>
+    <div>
       <button
         className="sidebarSectionHeaderBtn"
         onClick={() => setCollapsed((c) => !c)}
         aria-expanded={!collapsed}
       >
-        <span className="sidebarSectionHeaderText">{value}</span>
+        <span className="sidebarSectionHeaderText">
+          {showHeader ? (
+            <ScrambleHeading
+              text={title}
+              as="span"
+              revealDelayMs={50}
+              cycleDelayMs={25}
+              cyclesPerChar={2}
+              className="sidebarSectionTitle"
+            />
+          ) : (
+            <span className="sidebarSectionTitle">&nbsp;</span>
+          )}
+        </span>
         <span className={`sidebarSectionChevron ${collapsed ? "collapsed" : ""}`}>
           <ChevronIcon />
         </span>
