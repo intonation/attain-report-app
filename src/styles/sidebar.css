@@ -46,6 +46,53 @@
   color: var(--color-text);
 }
 
+/* Section header button */
+.sidebarSectionHeaderBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0 10px;
+  margin: 16px 0 8px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  min-height: 20px;
+  text-align: left;
+  transition: color 150ms ease;
+}
+
+.sidebarSectionHeaderBtn:hover {
+  color: var(--color-text);
+}
+
+.sidebarSectionHeaderText {
+  flex: 1;
+}
+
+.sidebarSectionChevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms ease;
+}
+
+.sidebarSectionChevron.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Section items container */
+.sidebarSectionItems {
+  overflow: hidden;
+}
+
+/* Legacy header class (kept for compatibility) */
 .sidebarHeader {
   font-size: 11px;
   font-weight: 600;
@@ -66,6 +113,7 @@
   transform: translateY(0);
 }
 
+/* Menu items */
 .sidebarItem {
   display: flex;
   align-items: center;
@@ -73,9 +121,9 @@
   padding: 8px 10px;
   border-radius: 8px;
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+  transform: translateY(6px);
+  transition: opacity 180ms ease-out,
+              transform 180ms ease-out,
               background-color 150ms ease;
   width: 100%;
   border: none;
