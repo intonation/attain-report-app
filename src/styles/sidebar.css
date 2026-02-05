@@ -40,17 +40,9 @@
   padding-bottom: 16px;
 }
 
-.sidebarLogoIcon {
+.sidebarLogo svg {
   width: 28px;
   height: 28px;
-  background-color: var(--color-dark);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
   flex-shrink: 0;
 }
 
@@ -213,7 +205,7 @@
 }
 
 .sidebarItemVisited {
-  background: rgba(220, 38, 38, 0.08);
+  background: rgb(245 243 241);
 }
 
 /* Sidebar content wrapper */

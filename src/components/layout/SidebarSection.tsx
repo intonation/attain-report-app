@@ -16,6 +16,7 @@ interface SidebarSectionProps {
   onNavigate: (itemId: string) => void;
   skipAnimation?: boolean;
   onAnimationComplete?: () => void;
+  defaultCollapsed?: boolean;
 }
 
 export function SidebarSection({
@@ -27,9 +28,10 @@ export function SidebarSection({
   onNavigate,
   skipAnimation = false,
   onAnimationComplete,
+  defaultCollapsed = false,
 }: SidebarSectionProps) {
   const [visibleCount, setVisibleCount] = useState(skipAnimation ? items.length : 0);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [showHeader, setShowHeader] = useState(skipAnimation);
 
   const hasAnimatedRef = useRef(skipAnimation);
