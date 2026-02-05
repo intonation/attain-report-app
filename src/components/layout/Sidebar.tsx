@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import {
   GeneratedAnalysisIcon,
   GeneratedTablesIcon,
@@ -7,6 +7,8 @@ import {
 } from '../icons';
 import { SidebarSection } from './SidebarSection';
 import '../../styles/sidebar.css';
+
+const COLLAPSE_BREAKPOINT = 1200;
 
 interface NavItem {
   id: string;
@@ -57,10 +59,42 @@ export const Sidebar = ({
 }: SidebarProps) => {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   const [visitedItemIds, setVisitedItemIds] = useState<Set<string>>(new Set());
+  const userToggledRef = useRef(false);
+  const hasAnimatedRef = useRef(false);
+
+  // Mark animation as complete (called by first section after animation runs)
+  const markAnimationComplete = () => {
+    hasAnimatedRef.current = true;
+  };
+
+  // Responsive collapse based on viewport width
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(`(max-width: ${COLLAPSE_BREAKPOINT}px)`);
+
+    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      // Only auto-collapse if user hasn't manually toggled
+      if (!userToggledRef.current) {
+        if (onCollapsedChange) {
+          onCollapsedChange(e.matches);
+        } else {
+          setInternalCollapsed(e.matches);
+        }
+      }
+    };
+
+    // Check initial state
+    handleChange(mediaQuery);
+
+    // Listen for changes
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [onCollapsedChange]);
 
   // Use controlled state if provided, otherwise use internal state
   const collapsed = controlledCollapsed ?? internalCollapsed;
   const setCollapsed = (value: boolean) => {
+    // Mark that user has manually toggled
+    userToggledRef.current = true;
     if (onCollapsedChange) {
       onCollapsedChange(value);
     } else {
@@ -74,65 +108,57 @@ export const Sidebar = ({
     onNavigate(itemId);
   };
 
-  if (collapsed) {
-    return (
-      <div className="sidebarContainer collapsed">
-        <div className="sidebarLogo">
-          <div className="sidebarLogoIcon">A</div>
-        </div>
-        <button
-          className="sidebarCollapseBtn"
-          onClick={() => setCollapsed(false)}
-          aria-label="Expand sidebar"
-        >
-          <ExpandIcon />
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div className="sidebarContainer">
+    <div className={`sidebarContainer ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebarTopRow">
         <div className="sidebarLogo">
           <div className="sidebarLogoIcon">A</div>
-          <span className="sidebarLogoText">Client name</span>
+          {!collapsed && <span className="sidebarLogoText">Client name</span>}
         </div>
         <button
           className="sidebarCollapseBtn"
-          onClick={() => setCollapsed(true)}
-          aria-label="Collapse sidebar"
+          onClick={() => setCollapsed(!collapsed)}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          <SidepanelIcon />
+          {collapsed ? <ExpandIcon /> : <SidepanelIcon />}
         </button>
       </div>
 
-      <SidebarSection
-        title="GENERATED DOCUMENTS"
-        startDelay={100}
-        items={generatedDocumentsItems}
-        activeItem={activeItem}
-        visitedItemIds={visitedItemIds}
-        onNavigate={handleNavigate}
-      />
+      {/* Only render menu content when not collapsed */}
+      {!collapsed && (
+        <div className="sidebarContent">
+          <SidebarSection
+            title="GENERATED DOCUMENTS"
+            startDelay={100}
+            items={generatedDocumentsItems}
+            activeItem={activeItem}
+            visitedItemIds={visitedItemIds}
+            onNavigate={handleNavigate}
+            skipAnimation={hasAnimatedRef.current}
+            onAnimationComplete={markAnimationComplete}
+          />
 
-      <SidebarSection
-        title="GENERATED TABLES"
-        startDelay={400}
-        items={generatedTableItems}
-        activeItem={activeItem}
-        visitedItemIds={visitedItemIds}
-        onNavigate={handleNavigate}
-      />
+          <SidebarSection
+            title="GENERATED TABLES"
+            startDelay={400}
+            items={generatedTableItems}
+            activeItem={activeItem}
+            visitedItemIds={visitedItemIds}
+            onNavigate={handleNavigate}
+            skipAnimation={hasAnimatedRef.current}
+          />
 
-      <SidebarSection
-        title="PRIOR ART"
-        startDelay={700}
-        items={priorArtItems}
-        activeItem={activeItem}
-        visitedItemIds={visitedItemIds}
-        onNavigate={handleNavigate}
-      />
+          <SidebarSection
+            title="PRIOR ART"
+            startDelay={700}
+            items={priorArtItems}
+            activeItem={activeItem}
+            visitedItemIds={visitedItemIds}
+            onNavigate={handleNavigate}
+            skipAnimation={hasAnimatedRef.current}
+          />
+        </div>
+      )}
     </div>
   );
 };

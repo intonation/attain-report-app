@@ -11,9 +11,23 @@
 
 .sidebarContainer.collapsed {
   width: 72px;
-  display: flex;
+}
+
+.sidebarContainer.collapsed .sidebarTopRow {
   flex-direction: column;
   align-items: center;
+  gap: 8px;
+}
+
+.sidebarContainer.collapsed .sidebarLogo {
+  justify-content: center;
+  border-bottom: none;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.sidebarContainer.collapsed .sidebarCollapseBtn {
+  margin-left: 0;
 }
 
 .sidebarLogo {
@@ -200,4 +214,15 @@
 
 .sidebarItemVisited {
   background: rgba(220, 38, 38, 0.08);
+}
+
+/* Sidebar content wrapper */
+.sidebarContent {
+  /* Content container for menu sections */
+}
+
+.sidebarItemLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

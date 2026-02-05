@@ -14,6 +14,8 @@ interface SidebarSectionProps {
   activeItem: string;
   visitedItemIds: Set<string>;
   onNavigate: (itemId: string) => void;
+  skipAnimation?: boolean;
+  onAnimationComplete?: () => void;
 }
 
 export function SidebarSection({
@@ -23,15 +25,22 @@ export function SidebarSection({
   activeItem,
   visitedItemIds,
   onNavigate,
+  skipAnimation = false,
+  onAnimationComplete,
 }: SidebarSectionProps) {
-  const [visibleCount, setVisibleCount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(skipAnimation ? items.length : 0);
   const [collapsed, setCollapsed] = useState(false);
-  const [showHeader, setShowHeader] = useState(false);
+  const [showHeader, setShowHeader] = useState(skipAnimation);
 
-  const hasAnimatedRef = useRef(false);
+  const hasAnimatedRef = useRef(skipAnimation);
 
   useEffect(() => {
-    if (hasAnimatedRef.current) return;
+    // Skip animation if already animated or told to skip
+    if (hasAnimatedRef.current || skipAnimation) {
+      setShowHeader(true);
+      setVisibleCount(items.length);
+      return;
+    }
 
     const t = setTimeout(() => {
       setShowHeader(true);
@@ -40,6 +49,10 @@ export function SidebarSection({
       items.forEach((_, i) => {
         setTimeout(() => {
           setVisibleCount((v) => v + 1);
+          // Call onAnimationComplete when last item is revealed
+          if (i === items.length - 1 && onAnimationComplete) {
+            onAnimationComplete();
+          }
         }, i * 120);
       });
 
@@ -47,7 +60,7 @@ export function SidebarSection({
     }, startDelay);
 
     return () => clearTimeout(t);
-  }, [startDelay, items.length]);
+  }, [startDelay, items.length, skipAnimation, onAnimationComplete]);
 
   return (
     <div>
@@ -89,7 +102,7 @@ export function SidebarSection({
                 onClick={() => onNavigate(item.id)}
               >
                 {item.icon}
-                <span>{item.label}</span>
+                <span className="sidebarItemLabel">{item.label}</span>
               </button>
             );
           })}
