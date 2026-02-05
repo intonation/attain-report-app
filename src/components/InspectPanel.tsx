@@ -37,7 +37,7 @@ export const InspectPanel = ({ onClose, claimNumber = 1 }: InspectPanelProps) =>
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    height: 'calc(100vh - var(--space-6) * 2)',
+    height: '100vh',
   };
 
   const headerStyles: React.CSSProperties = {

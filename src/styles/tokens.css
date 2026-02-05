@@ -81,6 +81,33 @@ body {
   line-height: var(--line-height-body);
   color: var(--color-text);
   background-color: var(--color-canvas);
+  overflow: hidden;
+}
+
+/* App frame layout */
+.appFrame {
+  display: flex;
+  height: 100vh;
+  background-color: var(--color-canvas);
+  overflow: hidden;
+}
+
+.appFrame__sidebar {
+  flex-shrink: 0;
+  padding: var(--space-6);
+  padding-right: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.appFrame__main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100vh;
+  padding: var(--space-6);
 }
 
 /* Animations */
@@ -106,6 +133,22 @@ body {
 
 .fade-in {
   animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Content mount animation */
+.contentMount {
+  animation: contentFadeUp 500ms ease 0s 1 normal forwards;
+}
+
+@keyframes contentFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fade-in-delay-1 { animation-delay: 0.05s; }

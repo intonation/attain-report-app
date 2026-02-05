@@ -69,17 +69,24 @@ export const Sidebar = ({
   const [visitedItemIds, setVisitedItemIds] = useState<Set<string>>(new Set());
   const userToggledRef = useRef(false);
   const hasAnimatedRef = useRef(false);
+  const isInitialLoadRef = useRef(true);
 
   // Mark animation as complete (called by first section after animation runs)
   const markAnimationComplete = () => {
     hasAnimatedRef.current = true;
+    // After animation completes, allow responsive collapse
+    isInitialLoadRef.current = false;
   };
 
-  // Responsive collapse based on viewport width
+  // Responsive collapse based on viewport width (only after initial load)
   useEffect(() => {
     const mediaQuery = window.matchMedia(`(max-width: ${COLLAPSE_BREAKPOINT}px)`);
 
     const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      // Skip auto-collapse on initial load - always show expanded first
+      if (isInitialLoadRef.current) {
+        return;
+      }
       // Only auto-collapse if user hasn't manually toggled
       if (!userToggledRef.current) {
         if (onCollapsedChange) {
@@ -90,10 +97,7 @@ export const Sidebar = ({
       }
     };
 
-    // Check initial state
-    handleChange(mediaQuery);
-
-    // Listen for changes
+    // Listen for changes (don't check initial state - we want expanded on load)
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [onCollapsedChange]);

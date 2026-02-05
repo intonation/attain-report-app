@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Sidebar } from '../components/layout/Sidebar';
 import { ClaimCard } from '../components/ClaimCard';
 import { InspectPanel } from '../components/InspectPanel';
@@ -7,11 +7,18 @@ import { reportData, claimsData } from '../data/mockData';
 // Navigation items that should trigger full-width mode (sidebar collapsed)
 const FULL_WIDTH_NAV_ITEMS = ['claim-charts', 'workbench'];
 
+// Breakpoint at which we auto-collapse sidebar when inspect panel opens
+const INSPECT_COLLAPSE_BREAKPOINT = 1400;
+
 export const ReportExecutiveSummaryWireframe = () => {
   const [activeNavItem, setActiveNavItem] = useState('executive-summary');
   const [isInspectOpen, setIsInspectOpen] = useState(false);
   const [inspectClaimNumber, setInspectClaimNumber] = useState<number>(1);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const mainScrollRef = useRef<HTMLDivElement>(null);
+  const userToggledSidebarRef = useRef(false);
+  const isInitialLoadRef = useRef(true);
+  const wasCollapsedByInspectRef = useRef(false);
 
   // Auto-collapse sidebar for full-width pages
   useEffect(() => {
@@ -20,9 +27,49 @@ export const ReportExecutiveSummaryWireframe = () => {
     }
   }, [activeNavItem]);
 
+  // Reset scroll position on navigation (scroll main container, not window)
+  useEffect(() => {
+    if (mainScrollRef.current) {
+      mainScrollRef.current.scrollTop = 0;
+    }
+  }, [activeNavItem]);
+
+  // Auto-collapse/expand sidebar based on inspect panel state and viewport width
+  useEffect(() => {
+    // Never auto-collapse on initial load
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
+      return;
+    }
+
+    // Don't auto-adjust if user has manually toggled sidebar
+    if (userToggledSidebarRef.current) {
+      return;
+    }
+
+    const isNarrow = window.innerWidth < INSPECT_COLLAPSE_BREAKPOINT;
+
+    if (isInspectOpen && isNarrow && !sidebarCollapsed) {
+      // Collapse sidebar when inspect panel opens and viewport is narrow
+      wasCollapsedByInspectRef.current = true;
+      setSidebarCollapsed(true);
+    } else if (!isInspectOpen && wasCollapsedByInspectRef.current) {
+      // Re-expand sidebar when inspect panel closes (if we collapsed it)
+      wasCollapsedByInspectRef.current = false;
+      setSidebarCollapsed(false);
+    }
+  }, [isInspectOpen, sidebarCollapsed]);
+
   const handleInspectClaim = (claimNumber: number) => {
     setInspectClaimNumber(claimNumber);
     setIsInspectOpen(true);
+  };
+
+  const handleSidebarCollapsedChange = (collapsed: boolean) => {
+    // Mark that user has manually toggled
+    userToggledSidebarRef.current = true;
+    wasCollapsedByInspectRef.current = false;
+    setSidebarCollapsed(collapsed);
   };
 
   const handleNavigate = (itemId: string) => {
@@ -31,15 +78,6 @@ export const ReportExecutiveSummaryWireframe = () => {
 
   // Check if we're in full-width mode
   const isFullWidth = FULL_WIDTH_NAV_ITEMS.includes(activeNavItem);
-
-  // Layout styles - flex row container for sidebar + content + inspect panel
-  const wrapperStyles: React.CSSProperties = {
-    display: 'flex',
-    gap: 'var(--space-6)',
-    padding: 'var(--space-6)',
-    minHeight: '100vh',
-    backgroundColor: 'var(--color-canvas)',
-  };
 
   // Content area takes remaining space, shrinks when inspect panel opens
   const contentAreaStyles: React.CSSProperties = {
@@ -58,10 +96,11 @@ export const ReportExecutiveSummaryWireframe = () => {
 
   // Header styles
   const titleStyles: React.CSSProperties = {
-    fontSize: 'var(--font-size-h2)',
-    fontWeight: 600,
+    fontSize: 'var(--font-size-h1)',
+    fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-2)',
+    fontFamily: 'times',
   };
 
   const applicationRefStyles: React.CSSProperties = {
@@ -78,10 +117,11 @@ export const ReportExecutiveSummaryWireframe = () => {
   };
 
   const sectionHeadingStyles: React.CSSProperties = {
-    fontSize: 'var(--font-size-h4)',
-    fontWeight: 600,
+    fontSize: 'var(--font-size-h2)',
+    fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-5)',
+    fontFamily: 'times',
   };
 
   // Placeholder content for full-width pages
@@ -113,55 +153,60 @@ export const ReportExecutiveSummaryWireframe = () => {
   };
 
   return (
-    <div style={wrapperStyles}>
+    <div className="appFrame">
       {/* Left Sidebar */}
-      <Sidebar
-        activeItem={activeNavItem}
-        onNavigate={handleNavigate}
-        collapsed={sidebarCollapsed}
-        onCollapsedChange={setSidebarCollapsed}
-      />
-
-      {/* Content Area - shrinks when inspect panel is open */}
-      <div style={contentAreaStyles}>
-        {/* Main Content Column */}
-        <main style={mainColumnStyles}>
-          {isFullWidth ? (
-            renderFullWidthPlaceholder()
-          ) : (
-            <>
-              {/* Header Area */}
-              <header>
-                <h1 style={titleStyles}>{reportData.title}</h1>
-                <p style={applicationRefStyles}>
-                  {reportData.applicationRef} · {reportData.subtitle}
-                </p>
-                <div style={summaryStyles}>
-                  {reportData.summary.split('\n\n').map((paragraph, index) => (
-                    <p key={index} style={{ marginBottom: 'var(--space-4)' }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </header>
-
-              {/* Independent Claims Section */}
-              <section>
-                <h2 style={sectionHeadingStyles}>Independent claims</h2>
-                {claimsData.map((claim) => (
-                  <ClaimCard
-                    key={claim.claimNumber}
-                    claim={claim}
-                    onInspect={handleInspectClaim}
-                  />
-                ))}
-              </section>
-            </>
-          )}
-        </main>
+      <div className="appFrame__sidebar">
+        <Sidebar
+          activeItem={activeNavItem}
+          onNavigate={handleNavigate}
+          collapsed={sidebarCollapsed}
+          onCollapsedChange={handleSidebarCollapsedChange}
+        />
       </div>
 
-      {/* Inspect Panel - inline, conditionally rendered */}
+      {/* Main scrollable content area */}
+      <div className="appFrame__main" ref={mainScrollRef}>
+        {/* Content Area - shrinks when inspect panel is open */}
+        <div style={contentAreaStyles} className="contentMount">
+          {/* Main Content Column */}
+          <main style={mainColumnStyles}>
+            {isFullWidth ? (
+              renderFullWidthPlaceholder()
+            ) : (
+              <>
+                {/* Header Area */}
+                <header>
+                  <h1 style={titleStyles}>{reportData.title}</h1>
+                  <p style={applicationRefStyles}>
+                    {reportData.applicationRef} · {reportData.subtitle}
+                  </p>
+                  <div style={summaryStyles}>
+                    {reportData.summary.split('\n\n').map((paragraph, index) => (
+                      <p key={index} style={{ marginBottom: 'var(--space-4)' }}>
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </header>
+
+                {/* Independent Claims Section */}
+                <section>
+                  <h2 style={sectionHeadingStyles}>Independent claims</h2>
+                  {claimsData.map((claim) => (
+                    <ClaimCard
+                      key={claim.claimNumber}
+                      claim={claim}
+                      onInspect={handleInspectClaim}
+                    />
+                  ))}
+                </section>
+              </>
+            )}
+          </main>
+        </div>
+      </div>
+
+      {/* Inspect Panel - outside scroll container, fixed height */}
       {isInspectOpen && (
         <InspectPanel
           onClose={() => setIsInspectOpen(false)}

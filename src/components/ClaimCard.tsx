@@ -2,7 +2,7 @@ import { Card, Badge, Button } from './base';
 
 export interface ClaimData {
   claimNumber: number;
-  isNovel: boolean;
+  isNovel: 'novel' | 'likely-novel' | 'likely-not-novel' | 'not-novel';
   reasoning: string;
   references?: string;
 }
@@ -48,7 +48,15 @@ export const ClaimCard = ({ claim, onInspect }: ClaimCardProps) => {
     <Card style={cardStyles}>
       <div style={headerStyles}>
         <span style={claimNumberStyles}>Claim {claim.claimNumber}</span>
-        <Badge variant="success">{claim.isNovel ? 'Novel' : 'Not Novel'}</Badge>
+        <Badge variant={
+          claim.isNovel === 'novel' ? 'success' :
+          claim.isNovel === 'likely-novel' ? 'success-light' :
+          claim.isNovel === 'likely-not-novel' ? 'warning' : 'error'
+        }>
+          {claim.isNovel === 'novel' ? 'Novel' :
+           claim.isNovel === 'likely-novel' ? 'Likely novel' :
+           claim.isNovel === 'likely-not-novel' ? 'Likely not novel' : 'Not novel'}
+        </Badge>
       </div>
       <p style={reasoningStyles}>{claim.reasoning}</p>
       {claim.references && <p style={referencesStyles}>{claim.references}</p>}
@@ -57,7 +65,7 @@ export const ClaimCard = ({ claim, onInspect }: ClaimCardProps) => {
         size="small"
         onClick={() => onInspect?.(claim.claimNumber)}
       >
-        Inspect claim
+        Inspect
       </Button>
     </Card>
   );

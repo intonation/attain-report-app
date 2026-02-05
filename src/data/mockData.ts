@@ -12,18 +12,23 @@ The prior art reference, Graves et. al., discusses conventional adaptive cruise 
 export const claimsData: ClaimData[] = [
   {
     claimNumber: 1,
-    isNovel: true,
-    reasoning: `This determination is based on Graves describing zone-based safety levels and comfort considerations but does not describe using a predicted headway value as the comfort selective input to determine the deceleration strategy (see claim charts L1-8 L1-8 L1-10).`,
-  },
-  {
-    claimNumber: 18,
-    isNovel: true,
-    reasoning: `This determination is based on Graves describing zone-based safety levels and comfort considerations but does not describe determining a discrete risk category from forward vehicle relative kinematics as the basis for comfort selective strategy determination (see claim charts L6-7 L18-8).`,
+    isNovel: 'novel',
+    reasoning: `This claim is novel. Graves describes zone-based safety levels and comfort considerations but does not describe using a predicted headway value as the comfort selective input to determine the deceleration strategy (see claim charts L1-8 L1-8 L1-10).`,
   },
   {
     claimNumber: 12,
-    isNovel: true,
-    reasoning: `For your analysis this claim. The reference discloses a vehicle control system with predictive braking that monitors forward vehicle distance and adjusts deceleration rates based on relative velocity calculations (see claim charts L12-1 L12-4 L12-5).`,
+    isNovel: 'likely-novel',
+    reasoning: `This claim is likely novel. The reference discloses a vehicle control system with predictive braking but does not appear to teach coordinating multiple controller modules under sensor degradation conditions as claimed (see claim charts L12-1 L12-4 L12-5).`,
+  },
+  {
+    claimNumber: 7,
+    isNovel: 'likely-not-novel',
+    reasoning: `This claim may be anticipated by the combination of Graves and Breuer. Graves discloses the basic headway calculation method, while Breuer teaches similar velocity threshold parameters. Further review recommended (see Breuer paras [0032]-[0035]).`,
+  },
+  {
+    claimNumber: 18,
+    isNovel: 'not-novel',
+    reasoning: `This claim is anticipated by Graves. The reference explicitly discloses determining a discrete risk category from forward vehicle relative kinematics as the basis for deceleration strategy selection (see Graves Fig. 4, paras [0045]-[0048]).`,
   },
 ];
 
