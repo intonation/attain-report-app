@@ -186,8 +186,9 @@
 }
 
 .sidebarTopRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    flex-direction: row;
+    align-content: center;
 }

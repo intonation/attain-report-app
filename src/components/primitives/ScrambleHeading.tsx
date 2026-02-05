@@ -15,95 +15,80 @@ interface ScrambleHeadingProps {
 export function ScrambleHeading({
   text,
   as: Tag = "h2",
-  revealDelayMs = 70,
-  cycleDelayMs = 30,
-  cyclesPerChar = 3,
+  revealDelayMs = 80,
+  cycleDelayMs = 32,
+  cyclesPerChar = 2,
   className = "",
   style,
 }: ScrambleHeadingProps) {
-  // Check for reduced motion preference
-  const prefersReducedMotion = useRef(
+  const prefersReducedMotion =
     typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const [displayText, setDisplayText] = useState(
-    prefersReducedMotion.current ? text : ""
+    prefersReducedMotion ? text : ""
   );
-  const hasAnimatedRef = useRef(false);
+
+  const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Skip animation if reduced motion or already animated
-    if (prefersReducedMotion.current || hasAnimatedRef.current) {
+    if (prefersReducedMotion) {
       setDisplayText(text);
       return;
     }
 
-    hasAnimatedRef.current = true;
-
     let charIndex = 0;
-    let cycleCount = 0;
-    let currentDisplay = "";
+    let cycleIndex = 0;
+    let buffer = "";
 
-    const runAnimation = () => {
-      // Finished all characters
+    const tick = () => {
       if (charIndex >= text.length) {
         setDisplayText(text);
+        if (timerRef.current) clearInterval(timerRef.current);
         return;
       }
 
-      const currentChar = text[charIndex];
+      const realChar = text[charIndex];
 
-      // If it's a space or non-letter, reveal immediately and move on
-      if (currentChar === " " || !/[A-Za-z]/.test(currentChar)) {
-        currentDisplay += currentChar;
-        setDisplayText(currentDisplay);
+      // spaces settle immediately
+      if (realChar === " ") {
+        buffer += " ";
+        setDisplayText(buffer);
         charIndex++;
-        cycleCount = 0;
-        setTimeout(runAnimation, revealDelayMs);
+        cycleIndex = 0;
         return;
       }
 
-      // Still cycling through random letters for current character
-      if (cycleCount < cyclesPerChar) {
-        const randomChar = ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-        setDisplayText(currentDisplay + randomChar);
-        cycleCount++;
-        setTimeout(runAnimation, cycleDelayMs);
+      if (cycleIndex < cyclesPerChar) {
+        const rand =
+          ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+        setDisplayText(buffer + rand);
+        cycleIndex++;
         return;
       }
 
-      // Done cycling, reveal the real character
-      currentDisplay += currentChar;
-      setDisplayText(currentDisplay);
+      // settle real char
+      buffer += realChar;
+      setDisplayText(buffer);
       charIndex++;
-      cycleCount = 0;
-      setTimeout(runAnimation, revealDelayMs);
+      cycleIndex = 0;
     };
 
-    // Start the animation
-    const startTimeout = setTimeout(runAnimation, 0);
+    const intervalMs = Math.min(cycleDelayMs, revealDelayMs);
+    timerRef.current = window.setInterval(tick, intervalMs);
 
     return () => {
-      clearTimeout(startTimeout);
+      if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [text, revealDelayMs, cycleDelayMs, cyclesPerChar]);
+  }, [text, prefersReducedMotion, cycleDelayMs, revealDelayMs, cyclesPerChar]);
 
-  // Pad display text with spaces to prevent layout shift
-  const paddedText = displayText.padEnd(text.length, " ");
+  const padded = displayText.padEnd(text.length, " ");
 
   return (
     <Tag className={className} style={style}>
-      {paddedText.split("").map((char, index) => (
-        <span
-          key={index}
-          style={{
-            display: "inline-block",
-            minWidth: text[index] === " " ? "0.25em" : undefined,
-            opacity: index < displayText.length ? 1 : 0,
-          }}
-        >
-          {char === " " ? "\u00A0" : char}
+      {padded.split("").map((c, i) => (
+        <span key={i} style={{ display: "inline-block" }}>
+          {c === " " ? "\u00A0" : c}
         </span>
       ))}
     </Tag>
