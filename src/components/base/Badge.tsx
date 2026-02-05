@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 
-export type BadgeVariant = 'default' | 'success' | 'muted';
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'muted';
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
@@ -33,6 +33,10 @@ export const Badge = ({
     success: {
       backgroundColor: 'var(--color-accent-subtle)',
       color: 'var(--color-accent)',
+    },
+    warning: {
+      backgroundColor: 'rgba(180, 120, 60, 0.12)',
+      color: '#8b6914',
     },
     muted: {
       backgroundColor: 'var(--color-grey-mid)',

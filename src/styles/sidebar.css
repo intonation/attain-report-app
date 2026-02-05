@@ -1,12 +1,12 @@
 .sidebarContainer {
-  width: 280px;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  background: #fafafa;
-  height: fit-content;
-  position: sticky;
-  top: 24px;
+    width: 280px;
+    padding: 16px;
+    border-radius: 0;
+    /* border: 1px solid #fefefe; */
+    background: #ffffff;
+    height: fit-content;
+    position: sticky;
+    top: 24px;
 }
 
 .sidebarContainer.collapsed {
