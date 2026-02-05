@@ -1,7 +1,6 @@
 import { Card, Badge } from './base';
 
 interface InspectPanelProps {
-  isOpen: boolean;
   onClose: () => void;
   claimNumber?: number;
 }
@@ -29,22 +28,16 @@ const CloseIcon = () => (
   </svg>
 );
 
-export const InspectPanel = ({ isOpen, onClose, claimNumber = 1 }: InspectPanelProps) => {
-  const overlayStyles: React.CSSProperties = {
-    position: 'fixed',
-    top: 0,
-    right: 0,
-    bottom: 0,
+export const InspectPanel = ({ onClose, claimNumber = 1 }: InspectPanelProps) => {
+  const panelStyles: React.CSSProperties = {
     width: '420px',
+    flexShrink: 0,
     backgroundColor: 'var(--color-paper)',
     borderLeft: '1px solid var(--color-border)',
-    boxShadow: '-4px 0 24px rgba(0, 0, 0, 0.08)',
-    transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
-    transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    zIndex: 100,
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    height: 'calc(100vh - var(--space-6) * 2)',
   };
 
   const headerStyles: React.CSSProperties = {
@@ -126,7 +119,7 @@ export const InspectPanel = ({ isOpen, onClose, claimNumber = 1 }: InspectPanelP
   };
 
   return (
-    <div style={overlayStyles} aria-hidden={!isOpen}>
+    <aside style={panelStyles}>
       {/* Header */}
       <div style={headerStyles}>
         <h2 style={titleStyles}>Claim {claimNumber} details</h2>
@@ -179,6 +172,6 @@ export const InspectPanel = ({ isOpen, onClose, claimNumber = 1 }: InspectPanelP
           </Card>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };

@@ -14,24 +14,26 @@ interface NavItem {
   icon: ReactNode;
 }
 
-const generatedAnalysisItems: NavItem[] = [
+const generatedDocumentsItems: NavItem[] = [
   { id: 'executive-summary', label: 'Executive Summary', icon: <GeneratedAnalysisIcon /> },
-  { id: 'scope-of-analysis', label: 'Scope of Analysis', icon: <GeneratedAnalysisIcon /> },
+  { id: 'scope-of-analysis', label: 'Scope of analysis', icon: <GeneratedAnalysisIcon /> },
   { id: 'strategic-review', label: 'Strategic Review', icon: <GeneratedAnalysisIcon /> },
   { id: 'claims', label: 'Claims', icon: <GeneratedAnalysisIcon /> },
+  { id: 'summary-graves', label: 'Summary: Graves et al.: US 2019/0329772 A1', icon: <GeneratedAnalysisIcon /> },
 ];
 
 const generatedTableItems: NavItem[] = [
-  { id: 'document', label: 'Document', icon: <GeneratedTablesIcon /> },
-  { id: 'references', label: 'References', icon: <GeneratedTablesIcon /> },
-  { id: 'claims-chart', label: 'Claims chart', icon: <GeneratedTablesIcon /> },
+  { id: 'claim-charts', label: 'Claim Charts', icon: <GeneratedTablesIcon /> },
   { id: 'workbench', label: 'Workbench', icon: <GeneratedTablesIcon /> },
+  { id: 'documents-overview', label: 'Documents Overview', icon: <GeneratedTablesIcon /> },
 ];
 
 const priorArtItems: NavItem[] = [
-  { id: 'documents-overview', label: 'Documents overview', icon: <PriorArtIcon /> },
+  { id: 'claims-on-file', label: 'Claims on File', icon: <PriorArtIcon /> },
   { id: 'patent-specification', label: 'Patent Specification', icon: <PriorArtIcon /> },
-  { id: 'prior-art-references', label: 'Prior art references', icon: <PriorArtIcon /> },
+  { id: 'us-17-774-135-oa', label: 'US 17/774,135 OA', icon: <PriorArtIcon /> },
+  { id: 'breuer-et-al', label: 'Breuer et al.: US 2015/0012204', icon: <PriorArtIcon /> },
+  { id: 'graves-et-al', label: 'Graves et al.: US 2019/0329772 A1', icon: <PriorArtIcon /> },
 ];
 
 const ExpandIcon = () => (
@@ -99,9 +101,9 @@ export const Sidebar = ({
       </div>
 
       <SidebarSection
-        title="GENERATED ANALYSIS"
+        title="GENERATED DOCUMENTS"
         startDelay={100}
-        items={generatedAnalysisItems}
+        items={generatedDocumentsItems}
         activeItem={activeItem}
         onNavigate={onNavigate}
       />

@@ -5,7 +5,7 @@ import { InspectPanel } from '../components/InspectPanel';
 import { reportData, claimsData } from '../data/mockData';
 
 // Navigation items that should trigger full-width mode (sidebar collapsed)
-const FULL_WIDTH_NAV_ITEMS = ['claims-chart', 'workbench'];
+const FULL_WIDTH_NAV_ITEMS = ['claim-charts', 'workbench'];
 
 export const ReportExecutiveSummaryWireframe = () => {
   const [activeNavItem, setActiveNavItem] = useState('executive-summary');
@@ -32,7 +32,7 @@ export const ReportExecutiveSummaryWireframe = () => {
   // Check if we're in full-width mode
   const isFullWidth = FULL_WIDTH_NAV_ITEMS.includes(activeNavItem);
 
-  // Layout styles
+  // Layout styles - flex row container for sidebar + content + inspect panel
   const wrapperStyles: React.CSSProperties = {
     display: 'flex',
     gap: 'var(--space-6)',
@@ -41,8 +41,10 @@ export const ReportExecutiveSummaryWireframe = () => {
     backgroundColor: 'var(--color-canvas)',
   };
 
+  // Content area takes remaining space, shrinks when inspect panel opens
   const contentAreaStyles: React.CSSProperties = {
     flex: 1,
+    minWidth: 0, // Allow shrinking below content size
     display: 'flex',
     justifyContent: isFullWidth ? 'stretch' : 'flex-start',
   };
@@ -94,7 +96,7 @@ export const ReportExecutiveSummaryWireframe = () => {
     };
 
     const titleMap: Record<string, string> = {
-      'claims-chart': 'Claims Chart',
+      'claim-charts': 'Claim Charts',
       'workbench': 'Workbench',
     };
 
@@ -120,7 +122,7 @@ export const ReportExecutiveSummaryWireframe = () => {
         onCollapsedChange={setSidebarCollapsed}
       />
 
-      {/* Content Area */}
+      {/* Content Area - shrinks when inspect panel is open */}
       <div style={contentAreaStyles}>
         {/* Main Content Column */}
         <main style={mainColumnStyles}>
@@ -159,12 +161,13 @@ export const ReportExecutiveSummaryWireframe = () => {
         </main>
       </div>
 
-      {/* Inspect Panel (slide-in from right) */}
-      <InspectPanel
-        isOpen={isInspectOpen}
-        onClose={() => setIsInspectOpen(false)}
-        claimNumber={inspectClaimNumber}
-      />
+      {/* Inspect Panel - inline, conditionally rendered */}
+      {isInspectOpen && (
+        <InspectPanel
+          onClose={() => setIsInspectOpen(false)}
+          claimNumber={inspectClaimNumber}
+        />
+      )}
     </div>
   );
 };
