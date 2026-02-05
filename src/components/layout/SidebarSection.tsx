@@ -12,6 +12,7 @@ interface SidebarSectionProps {
   items: Item[];
   startDelay: number;
   activeItem: string;
+  visitedItemIds: Set<string>;
   onNavigate: (itemId: string) => void;
 }
 
@@ -20,6 +21,7 @@ export function SidebarSection({
   items,
   startDelay,
   activeItem,
+  visitedItemIds,
   onNavigate,
 }: SidebarSectionProps) {
   const [visibleCount, setVisibleCount] = useState(0);
@@ -75,16 +77,22 @@ export function SidebarSection({
 
       {!collapsed && (
         <div className="sidebarSectionItems">
-          {items.map((item, i) => (
-            <button
-              key={item.id}
-              className={`sidebarItem ${i < visibleCount ? "visible" : ""} ${activeItem === item.id ? "active" : ""}`}
-              onClick={() => onNavigate(item.id)}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {items.map((item, i) => {
+            const isActive = activeItem === item.id;
+            const isVisited = visitedItemIds.has(item.id);
+            const stateClass = isVisited ? "sidebarItemVisited" : "sidebarItemUnread";
+
+            return (
+              <button
+                key={item.id}
+                className={`sidebarItem ${i < visibleCount ? "visible" : ""} ${isActive ? "active" : ""} ${stateClass}`}
+                onClick={() => onNavigate(item.id)}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

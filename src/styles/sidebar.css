@@ -192,3 +192,12 @@
     flex-direction: row;
     align-content: center;
 }
+
+/* Item read states */
+.sidebarItemUnread {
+  background: transparent;
+}
+
+.sidebarItemVisited {
+  background: rgba(220, 38, 38, 0.08);
+}

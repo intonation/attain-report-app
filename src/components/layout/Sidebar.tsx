@@ -56,6 +56,7 @@ export const Sidebar = ({
   onCollapsedChange,
 }: SidebarProps) => {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const [visitedItemIds, setVisitedItemIds] = useState<Set<string>>(new Set());
 
   // Use controlled state if provided, otherwise use internal state
   const collapsed = controlledCollapsed ?? internalCollapsed;
@@ -65,6 +66,12 @@ export const Sidebar = ({
     } else {
       setInternalCollapsed(value);
     }
+  };
+
+  // Handle navigation and mark item as visited
+  const handleNavigate = (itemId: string) => {
+    setVisitedItemIds((prev) => new Set(prev).add(itemId));
+    onNavigate(itemId);
   };
 
   if (collapsed) {
@@ -105,7 +112,8 @@ export const Sidebar = ({
         startDelay={100}
         items={generatedDocumentsItems}
         activeItem={activeItem}
-        onNavigate={onNavigate}
+        visitedItemIds={visitedItemIds}
+        onNavigate={handleNavigate}
       />
 
       <SidebarSection
@@ -113,7 +121,8 @@ export const Sidebar = ({
         startDelay={400}
         items={generatedTableItems}
         activeItem={activeItem}
-        onNavigate={onNavigate}
+        visitedItemIds={visitedItemIds}
+        onNavigate={handleNavigate}
       />
 
       <SidebarSection
@@ -121,7 +130,8 @@ export const Sidebar = ({
         startDelay={700}
         items={priorArtItems}
         activeItem={activeItem}
-        onNavigate={onNavigate}
+        visitedItemIds={visitedItemIds}
+        onNavigate={handleNavigate}
       />
     </div>
   );
