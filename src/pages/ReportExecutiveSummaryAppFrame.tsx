@@ -11,7 +11,7 @@ import { reportData, claimsData, claimChartData } from '../data/mockData';
 import type { ClaimChartRow } from '../data/mockData';
 
 // Navigation items that should trigger full-width mode (sidebar collapsed)
-const FULL_WIDTH_NAV_ITEMS = ['claim-charts', 'workbench'];
+const FULL_WIDTH_NAV_ITEMS = ['claim-charts'];
 
 // Breakpoint at which we auto-collapse sidebar when inspect panel opens
 const INSPECT_COLLAPSE_BREAKPOINT = 1400;
@@ -146,12 +146,11 @@ export const ReportExecutiveSummaryAppFrame = () => {
     setIsDetailPanelOpen(false);
   };
 
-  // Handle citation click - open document viewer
+  // Handle citation click - open document viewer (alongside detail panel)
   const handleCitationClick = (citation: string) => {
     setViewerCitation(citation);
     setIsDocumentViewerOpen(true);
-    // Close other panels
-    setIsDetailPanelOpen(false);
+    // Close inspect and split view, but keep detail panel open
     setIsInspectOpen(false);
     setIsSplitView(false);
   };
@@ -217,32 +216,10 @@ export const ReportExecutiveSummaryAppFrame = () => {
       );
     }
 
-    // Workbench placeholder
-    if (docId === 'workbench') {
-      const placeholderStyles: React.CSSProperties = {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '400px',
-        color: 'var(--color-text-muted)',
-      };
-
-      return (
-        <div style={placeholderStyles}>
-          <h2 style={{ ...titleStyles, marginBottom: 'var(--space-4)' }}>
-            Workbench
-          </h2>
-          <p style={{ fontSize: 'var(--font-size-small)' }}>
-            Full-width table view placeholder
-          </p>
-        </div>
-      );
-    }
-
-    // Main content styles
+    // Main content styles - centered with max width
     const mainContentStyles: React.CSSProperties = {
       maxWidth: 'var(--main-content-max-width)',
+      margin: '0 auto',
     };
 
     return (
@@ -304,7 +281,8 @@ export const ReportExecutiveSummaryAppFrame = () => {
               items={DOCUMENT_ITEMS}
               selectedId={activeNavItem}
               onSelect={handleLeftPaneDocumentSelect}
-              onSplit={handleSplit}
+              onSplitToggle={handleSplit}
+              isSplitView={isSplitView}
               showNavigation={true}
               showKebab={true}
               showSplit={!isSplitView}
@@ -322,7 +300,8 @@ export const ReportExecutiveSummaryAppFrame = () => {
                 items={DOCUMENT_ITEMS}
                 selectedId={rightPaneDocId}
                 onSelect={handleRightPaneDocumentSelect}
-                onSplit={handleCloseSplitView}
+                onSplitToggle={handleCloseSplitView}
+                isSplitView={isSplitView}
                 showNavigation={true}
                 showKebab={true}
                 showSplit={true}
@@ -353,22 +332,23 @@ export const ReportExecutiveSummaryAppFrame = () => {
             </div>
           )}
 
-          {/* Right Pane - Claim Detail Panel (for claim chart row selection) */}
-          {isDetailPanelOpen && !isSplitView && !isDocumentViewerOpen && (
-            <div className="appShell__inspectPane">
-              <ClaimDetailPanel
-                row={detailRow}
-                onClose={handleDetailPanelClose}
-              />
-            </div>
-          )}
-
-          {/* Right Pane - Document Viewer (for citation clicks) */}
+          {/* Document Viewer - opens to the left of the detail panel */}
           {isDocumentViewerOpen && !isSplitView && (
             <div className="appShell__inspectPane">
               <DocumentViewer
                 citation={viewerCitation}
                 onClose={handleDocumentViewerClose}
+              />
+            </div>
+          )}
+
+          {/* Right Pane - Claim Detail Panel (for claim chart row selection) */}
+          {isDetailPanelOpen && !isSplitView && (
+            <div className="appShell__inspectPane">
+              <ClaimDetailPanel
+                row={detailRow}
+                onClose={handleDetailPanelClose}
+                onCitationClick={handleCitationClick}
               />
             </div>
           )}

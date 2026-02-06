@@ -52,7 +52,7 @@
 .sidebarSectionHeaderBtn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   width: 100%;
   background: none;
   border: 0;
@@ -64,10 +64,22 @@
   font-weight: 600;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: #0d243b;
   min-height: 20px;
   text-align: left;
   transition: color 150ms ease;
+}
+
+.sidebarSectionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebarSectionIcon svg {
+  width: 14px;
+  height: 14px;
 }
 
 .sidebarSectionHeaderBtn:hover {
@@ -94,6 +106,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
   transition: transform 200ms ease;
 }
 
@@ -209,7 +222,7 @@
 }
 
 .sidebarItemVisited {
-  background: rgb(245 243 241);
+  background: transparent;
   font-weight: 400;
 }
 

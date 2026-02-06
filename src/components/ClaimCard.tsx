@@ -9,10 +9,14 @@ export interface ClaimData {
 
 interface ClaimCardProps {
   claim: ClaimData;
+  onGoToClaimChart?: (claimNumber: number) => void;
+  /** @deprecated Use onGoToClaimChart instead */
   onInspect?: (claimNumber: number) => void;
 }
 
-export const ClaimCard = ({ claim, onInspect }: ClaimCardProps) => {
+export const ClaimCard = ({ claim, onGoToClaimChart, onInspect }: ClaimCardProps) => {
+  // Prefer onGoToClaimChart, fallback to onInspect for backward compatibility
+  const handleClick = onGoToClaimChart || onInspect;
   const cardStyles: React.CSSProperties = {
     padding: 'var(--space-5)',
     marginBottom: 'var(--space-4)',
@@ -63,9 +67,9 @@ export const ClaimCard = ({ claim, onInspect }: ClaimCardProps) => {
       <Button
         variant="secondary"
         size="small"
-        onClick={() => onInspect?.(claim.claimNumber)}
+        onClick={() => handleClick?.(claim.claimNumber)}
       >
-        Inspect
+        Go to claims chart
       </Button>
     </Card>
   );

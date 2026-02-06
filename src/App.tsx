@@ -1,8 +1,8 @@
 import './styles/tokens.css';
-import { ReportExecutiveSummaryAppFrame } from './pages/ReportExecutiveSummaryAppFrame';
+import { ConstrainedWorkspace } from './pages/ConstrainedWorkspace';
 
 function App() {
-  return <ReportExecutiveSummaryAppFrame />;
+  return <ConstrainedWorkspace />;
 }
 
 export default App;

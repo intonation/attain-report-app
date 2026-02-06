@@ -1,9 +1,6 @@
 import { Button } from '../base';
 import {
-  HistoryIcon,
   DiamondIcon,
-  PenIcon,
-  StrikethroughIcon,
   DownloadIcon,
 } from '../icons';
 import '../../styles/toolbar.css';
@@ -30,25 +27,12 @@ export const Toolbar = ({
         </div>
       </div>
 
-      {/* Center section - Tool controls */}
-      <div className="toolbar__center">
-        <button className="toolbar__iconBtn" aria-label="History">
-          <HistoryIcon />
-        </button>
-        <div className="toolbar__divider" />
-        <button className="toolbar__iconBtn" aria-label="Diamond">
+      {/* Right section - Clear highlighting and Export */}
+      <div className="toolbar__right">
+        <button className="toolbar__iconBtn" aria-label="Clear all highlighting">
           <DiamondIcon />
         </button>
-        <button className="toolbar__iconBtn" aria-label="Edit">
-          <PenIcon />
-        </button>
-        <button className="toolbar__iconBtn" aria-label="Strikethrough">
-          <StrikethroughIcon />
-        </button>
-      </div>
-
-      {/* Right section - Export */}
-      <div className="toolbar__right">
+        <div className="toolbar__divider" />
         <Button variant="primary" size="small">
           <DownloadIcon />
           Export

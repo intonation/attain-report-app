@@ -171,14 +171,15 @@ export const PriorArtIcon = (props: IconProps) => (
 );
 
 export const SidepanelIcon = (props: IconProps) => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M21 3C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H21ZM15 5H4V19H15V5ZM20 5H17V19H20V5Z" />
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <line x1="9" y1="3" x2="9" y2="21" />
   </svg>
 );
 
 // Toolbar icons
 export const HistoryIcon = (props: IconProps) => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M12 8v4l3 3" />
     <circle cx="12" cy="12" r="9" />
   </svg>
@@ -193,7 +194,7 @@ export const RefreshIcon = (props: IconProps) => (
 
 // Clear highlighting icon (eraser) - from Clear heighlighting.svg
 export const ClearHighlightingIcon = (props: IconProps) => (
-  <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg width="24" height="24" viewBox="7 8 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M12.6667 22L9.80005 19.1333C9.13338 18.4667 9.13338 17.4667 9.80005 16.8667L16.2 10.4667C16.8667 9.80001 17.8667 9.80001 18.4667 10.4667L22.2 14.2C22.8667 14.8667 22.8667 15.8667 22.2 16.4667L16.6667 22" />
     <path d="M22.6667 22H12.6667" />
     <path d="M11.3333 15.3333L17.3333 21.3333" />
@@ -204,7 +205,7 @@ export const DiamondIcon = ClearHighlightingIcon;
 
 // Hide update highlights icon - from Hide update highlihts.svg
 export const HideUpdateHighlightsIcon = (props: IconProps) => (
-  <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg width="24" height="24" viewBox="7 8 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M14 15.3333L10 19.3333V21.3333H16L18 19.3333" />
     <path d="M22.6666 16L19.6 19.0667C19.3507 19.311 19.0156 19.4478 18.6666 19.4478C18.3176 19.4478 17.9825 19.311 17.7333 19.0667L14.2666 15.6C14.0223 15.3508 13.8855 15.0157 13.8855 14.6667C13.8855 14.3177 14.0223 13.9826 14.2666 13.7334L17.3333 10.6667" />
   </svg>
@@ -214,7 +215,7 @@ export const PenIcon = HideUpdateHighlightsIcon;
 
 // Show red lines icon (strikethrough text) - from Show-red-lines.svg
 export const ShowRedLinesIcon = (props: IconProps) => (
-  <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg width="24" height="24" viewBox="7 8 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M18.6667 10.6667H14.0001C13.68 10.6665 13.3646 10.7432 13.0803 10.8902C12.796 11.0372 12.5512 11.2503 12.3663 11.5116C12.1815 11.7728 12.062 12.0746 12.018 12.3917C11.974 12.7087 12.0067 13.0316 12.1134 13.3334" />
     <path d="M17.3333 16C18.0406 16 18.7189 16.281 19.219 16.781C19.719 17.2811 20 17.9594 20 18.6667C20 19.3739 19.719 20.0522 19.219 20.5523C18.7189 21.0524 18.0406 21.3333 17.3333 21.3333H12" />
     <path d="M10.6667 16H21.3334" />

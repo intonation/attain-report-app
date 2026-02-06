@@ -70,7 +70,7 @@
 .toolbar__right {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-1);
 }
 
 .toolbar__iconBtn {
@@ -90,6 +90,21 @@
 .toolbar__iconBtn:hover {
   background-color: var(--color-grey-light);
   color: var(--color-text);
+}
+
+.toolbar__iconBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.toolbar__iconBtn--active {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+.toolbar__iconBtn--active:hover {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
 }
 
 /* Export button styling */

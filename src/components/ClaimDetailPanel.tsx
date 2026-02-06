@@ -61,9 +61,10 @@ function StrengthBar({ strength }: { strength: string }) {
 interface ClaimDetailPanelProps {
   row: ClaimChartRow | null;
   onClose: () => void;
+  onCitationClick?: (citation: string) => void;
 }
 
-export function ClaimDetailPanel({ row, onClose }: ClaimDetailPanelProps) {
+export function ClaimDetailPanel({ row, onClose, onCitationClick }: ClaimDetailPanelProps) {
   if (!row) {
     return (
       <div className="claimDetailPanel claimDetailPanel--empty">
@@ -111,8 +112,13 @@ export function ClaimDetailPanel({ row, onClose }: ClaimDetailPanelProps) {
             <blockquote className="claimDetailPanel__quotation">
               {row.interpretation}
             </blockquote>
-            {row.citations && (
-              <p className="claimDetailPanel__citation">{row.citations}</p>
+            {row.citations && row.citations !== '—' && (
+              <button
+                className="claimDetailPanel__citationBtn"
+                onClick={() => onCitationClick?.(row.citations)}
+              >
+                {row.citations}
+              </button>
             )}
           </section>
         )}

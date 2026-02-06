@@ -17,10 +17,12 @@ interface PaneHeaderProps {
   onSelect?: (id: string) => void;
   onPrevious?: () => void;
   onNext?: () => void;
-  onSplit?: () => void;
+  onSplitToggle?: () => void;
+  isSplitView?: boolean;
   showNavigation?: boolean;
   showKebab?: boolean;
   showSplit?: boolean;
+  showDropdown?: boolean;
 }
 
 export const PaneHeader = ({
@@ -30,10 +32,12 @@ export const PaneHeader = ({
   onSelect,
   onPrevious,
   onNext,
-  onSplit,
+  onSplitToggle,
+  isSplitView = false,
   showNavigation = true,
   showKebab = true,
   showSplit = true,
+  showDropdown = true,
 }: PaneHeaderProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isKebabOpen, setIsKebabOpen] = useState(false);
@@ -62,31 +66,33 @@ export const PaneHeader = ({
 
   return (
     <div className="paneHeader">
-      {/* Dropdown selector with navigation */}
-      <div className="paneHeader__dropdown" ref={dropdownRef}>
-        <button
-          className="paneHeader__dropdownBtn"
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          aria-expanded={isDropdownOpen}
-        >
-          <span className="paneHeader__title">{title}</span>
-          <ChevronDownIcon />
-        </button>
+      {/* Dropdown selector - only shown in split view */}
+      {showDropdown && (
+        <div className="paneHeader__dropdown" ref={dropdownRef}>
+          <button
+            className="paneHeader__dropdownBtn"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            aria-expanded={isDropdownOpen}
+          >
+            <span className="paneHeader__title">{title}</span>
+            <ChevronDownIcon />
+          </button>
 
-        {isDropdownOpen && items.length > 0 && (
-          <div className="paneHeader__dropdownMenu">
-            {items.map((item) => (
-              <button
-                key={item.id}
-                className={`paneHeader__dropdownItem ${item.id === selectedId ? 'active' : ''}`}
-                onClick={() => handleSelect(item.id)}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+          {isDropdownOpen && items.length > 0 && (
+            <div className="paneHeader__dropdownMenu">
+              {items.map((item) => (
+                <button
+                  key={item.id}
+                  className={`paneHeader__dropdownItem ${item.id === selectedId ? 'active' : ''}`}
+                  onClick={() => handleSelect(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Navigation arrows */}
       {showNavigation && (
@@ -112,9 +118,10 @@ export const PaneHeader = ({
       <div className="paneHeader__actions">
         {showSplit && (
           <button
-            className="paneHeader__actionBtn"
-            onClick={onSplit}
-            aria-label="Split view"
+            className={`paneHeader__actionBtn ${isSplitView ? 'paneHeader__actionBtn--active' : ''}`}
+            onClick={onSplitToggle}
+            aria-label={isSplitView ? 'Close split view' : 'Open split view'}
+            aria-pressed={isSplitView}
           >
             <SplitIcon />
           </button>

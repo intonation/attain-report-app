@@ -4,11 +4,11 @@ import { ScrambleHeading } from "../primitives/ScrambleHeading";
 type Item = {
   id: string;
   label: string;
-  icon: ReactNode;
 };
 
 interface SidebarSectionProps {
   title: string;
+  sectionIcon?: ReactNode;
   items: Item[];
   startDelay: number;
   activeItem: string;
@@ -21,6 +21,7 @@ interface SidebarSectionProps {
 
 export function SidebarSection({
   title,
+  sectionIcon,
   items,
   startDelay,
   activeItem,
@@ -71,6 +72,9 @@ export function SidebarSection({
         onClick={() => setCollapsed((c) => !c)}
         aria-expanded={!collapsed}
       >
+        {sectionIcon && (
+          <span className="sidebarSectionIcon">{sectionIcon}</span>
+        )}
         <span className="sidebarSectionHeaderText">
           {showHeader ? (
             <ScrambleHeading
@@ -104,7 +108,6 @@ export function SidebarSection({
                 className={`sidebarItem ${i < visibleCount ? "visible" : ""} ${isActive ? "active" : ""} ${stateClass} ${skipAnimation ? "skipAnimation" : ""}`}
                 onClick={() => onNavigate(item.id)}
               >
-                {item.icon}
                 <span className="sidebarItemLabel">{item.label}</span>
               </button>
             );

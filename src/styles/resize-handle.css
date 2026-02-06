@@ -1,0 +1,75 @@
+/* Resize Handle Component */
+.resizeHandle {
+  position: absolute;
+  z-index: 10;
+  user-select: none;
+}
+
+.resizeHandle--horizontal {
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: col-resize;
+}
+
+.resizeHandle--horizontal.resizeHandle--right {
+  right: -4px;
+}
+
+.resizeHandle--horizontal.resizeHandle--left {
+  left: -4px;
+}
+
+.resizeHandle--vertical {
+  left: 0;
+  right: 0;
+  height: 8px;
+  bottom: -4px;
+  cursor: row-resize;
+}
+
+.resizeHandle__line {
+  position: absolute;
+  background-color: transparent;
+  transition: background-color 150ms ease;
+}
+
+.resizeHandle--horizontal .resizeHandle__line {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.resizeHandle--vertical .resizeHandle__line {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.resizeHandle:hover .resizeHandle__line,
+.resizeHandle--dragging .resizeHandle__line {
+  background-color: var(--color-accent);
+}
+
+.resizeHandle--dragging {
+  /* Extend hit area while dragging */
+}
+
+/* Global cursor override while dragging */
+body.resizing-horizontal {
+  cursor: col-resize !important;
+}
+
+body.resizing-vertical {
+  cursor: row-resize !important;
+}
+
+body.resizing-horizontal *,
+body.resizing-vertical * {
+  cursor: inherit !important;
+  user-select: none !important;
+}

@@ -38,6 +38,12 @@
   position: relative;
 }
 
+.paneHeader__titleStatic {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+}
+
 .paneHeader__dropdownBtn {
   display: flex;
   align-items: center;
@@ -128,6 +134,16 @@
 .paneHeader__actionBtn:hover {
   background-color: var(--color-grey-light);
   color: var(--color-text);
+}
+
+.paneHeader__actionBtn--active {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+.paneHeader__actionBtn--active:hover {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
 }
 
 .paneHeader__kebab {
