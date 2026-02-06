@@ -1,8 +1,8 @@
 import './styles/tokens.css';
-import { ReportExecutiveSummaryWireframe } from './pages/ReportExecutiveSummaryWireframe';
+import { ReportExecutiveSummaryAppFrame } from './pages/ReportExecutiveSummaryAppFrame';
 
 function App() {
-  return <ReportExecutiveSummaryWireframe />;
+  return <ReportExecutiveSummaryAppFrame />;
 }
 
 export default App;

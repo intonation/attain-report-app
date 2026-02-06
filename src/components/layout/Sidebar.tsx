@@ -4,6 +4,10 @@ import {
   GeneratedTablesIcon,
   PriorArtIcon,
   SidepanelIcon,
+  AllCasesIcon,
+  UsersIcon,
+  SettingsIcon,
+  LogOutIcon,
 } from '../icons';
 import { SidebarSection } from './SidebarSection';
 import '../../styles/sidebar.css';
@@ -66,7 +70,8 @@ export const Sidebar = ({
   onCollapsedChange,
 }: SidebarProps) => {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
-  const [visitedItemIds, setVisitedItemIds] = useState<Set<string>>(new Set());
+  // Initialize with the active item already marked as visited (it's the page we're on)
+  const [visitedItemIds, setVisitedItemIds] = useState<Set<string>>(() => new Set([activeItem]));
   const userToggledRef = useRef(false);
   const hasAnimatedRef = useRef(false);
   const isInitialLoadRef = useRef(true);
@@ -122,11 +127,9 @@ export const Sidebar = ({
 
   return (
     <div className={`sidebarContainer ${collapsed ? 'collapsed' : ''}`}>
-      <div className="sidebarTopRow">
-        <div className="sidebarLogo">
-          <LogoIcon />
-          {!collapsed && <span className="sidebarLogoText">Client name</span>}
-        </div>
+      <div className="sidebarLogo">
+        <LogoIcon />
+        {!collapsed && <span className="sidebarLogoText">Acme Automotive</span>}
         <button
           className="sidebarCollapseBtn"
           onClick={() => setCollapsed(!collapsed)}
@@ -138,39 +141,66 @@ export const Sidebar = ({
 
       {/* Only render menu content when not collapsed */}
       {!collapsed && (
-        <div className="sidebarContent">
-          <SidebarSection
-            title="GENERATED DOCUMENTS"
-            startDelay={100}
-            items={generatedDocumentsItems}
-            activeItem={activeItem}
-            visitedItemIds={visitedItemIds}
-            onNavigate={handleNavigate}
-            skipAnimation={hasAnimatedRef.current}
-            onAnimationComplete={markAnimationComplete}
-          />
+        <>
+          <div className="sidebarContent">
+            {/* All cases link */}
+            <button
+              className="sidebarBottomItem"
+              style={{ marginBottom: 'var(--space-4)' }}
+            >
+              <AllCasesIcon />
+              <span>All cases</span>
+            </button>
 
-          <SidebarSection
-            title="GENERATED TABLES"
-            startDelay={400}
-            items={generatedTableItems}
-            activeItem={activeItem}
-            visitedItemIds={visitedItemIds}
-            onNavigate={handleNavigate}
-            skipAnimation={hasAnimatedRef.current}
-          />
+            <SidebarSection
+              title="GENERATED DOCUMENTS"
+              startDelay={100}
+              items={generatedDocumentsItems}
+              activeItem={activeItem}
+              visitedItemIds={visitedItemIds}
+              onNavigate={handleNavigate}
+              skipAnimation={hasAnimatedRef.current}
+              onAnimationComplete={markAnimationComplete}
+            />
 
-          <SidebarSection
-            title="PRIOR ART"
-            startDelay={700}
-            items={priorArtItems}
-            activeItem={activeItem}
-            visitedItemIds={visitedItemIds}
-            onNavigate={handleNavigate}
-            skipAnimation={hasAnimatedRef.current}
-            defaultCollapsed={true}
-          />
-        </div>
+            <SidebarSection
+              title="GENERATED TABLES"
+              startDelay={400}
+              items={generatedTableItems}
+              activeItem={activeItem}
+              visitedItemIds={visitedItemIds}
+              onNavigate={handleNavigate}
+              skipAnimation={hasAnimatedRef.current}
+            />
+
+            <SidebarSection
+              title="PRIOR ART"
+              startDelay={700}
+              items={priorArtItems}
+              activeItem={activeItem}
+              visitedItemIds={visitedItemIds}
+              onNavigate={handleNavigate}
+              skipAnimation={hasAnimatedRef.current}
+              defaultCollapsed={true}
+            />
+          </div>
+
+          {/* Bottom navigation */}
+          <div className="sidebarBottom">
+            <button className="sidebarBottomItem">
+              <UsersIcon />
+              <span>Invite users</span>
+            </button>
+            <button className="sidebarBottomItem">
+              <SettingsIcon />
+              <span>Settings</span>
+            </button>
+            <button className="sidebarBottomItem">
+              <LogOutIcon />
+              <span>Sign out</span>
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

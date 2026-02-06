@@ -1,0 +1,118 @@
+/* Toolbar styles */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 var(--space-4);
+  background-color: #f5f3f100;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.toolbar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.toolbar__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.toolbar__appInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.toolbar__appNumber {
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.toolbar__appTitle {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toolbar__version {
+  font-size: var(--font-size-xsmall);
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  background-color: var(--color-grey-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.toolbar__center {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.toolbar__divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-border);
+  margin: 0 var(--space-2);
+}
+
+.toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.toolbar__iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.toolbar__iconBtn:hover {
+  background-color: var(--color-grey-light);
+  color: var(--color-text);
+}
+
+/* Export button styling */
+.toolbar__right .button--primary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 6px;
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.toolbar__right .button--primary:hover {
+  background-color: #1e7078;
+}
+
+.toolbar__right .button--primary svg {
+  width: 16px;
+  height: 16px;
+}

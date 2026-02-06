@@ -1,0 +1,175 @@
+/* Pane Header styles */
+.paneHeader {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 var(--space-4);
+  background-color: var(--color-canvas);
+  border-bottom: 1px solid var(--color-border);
+  gap: var(--space-2);
+}
+
+.paneHeader__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.paneHeader__navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.paneHeader__navBtn:hover {
+  background-color: var(--color-grey-light);
+  color: var(--color-text);
+}
+
+.paneHeader__dropdown {
+  position: relative;
+  flex: 1;
+}
+
+.paneHeader__dropdownBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background-color 150ms ease;
+}
+
+.paneHeader__dropdownBtn:hover {
+  background-color: var(--color-grey-light);
+}
+
+.paneHeader__title {
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.paneHeader__dropdownBtn svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-text-muted);
+}
+
+.paneHeader__dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--space-1);
+  min-width: 220px;
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.paneHeader__dropdownItem {
+  display: block;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.paneHeader__dropdownItem:hover {
+  background-color: var(--color-grey-light);
+}
+
+.paneHeader__dropdownItem.active {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+.paneHeader__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.paneHeader__actionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.paneHeader__actionBtn:hover {
+  background-color: var(--color-grey-light);
+  color: var(--color-text);
+}
+
+.paneHeader__kebab {
+  position: relative;
+}
+
+.paneHeader__kebabMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--space-1);
+  min-width: 140px;
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.paneHeader__kebabItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.paneHeader__kebabItem:hover {
+  background-color: var(--color-grey-light);
+}
+
+.paneHeader__kebabItem svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+}

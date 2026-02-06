@@ -94,9 +94,9 @@ export const ReportExecutiveSummaryWireframe = () => {
     borderRadius: 0,
   };
 
-  // Header styles
+  // Header styles (Minor third scale: 14px base × 1.2⁴ = 29px for h1)
   const titleStyles: React.CSSProperties = {
-    fontSize: 'var(--font-size-h1)',
+    fontSize: '29px',
     fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-2)',
@@ -116,8 +116,9 @@ export const ReportExecutiveSummaryWireframe = () => {
     marginBottom: 'var(--space-8)',
   };
 
+  // Minor third scale: 14px base × 1.2³ = 24px for h2
   const sectionHeadingStyles: React.CSSProperties = {
-    fontSize: 'var(--font-size-h2)',
+    fontSize: '24px',
     fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-5)',

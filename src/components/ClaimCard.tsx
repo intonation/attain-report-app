@@ -32,7 +32,7 @@ export const ClaimCard = ({ claim, onInspect }: ClaimCardProps) => {
   };
 
   const reasoningStyles: React.CSSProperties = {
-    fontSize: 'var(--font-size-small)',
+    fontSize: '14px',
     lineHeight: 'var(--line-height-body)',
     color: 'var(--color-text)',
     marginBottom: 'var(--space-4)',
