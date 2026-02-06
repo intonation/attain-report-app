@@ -80,6 +80,7 @@ export function SidebarSection({
               cycleDelayMs={25}
               cyclesPerChar={2}
               className="sidebarSectionTitle"
+              skipAnimation={skipAnimation}
             />
           ) : (
             <span className="sidebarSectionTitle">&nbsp;</span>
@@ -100,7 +101,7 @@ export function SidebarSection({
             return (
               <button
                 key={item.id}
-                className={`sidebarItem ${i < visibleCount ? "visible" : ""} ${isActive ? "active" : ""} ${stateClass}`}
+                className={`sidebarItem ${i < visibleCount ? "visible" : ""} ${isActive ? "active" : ""} ${stateClass} ${skipAnimation ? "skipAnimation" : ""}`}
                 onClick={() => onNavigate(item.id)}
               >
                 {item.icon}

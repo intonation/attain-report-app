@@ -62,27 +62,7 @@ export const PaneHeader = ({
 
   return (
     <div className="paneHeader">
-      {/* Navigation arrows */}
-      {showNavigation && (
-        <div className="paneHeader__nav">
-          <button
-            className="paneHeader__navBtn"
-            onClick={onPrevious}
-            aria-label="Previous"
-          >
-            <ChevronLeftIcon />
-          </button>
-          <button
-            className="paneHeader__navBtn"
-            onClick={onNext}
-            aria-label="Next"
-          >
-            <ChevronRightIcon />
-          </button>
-        </div>
-      )}
-
-      {/* Dropdown selector */}
+      {/* Dropdown selector with navigation */}
       <div className="paneHeader__dropdown" ref={dropdownRef}>
         <button
           className="paneHeader__dropdownBtn"
@@ -107,6 +87,26 @@ export const PaneHeader = ({
           </div>
         )}
       </div>
+
+      {/* Navigation arrows */}
+      {showNavigation && (
+        <div className="paneHeader__nav">
+          <button
+            className="paneHeader__navBtn"
+            onClick={onPrevious}
+            aria-label="Previous"
+          >
+            <ChevronLeftIcon />
+          </button>
+          <button
+            className="paneHeader__navBtn"
+            onClick={onNext}
+            aria-label="Next"
+          >
+            <ChevronRightIcon />
+          </button>
+        </div>
+      )}
 
       {/* Right actions */}
       <div className="paneHeader__actions">

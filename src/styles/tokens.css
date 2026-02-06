@@ -123,11 +123,25 @@ p {
   overflow: hidden;
 }
 
+/* Variant with sidebar reaching top of page */
+.appShell.appShell--withSidebarTop {
+  flex-direction: row;
+}
+
 .appShell__body {
   display: flex;
   flex: 1;
   min-height: 0;
   overflow: hidden;
+}
+
+/* Main area (toolbar + workspace) - used when sidebar is at root level */
+.appShell__main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
 }
 
 .appShell__sidebar {
@@ -152,7 +166,7 @@ p {
   display: flex;
   flex: 1;
   min-width: 0;
-  height: 100%;
+  min-height: 0;
 }
 
 .appShell__pane {

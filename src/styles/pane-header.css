@@ -36,7 +36,6 @@
 
 .paneHeader__dropdown {
   position: relative;
-  flex: 1;
 }
 
 .paneHeader__dropdownBtn {
@@ -109,6 +108,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
+  margin-left: auto;
 }
 
 .paneHeader__actionBtn {

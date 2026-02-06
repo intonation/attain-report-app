@@ -157,6 +157,13 @@
   transform: translateY(0);
 }
 
+/* Skip animation on subsequent renders (not initial page load) */
+.sidebarItem.skipAnimation {
+  opacity: 1;
+  transform: translateY(0);
+  transition: background-color 150ms ease;
+}
+
 .sidebarItem:hover {
   background-color: rgba(0, 0, 0, 0.04);
 }

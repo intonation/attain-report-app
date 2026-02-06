@@ -10,6 +10,7 @@ interface ScrambleHeadingProps {
   cyclesPerChar?: number;
   className?: string;
   style?: React.CSSProperties;
+  skipAnimation?: boolean;
 }
 
 export function ScrambleHeading({
@@ -20,19 +21,22 @@ export function ScrambleHeading({
   cyclesPerChar = 2,
   className = "",
   style,
+  skipAnimation = false,
 }: ScrambleHeadingProps) {
   const prefersReducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  const shouldSkip = skipAnimation || prefersReducedMotion;
+
   const [displayText, setDisplayText] = useState(
-    prefersReducedMotion ? text : ""
+    shouldSkip ? text : ""
   );
 
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (prefersReducedMotion) {
+    if (shouldSkip) {
       setDisplayText(text);
       return;
     }
@@ -80,7 +84,7 @@ export function ScrambleHeading({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [text, prefersReducedMotion, cycleDelayMs, revealDelayMs, cyclesPerChar]);
+  }, [text, shouldSkip, cycleDelayMs, revealDelayMs, cyclesPerChar]);
 
   const padded = displayText.padEnd(text.length, " ");
 

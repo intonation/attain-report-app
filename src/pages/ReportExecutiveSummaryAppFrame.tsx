@@ -4,7 +4,11 @@ import { PaneHeader } from '../components/layout/PaneHeader';
 import { Sidebar } from '../components/layout/Sidebar';
 import { ClaimCard } from '../components/ClaimCard';
 import { InspectPanel } from '../components/InspectPanel';
-import { reportData, claimsData } from '../data/mockData';
+import { ClaimsChartTable } from '../components/ClaimsChartTable';
+import { ClaimDetailPanel } from '../components/ClaimDetailPanel';
+import { DocumentViewer } from '../components/DocumentViewer';
+import { reportData, claimsData, claimChartData } from '../data/mockData';
+import type { ClaimChartRow } from '../data/mockData';
 
 // Navigation items that should trigger full-width mode (sidebar collapsed)
 const FULL_WIDTH_NAV_ITEMS = ['claim-charts', 'workbench'];
@@ -28,6 +32,16 @@ export const ReportExecutiveSummaryAppFrame = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isSplitView, setIsSplitView] = useState(false);
   const [rightPaneDocId, setRightPaneDocId] = useState('executive-summary');
+
+  // Claims chart row selection state
+  const [selectedRowId, setSelectedRowId] = useState<string | undefined>(undefined);
+  const [detailRow, setDetailRow] = useState<ClaimChartRow | null>(null);
+  const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
+
+  // Document viewer state
+  const [isDocumentViewerOpen, setIsDocumentViewerOpen] = useState(false);
+  const [viewerCitation, setViewerCitation] = useState<string>('');
+
   const mainScrollRef = useRef<HTMLDivElement>(null);
   const rightPaneScrollRef = useRef<HTMLDivElement>(null);
   const userToggledSidebarRef = useRef(false);
@@ -48,7 +62,7 @@ export const ReportExecutiveSummaryAppFrame = () => {
     }
   }, [activeNavItem]);
 
-  // Auto-collapse/expand sidebar based on inspect panel or split view state and viewport width
+  // Auto-collapse/expand sidebar based on inspect panel, detail panel, or split view state and viewport width
   useEffect(() => {
     // Never auto-collapse on initial load
     if (isInitialLoadRef.current) {
@@ -62,18 +76,18 @@ export const ReportExecutiveSummaryAppFrame = () => {
     }
 
     const isNarrow = window.innerWidth < INSPECT_COLLAPSE_BREAKPOINT;
-    const needsMoreSpace = isInspectOpen || isSplitView;
+    const needsMoreSpace = isInspectOpen || isSplitView || isDetailPanelOpen || isDocumentViewerOpen;
 
     if (needsMoreSpace && isNarrow && !sidebarCollapsed) {
-      // Collapse sidebar when inspect panel or split view opens and viewport is narrow
+      // Collapse sidebar when any right panel opens and viewport is narrow
       wasCollapsedByInspectRef.current = true;
       setSidebarCollapsed(true);
     } else if (!needsMoreSpace && wasCollapsedByInspectRef.current) {
-      // Re-expand sidebar when both are closed (if we collapsed it)
+      // Re-expand sidebar when all panels are closed (if we collapsed it)
       wasCollapsedByInspectRef.current = false;
       setSidebarCollapsed(false);
     }
-  }, [isInspectOpen, isSplitView, sidebarCollapsed]);
+  }, [isInspectOpen, isSplitView, isDetailPanelOpen, isDocumentViewerOpen, sidebarCollapsed]);
 
   const handleInspectClaim = (claimNumber: number) => {
     setInspectClaimNumber(claimNumber);
@@ -115,6 +129,39 @@ export const ReportExecutiveSummaryAppFrame = () => {
     setIsSplitView(false);
   };
 
+  // Handle row click from claims chart - open detail panel
+  const handleRowClick = (row: ClaimChartRow) => {
+    setDetailRow(row);
+    setSelectedRowId(row.claimId);
+    setIsDetailPanelOpen(true);
+    // Close other panels
+    setIsSplitView(false);
+    setIsInspectOpen(false);
+  };
+
+  // Handle closing the detail panel
+  const handleDetailPanelClose = () => {
+    setDetailRow(null);
+    setSelectedRowId(undefined);
+    setIsDetailPanelOpen(false);
+  };
+
+  // Handle citation click - open document viewer
+  const handleCitationClick = (citation: string) => {
+    setViewerCitation(citation);
+    setIsDocumentViewerOpen(true);
+    // Close other panels
+    setIsDetailPanelOpen(false);
+    setIsInspectOpen(false);
+    setIsSplitView(false);
+  };
+
+  // Handle closing the document viewer
+  const handleDocumentViewerClose = () => {
+    setIsDocumentViewerOpen(false);
+    setViewerCitation('');
+  };
+
   // Get document title by id
   const getDocTitle = (docId: string) =>
     DOCUMENT_ITEMS.find(d => d.id === docId)?.label || 'Executive Summary';
@@ -153,10 +200,25 @@ export const ReportExecutiveSummaryAppFrame = () => {
 
   // Render document content based on document ID
   const renderDocumentContent = (docId: string) => {
-    const isFullWidthDoc = FULL_WIDTH_NAV_ITEMS.includes(docId);
+    // Claim Charts page - render interactive table
+    if (docId === 'claim-charts') {
+      return (
+        <div style={{ width: '100%' }}>
+          {claimChartData.map((chart) => (
+            <ClaimsChartTable
+              key={chart.claimNumber}
+              chart={chart}
+              selectedRowId={selectedRowId}
+              onRowClick={handleRowClick}
+              onCitationClick={handleCitationClick}
+            />
+          ))}
+        </div>
+      );
+    }
 
-    // Placeholder content for full-width pages
-    if (isFullWidthDoc) {
+    // Workbench placeholder
+    if (docId === 'workbench') {
       const placeholderStyles: React.CSSProperties = {
         display: 'flex',
         flexDirection: 'column',
@@ -166,15 +228,10 @@ export const ReportExecutiveSummaryAppFrame = () => {
         color: 'var(--color-text-muted)',
       };
 
-      const titleMap: Record<string, string> = {
-        'claim-charts': 'Claim Charts',
-        'workbench': 'Workbench',
-      };
-
       return (
         <div style={placeholderStyles}>
           <h2 style={{ ...titleStyles, marginBottom: 'var(--space-4)' }}>
-            {titleMap[docId] || 'Full Width View'}
+            Workbench
           </h2>
           <p style={{ fontSize: 'var(--font-size-small)' }}>
             Full-width table view placeholder
@@ -218,25 +275,25 @@ export const ReportExecutiveSummaryAppFrame = () => {
   };
 
   return (
-    <div className="appShell">
-      {/* Top Toolbar */}
-      <Toolbar
-        applicationNumber="US 17/174,123"
-        applicationTitle="Adaptive Cruise Control with Predictive Headway Management"
-        version="v0.1"
-      />
+    <div className="appShell appShell--withSidebarTop">
+      {/* Left Sidebar - full height */}
+      <div className={`appShell__sidebar ${sidebarCollapsed ? 'appShell__sidebar--collapsed' : 'appShell__sidebar--expanded'}`}>
+        <Sidebar
+          activeItem={activeNavItem}
+          onNavigate={handleNavigate}
+          collapsed={sidebarCollapsed}
+          onCollapsedChange={handleSidebarCollapsedChange}
+        />
+      </div>
 
-      {/* Main body with sidebar and workspace */}
-      <div className="appShell__body">
-        {/* Left Sidebar */}
-        <div className={`appShell__sidebar ${sidebarCollapsed ? 'appShell__sidebar--collapsed' : 'appShell__sidebar--expanded'}`}>
-          <Sidebar
-            activeItem={activeNavItem}
-            onNavigate={handleNavigate}
-            collapsed={sidebarCollapsed}
-            onCollapsedChange={handleSidebarCollapsedChange}
-          />
-        </div>
+      {/* Main area (toolbar + workspace) */}
+      <div className="appShell__main">
+        {/* Top Toolbar */}
+        <Toolbar
+          applicationNumber="US 17/174,123"
+          applicationTitle="Adaptive Cruise Control with Predictive Headway Management"
+          version="v0.1"
+        />
 
         {/* Workspace area with panes */}
         <div className="appShell__workspace">
@@ -277,7 +334,7 @@ export const ReportExecutiveSummaryAppFrame = () => {
           )}
 
           {/* Right Pane - Inspect Panel */}
-          {isInspectOpen && !isSplitView && (
+          {isInspectOpen && !isSplitView && !isDetailPanelOpen && !isDocumentViewerOpen && (
             <div className="appShell__inspectPane">
               <PaneHeader
                 title={leftPaneDocTitle}
@@ -292,6 +349,26 @@ export const ReportExecutiveSummaryAppFrame = () => {
                 onClose={() => setIsInspectOpen(false)}
                 claimNumber={inspectClaimNumber}
                 embedded={true}
+              />
+            </div>
+          )}
+
+          {/* Right Pane - Claim Detail Panel (for claim chart row selection) */}
+          {isDetailPanelOpen && !isSplitView && !isDocumentViewerOpen && (
+            <div className="appShell__inspectPane">
+              <ClaimDetailPanel
+                row={detailRow}
+                onClose={handleDetailPanelClose}
+              />
+            </div>
+          )}
+
+          {/* Right Pane - Document Viewer (for citation clicks) */}
+          {isDocumentViewerOpen && !isSplitView && (
+            <div className="appShell__inspectPane">
+              <DocumentViewer
+                citation={viewerCitation}
+                onClose={handleDocumentViewerClose}
               />
             </div>
           )}
