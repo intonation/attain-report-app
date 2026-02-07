@@ -5,19 +5,12 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   padded?: boolean;
 }
 
-export const Card = ({ children, padded = false, style, ...props }: CardProps) => {
-  const styles: React.CSSProperties = {
-    position: 'relative',
-    backgroundColor: 'var(--color-paper)',
-    borderRadius: 0,
-    padding: padded ? 'var(--space-6)' : undefined,
-    border: '1px solid var(--color-border)',
-    transition: 'background-color 0.2s ease',
-    ...style,
-  };
+export const Card = ({ children, padded = false, style, className, ...props }: CardProps) => {
+  const cardClass = padded ? 'card card--padded' : 'card';
+  const combinedClassName = className ? `${cardClass} ${className}` : cardClass;
 
   return (
-    <div style={styles} {...props}>
+    <div className={combinedClassName} style={style} {...props}>
       {children}
     </div>
   );

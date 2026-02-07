@@ -86,9 +86,8 @@ export const ConstrainedWorkspace = () => {
     }
   }, [activeNavItem]);
 
-  // Navigate to claim charts and select the specific claim row
-  const handleGoToClaimChart = (claimNumber: number) => {
-    // Navigate to claim-charts view
+  // Canonical handler: navigate to claim-charts and select a specific row
+  const goToClaimChartRow = (claimNumber: number) => {
     handleNavigate('claim-charts');
 
     // Find the first row matching this claim number (claimChartData uses "Claim N" format)
@@ -306,7 +305,7 @@ export const ConstrainedWorkspace = () => {
                 <ClaimCard
                   key={claim.claimNumber}
                   claim={claim}
-                  onGoToClaimChart={handleGoToClaimChart}
+                  onGoToClaimChart={goToClaimChartRow}
                 />
               ))}
             </section>

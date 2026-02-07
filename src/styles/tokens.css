@@ -3,6 +3,8 @@
    ========================================================= */
 
 @import "../../attain-design-system/src/styles/tokens/index.css";
+@import "../../attain-design-system/src/styles/layout/index.css";
+@import "../../attain-design-system/src/styles/components/index.css";
 
 /* Backwards compatibility aliases — app legacy names */
 :root {

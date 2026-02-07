@@ -1,5 +1,6 @@
 import type { ClaimChartRow, NoveltyConclusion } from '../data/mockData';
 import { Badge, type BadgeVariant } from './base/Badge';
+import { ReferenceToken, type ReferenceVariant } from './base/ReferenceToken';
 import '../styles/claim-detail-panel.css';
 
 // Helper to map novelty conclusion to badge variant
@@ -14,6 +15,15 @@ function getNoveltyVariant(status: NoveltyConclusion): BadgeVariant {
     case 'Not novel':
       return 'not-novel';
   }
+}
+
+// Helper to map reference code to variant
+function getReferenceVariant(code: string): ReferenceVariant {
+  if (code.startsWith('L')) return 'line';
+  if (code.startsWith('C')) return 'claim';
+  if (code.startsWith('F')) return 'feature';
+  if (code.startsWith('R')) return 'relationship';
+  return 'line';
 }
 
 // Close icon
@@ -70,7 +80,7 @@ export function ClaimDetailPanel({ row, onClose, onCitationClick }: ClaimDetailP
       {/* Header */}
       <div className="claimDetailPanel__header">
         <div className="claimDetailPanel__headerLeft">
-          <span className="claimDetailPanel__idChip">{row.claimId}</span>
+          <ReferenceToken variant={getReferenceVariant(row.claimId)}>{row.claimId}</ReferenceToken>
           <Badge variant={getNoveltyVariant(row.conclusion)}>
             {row.conclusion}
           </Badge>
@@ -100,12 +110,13 @@ export function ClaimDetailPanel({ row, onClose, onCitationClick }: ClaimDetailP
               {row.interpretation}
             </blockquote>
             {row.citations && row.citations !== '—' && (
-              <button
-                className="claimDetailPanel__citationBtn"
+              <ReferenceToken
+                variant={getReferenceVariant(row.citations)}
                 onClick={() => onCitationClick?.(row.citations)}
+                style={{ cursor: 'pointer' }}
               >
                 {row.citations}
-              </button>
+              </ReferenceToken>
             )}
           </section>
         )}

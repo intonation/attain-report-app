@@ -9,3 +9,6 @@ export type { BadgeProps, BadgeVariant } from './Badge';
 
 export { Skeleton, SkeletonText } from './Skeleton';
 export type { SkeletonProps } from './Skeleton';
+
+export { ReferenceToken } from './ReferenceToken';
+export type { ReferenceTokenProps, ReferenceVariant } from './ReferenceToken';

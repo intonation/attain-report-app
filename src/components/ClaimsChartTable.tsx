@@ -1,5 +1,6 @@
 import type { ClaimChart, ClaimChartRow, NoveltyConclusion } from '../data/mockData';
 import { Badge, type BadgeVariant } from './base/Badge';
+import { ReferenceToken, type ReferenceVariant } from './base/ReferenceToken';
 import '../styles/claims-chart-table.css';
 
 // Helper to map novelty conclusion to badge variant
@@ -14,6 +15,15 @@ function getNoveltyVariant(status: NoveltyConclusion): BadgeVariant {
     case 'Not novel':
       return 'not-novel';
   }
+}
+
+// Helper to map reference code to variant
+function getReferenceVariant(code: string): ReferenceVariant {
+  if (code.startsWith('L')) return 'line';
+  if (code.startsWith('C')) return 'claim';
+  if (code.startsWith('F')) return 'feature';
+  if (code.startsWith('R')) return 'relationship';
+  return 'line';
 }
 
 interface ClaimsChartTableProps {
@@ -57,21 +67,22 @@ export function ClaimsChartTable({
                 onClick={() => onRowClick?.(row)}
               >
                 <td className="claimsChartTable__cell--id">
-                  <span className="claimsChartTable__idChip">{row.claimId}</span>
+                  <ReferenceToken variant={getReferenceVariant(row.claimId)}>{row.claimId}</ReferenceToken>
                 </td>
                 <td className="claimsChartTable__cell--claimText">{row.claimText}</td>
                 <td className="claimsChartTable__cell--interpretation">{row.interpretation}</td>
                 <td className="claimsChartTable__cell--citation">
                   {row.citations && row.citations !== '—' && (
-                    <button
-                      className="claimsChartTable__citationBtn"
+                    <ReferenceToken
+                      variant={getReferenceVariant(row.citations)}
                       onClick={(e) => {
                         e.stopPropagation();
                         onCitationClick?.(row.citations);
                       }}
+                      style={{ cursor: 'pointer' }}
                     >
                       {row.citations}
-                    </button>
+                    </ReferenceToken>
                   )}
                   {row.citations === '—' && (
                     <span className="claimsChartTable__citationTag">—</span>
