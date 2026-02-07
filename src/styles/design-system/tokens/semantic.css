@@ -1,0 +1,207 @@
+/* =====================================
+   DESIGN TOKENS (CANONICAL)
+   Source of truth for UI + prototypes
+   Do not redefine elsewhere
+   ===================================== */
+
+:root {
+  /* ========================================
+   * Brand Primitive Ramp — Editorial Ink
+   * ======================================== */
+  --color-brand-500: #77010D;
+  --color-brand-600: #5C0109;
+
+  --color-ink-900: #1C1917;
+  --color-ink-800: #292524;
+  --color-ink-600: #44403C;
+  --color-ink-500: #78716C;
+  --color-ink-300: #A8A29E;
+
+  --color-surface-0: #FAF9F7;
+  /* Surface ramp extension — intermediate step */
+  --color-surface-50: #F2EFEA;
+  --color-surface-100: #f5f3f1;
+
+  --color-border-300: #D6D3D1;
+
+  --color-accent-amber-500: #B4540A;
+  --color-success-500: #0F9D58;
+  --color-danger-500: #dc2626;
+
+  /* ========================================
+   * Semantic Tokens — UI Intent
+   * ======================================== */
+  --color-bg-canvas: var(--color-surface-0);
+  /* Optional warmer canvas */
+  --color-bg-canvas-warm: var(--color-surface-50);
+  --color-bg-surface: var(--color-white);
+
+  --color-text-primary: var(--color-ink-900);
+  --color-text-secondary: var(--color-ink-600);
+
+  --color-border-default: var(--color-border-300);
+
+  --color-action-primary: var(--color-brand-500);
+  --color-action-primary-hover: var(--color-brand-600);
+
+  --color-status-success: var(--color-success-500);
+  --color-status-danger: var(--color-danger-500);
+  --color-status-warning: var(--color-accent-amber-500);
+
+  /* ========================================
+   * Domain Tokens — Product-specific meaning
+   * ======================================== */
+  --color-domain-feature: #1e40af;
+  --color-domain-feature-subtle: rgba(30, 64, 175, 0.1);
+
+  --color-domain-relationship: #86198f;
+  --color-domain-relationship-subtle: rgba(134, 25, 143, 0.1);
+
+  /* ========================================
+   * Core Colors (primitives)
+   * ======================================== */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-dark: #0d243b;
+
+  /* Grey Ramp */
+  --color-grey-dark: #e0e0e0;
+  --color-grey-mid: #e2e2e2;
+  --color-grey-light: #f5f3f1;
+
+  /* Accent Colors (legacy primitives) */
+  --color-red: #a13838;
+  --color-green-1: #248790;
+  --color-green-2: #388b8c;
+  --color-green-3: #00fbff;
+
+  /* ========================================
+   * Backwards Compatibility Aliases
+   * DEPRECATED — Use semantic tokens instead
+   * ======================================== */
+
+  /* Deprecated — use --color-bg-canvas */
+  --color-canvas: var(--color-bg-canvas);
+
+  /* Deprecated — use --color-bg-surface */
+  --color-paper: var(--color-bg-surface);
+
+  /* Deprecated — use --color-text-primary */
+  --color-text: var(--color-text-primary);
+
+  /* Deprecated — use --color-text-secondary */
+  --color-muted: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-secondary);
+
+  /* Deprecated — use --color-border-default */
+  --color-border: var(--color-border-default);
+
+  /* Deprecated — use --color-action-primary */
+  --color-accent: var(--color-action-primary);
+  --color-accent-subtle: rgba(119, 1, 13, 0.1); /* 10% of brand-500 */
+
+  /* Deprecated — use --color-status-danger */
+  --color-danger: var(--color-status-danger);
+  --color-danger-subtle: rgba(220, 38, 38, 0.1); /* 10% of danger-500 */
+
+  /* Deprecated — use --color-domain-feature */
+  --color-feature: var(--color-domain-feature);
+  --color-feature-border: #1e40af52;
+  --color-feature-subtle: var(--color-domain-feature-subtle);
+
+  /* Deprecated — use --color-domain-relationship */
+  --color-relationship: var(--color-domain-relationship);
+  --color-relationship-border: #86198f52;
+  --color-relationship-subtle: var(--color-domain-relationship-subtle);
+
+  /* ========================================
+   * Typography - Font Families
+   * ======================================== */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+
+  /* ========================================
+   * Typography Scale (base 14px, ratio 1.2 minor third)
+   * Line-heights snap to 4px grid
+   * ======================================== */
+  --font-size-h1: 2.986rem;
+  --font-size-h2: 2.488rem;
+  --font-size-h3: 2.074rem;
+  --font-size-h4: 1.728rem;
+  --font-size-h5: 1.44rem;
+  --font-size-h6: 1.2rem;
+  --font-size-body: 1rem;
+  --font-size-small: 0.833rem;
+  --font-size-xsmall: 0.694rem;
+
+  /* Line-heights (4px grid aligned) */
+  --line-height-h1: 48px;
+  --line-height-h2: 40px;
+  --line-height-h3: 32px;
+  --line-height-h4: 28px;
+  --line-height-h5: 24px;
+  --line-height-h6: 20px;
+  --line-height-body: 24px;
+  --line-height-body-tight: 20px;
+  --line-height-small: 16px;
+  --line-height-xsmall: 12px;
+
+  /* ========================================
+   * Typography - Legacy Text Sizes
+   * (kept for backwards compatibility)
+   * ======================================== */
+  --text-xs: 0.75rem;
+  --text-xs-line-height: 1rem;
+
+  --text-sm: 0.875rem;
+  --text-sm-line-height: 1.25rem;
+
+  --text-md: 1rem;
+  --text-md-line-height: 1.5rem;
+
+  --text-lg: 1.125rem;
+  --text-lg-line-height: 1.75rem;
+
+  --text-xl: 1.25rem;
+  --text-xl-line-height: 1.75rem;
+
+  /* ========================================
+   * Spacing Tokens
+   * 4px baseline grid
+   * ======================================== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+
+  /* ========================================
+   * Border Radius Tokens
+   * Mapped from Open Props
+   * ======================================== */
+  --radius-none: 0;
+  --radius-sm: var(--radius-2);
+  --radius-md: var(--radius-3);
+  --radius-lg: var(--radius-4);
+
+  /* ========================================
+   * Shadow Tokens
+   * ======================================== */
+  --shadow-paper: var(--shadow-2);
+
+  /* ========================================
+   * Motion Tokens
+   * ======================================== */
+  --motion-duration-fast: 150ms;
+  --motion-duration-base: 250ms;
+  --motion-duration-slow: 400ms;
+
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --motion-ease-emphasised: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-linear: linear;
+}

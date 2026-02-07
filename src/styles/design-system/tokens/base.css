@@ -1,0 +1,381 @@
+/* =====================================
+   BASE STYLES
+   Global resets and defaults
+   ===================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  scroll-padding-top: 50px;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  font-weight: 400;
+  line-height: var(--line-height-body);
+  letter-spacing: 0em;
+  color: var(--color-text-primary);
+  background: var(--color-bg-canvas);
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+/* ----------------------------------------
+ * Document Typography (4px grid aligned)
+ * ---------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: var(--font-size-h1); line-height: var(--line-height-h1); }
+h2 { font-size: var(--font-size-h2); line-height: var(--line-height-h2); }
+h3 { font-size: var(--font-size-h3); line-height: var(--line-height-h3); }
+h4 { font-size: var(--font-size-h4); line-height: var(--line-height-h4); }
+h5 { font-size: var(--font-size-h5); line-height: var(--line-height-h5); }
+h6 { font-size: var(--font-size-h6); line-height: var(--line-height-h6); }
+
+/* Serif heading variant (per-element) */
+h1.heading-serif, h2.heading-serif, h3.heading-serif,
+h4.heading-serif, h5.heading-serif, h6.heading-serif,
+.heading-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+/* Serif headings context (all headings within) */
+.typography-serif h1, .typography-serif h2, .typography-serif h3,
+.typography-serif h4, .typography-serif h5, .typography-serif h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+/* Claim/Detail Title (h5 style) */
+.title-claim {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--color-dark);
+  margin: 0;
+  padding: 0;
+  border-bottom: none;
+}
+
+p {
+  margin: 0;
+}
+
+ul, ol {
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+li {
+  margin-bottom: var(--space-1);
+}
+
+/* Accent text utility */
+.text-accent {
+  color: var(--color-action-primary);
+}
+
+.text-muted {
+  color: var(--color-text-secondary);
+}
+
+.text-small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-xsmall {
+  font-size: var(--font-size-xsmall);
+  line-height: var(--line-height-xsmall);
+}
+
+/* ----------------------------------------
+ * Badge
+ * ---------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 4px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, text-decoration 0.15s ease;
+}
+
+.badge--default {
+  color: var(--color-text-primary);
+  background-color: var(--color-grey-mid);
+}
+
+.badge--success {
+  color: var(--color-action-primary);
+  background-color: var(--color-accent-subtle);
+}
+
+.badge--danger {
+  color: var(--color-status-danger);
+  background-color: var(--color-danger-subtle);
+}
+
+.badge--muted {
+  color: var(--color-text-secondary);
+  background-color: var(--color-grey-mid);
+}
+
+/* ----------------------------------------
+ * Reference Token
+ * Navigable inline references (claims, features, etc.)
+ * ---------------------------------------- */
+.reference-token {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 4px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, text-decoration 0.15s ease;
+}
+
+.reference-token:hover {
+  text-decoration: underline;
+}
+
+.reference-token--line {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-default);
+}
+
+.reference-token--line:hover {
+  background: var(--color-grey-mid);
+}
+
+.reference-token--claim {
+  color: var(--color-action-primary);
+  border-color: var(--color-action-primary);
+}
+
+.reference-token--claim:hover {
+  background: var(--color-accent-subtle);
+}
+
+.reference-token--feature {
+  color: var(--color-domain-feature);
+  border-color: var(--color-feature-border);
+}
+
+.reference-token--feature:hover {
+  background: var(--color-domain-feature-subtle);
+}
+
+.reference-token--relationship {
+  color: var(--color-domain-relationship);
+  border-color: var(--color-relationship-border);
+}
+
+.reference-token--relationship:hover {
+  background: var(--color-domain-relationship-subtle);
+}
+
+/* ----------------------------------------
+ * Signpost Link
+ * Full-width navigation link with title + description
+ * ---------------------------------------- */
+.signpost-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-3) 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border-default);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+.signpost-link:hover {
+  background: var(--color-accent-subtle);
+}
+
+.signpost-link:last-child {
+  border-bottom: none;
+}
+
+/* ----------------------------------------
+ * Inspection Panel
+ * Right-side details panel
+ * ---------------------------------------- */
+.inspection-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-bg-surface);
+}
+
+.inspection-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 3px solid var(--color-action-primary);
+}
+
+.inspection-panel__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--color-dark);
+}
+
+.inspection-panel__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5);
+}
+
+/* Panel Sections */
+.panel-section {
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-grey-mid);
+}
+
+.panel-section:last-child {
+  border-bottom: none;
+}
+
+.panel-section__heading {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  font-weight: 600;
+  color: var(--color-action-primary);
+}
+
+.panel-section__text {
+  margin: 0;
+  line-height: var(--line-height-body);
+}
+
+.panel-section__text--bold {
+  font-weight: 500;
+}
+
+.panel-section__citations {
+  margin-top: var(--space-2);
+}
+
+/* Citation Button (unstyled button for badge clicks) */
+.citation-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* Conclusion Box */
+.conclusion-box {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--color-grey-mid);
+}
+
+.conclusion-box__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.conclusion-box__row + .conclusion-box__row {
+  margin-top: var(--space-2);
+}
+
+.conclusion-box__label {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  font-weight: 600;
+  color: var(--color-action-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.conclusion-box__value {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-action-primary);
+  font-weight: 500;
+}
+
+.conclusion-box__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-green-2);
+}
+
+.conclusion-box__strength {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  color: var(--color-text-secondary);
+}
+
+/* Empty State */
+.inspection-panel__empty {
+  padding: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+/* ----------------------------------------
+ * Thin Scrollbars
+ * ---------------------------------------- */
+.app-shell-main {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.app-shell-main::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.app-shell-main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-shell-main::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+.app-shell-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}

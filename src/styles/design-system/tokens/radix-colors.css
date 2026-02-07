@@ -1,0 +1,16 @@
+/* Radix Colors - Gray and Blue ramps with light/dark mode support */
+
+@import '@radix-ui/colors/gray.css';
+@import '@radix-ui/colors/blue.css';
+@import '@radix-ui/colors/gray-dark.css';
+@import '@radix-ui/colors/blue-dark.css';
+
+/*
+ * Radix Colors provides CSS custom properties:
+ *   --gray-1 through --gray-12
+ *   --blue-1 through --blue-12
+ *
+ * Dark mode activates via:
+ *   - prefers-color-scheme: dark (automatic from *-dark.css imports)
+ *   - .dark class on :root or ancestor (manual toggle)
+ */
