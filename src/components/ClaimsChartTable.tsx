@@ -1,27 +1,19 @@
 import type { ClaimChart, ClaimChartRow, NoveltyConclusion } from '../data/mockData';
+import { Badge, type BadgeVariant } from './base/Badge';
 import '../styles/claims-chart-table.css';
 
-// Helper to get novelty status color
-function getStatusColor(status: NoveltyConclusion): string {
+// Helper to map novelty conclusion to badge variant
+function getNoveltyVariant(status: NoveltyConclusion): BadgeVariant {
   switch (status) {
-    case 'Not novel':
-      return '#dc2626';
-    case 'Likely not novel':
-      return '#ca8a04';
-    case 'Likely novel':
-      return '#65a30d';
     case 'Novel':
-      return '#16a34a';
+      return 'novel';
+    case 'Likely novel':
+      return 'likely-novel';
+    case 'Likely not novel':
+      return 'likely-not-novel';
+    case 'Not novel':
+      return 'not-novel';
   }
-}
-
-// Novelty status icon
-function NoveltyIcon({ status }: { status: NoveltyConclusion }) {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10">
-      <circle cx="5" cy="5" r="5" fill={getStatusColor(status)} />
-    </svg>
-  );
 }
 
 interface ClaimsChartTableProps {
@@ -86,14 +78,9 @@ export function ClaimsChartTable({
                   )}
                 </td>
                 <td className="claimsChartTable__cell--novelty">
-                  <span
-                    className={`claimsChartTable__noveltyChip claimsChartTable__noveltyChip--${row.conclusion
-                      .toLowerCase()
-                      .replace(/\s+/g, '-')}`}
-                  >
-                    <NoveltyIcon status={row.conclusion} />
-                    <span>{row.conclusion}</span>
-                  </span>
+                  <Badge variant={getNoveltyVariant(row.conclusion)}>
+                    {row.conclusion}
+                  </Badge>
                 </td>
               </tr>
             ))}

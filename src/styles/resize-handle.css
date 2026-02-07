@@ -31,7 +31,7 @@
 .resizeHandle__line {
   position: absolute;
   background-color: transparent;
-  transition: background-color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .resizeHandle--horizontal .resizeHandle__line {

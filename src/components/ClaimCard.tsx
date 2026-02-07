@@ -52,11 +52,7 @@ export const ClaimCard = ({ claim, onGoToClaimChart, onInspect }: ClaimCardProps
     <Card style={cardStyles}>
       <div style={headerStyles}>
         <span style={claimNumberStyles}>Claim {claim.claimNumber}</span>
-        <Badge variant={
-          claim.isNovel === 'novel' ? 'success' :
-          claim.isNovel === 'likely-novel' ? 'success-light' :
-          claim.isNovel === 'likely-not-novel' ? 'warning' : 'error'
-        }>
+        <Badge variant={claim.isNovel}>
           {claim.isNovel === 'novel' ? 'Novel' :
            claim.isNovel === 'likely-novel' ? 'Likely novel' :
            claim.isNovel === 'likely-not-novel' ? 'Likely not novel' : 'Not novel'}

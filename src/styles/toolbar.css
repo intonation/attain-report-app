@@ -84,7 +84,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--color-text-muted);
-  transition: background-color 150ms ease, color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .toolbar__iconBtn:hover {
@@ -120,7 +120,7 @@
   font-size: var(--font-size-small);
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .toolbar__right .button--primary:hover {

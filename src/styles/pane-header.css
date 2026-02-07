@@ -26,7 +26,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--color-text-muted);
-  transition: background-color 150ms ease, color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .paneHeader__navBtn:hover {
@@ -54,7 +54,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: var(--font-sans);
-  transition: background-color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .paneHeader__dropdownBtn:hover {
@@ -98,7 +98,7 @@
   font-size: var(--font-size-small);
   color: var(--color-text);
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .paneHeader__dropdownItem:hover {
@@ -128,7 +128,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--color-text-muted);
-  transition: background-color 150ms ease, color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .paneHeader__actionBtn:hover {
@@ -177,7 +177,7 @@
   font-size: var(--font-size-small);
   color: var(--color-text);
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .paneHeader__kebabItem:hover {
