@@ -1,3 +1,5 @@
+@import "./styles/tokens.css";
+
 /* Minimal reset - tokens.css handles the rest */
 #root {
   width: 100%;
