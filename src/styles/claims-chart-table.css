@@ -27,7 +27,7 @@
 .claimsChartTable__wrapper {
   overflow-x: auto;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--color-paper);
 }
 
@@ -130,9 +130,9 @@
 /* ID chip */
 .claimsChartTable__idChip {
   display: inline-block;
-  padding: 2px 8px;
+  padding: 2px var(--space-2);
   background: var(--color-grey-light);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--font-size-xsmall);
   font-weight: 500;
@@ -141,9 +141,9 @@
 /* Citation tag (non-clickable) */
 .claimsChartTable__citationTag {
   display: inline-block;
-  padding: 2px 8px;
+  padding: 2px var(--space-2);
   background: var(--color-grey-light);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: var(--font-size-xsmall);
   color: var(--color-text-muted);
 }
@@ -151,10 +151,10 @@
 /* Citation button (clickable) */
 .claimsChartTable__citationBtn {
   display: inline-block;
-  padding: 2px 8px;
+  padding: 2px var(--space-2);
   background: var(--color-accent-subtle);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: var(--font-size-xsmall);
   color: var(--color-accent);
   cursor: pointer;
@@ -163,7 +163,7 @@
 
 .claimsChartTable__citationBtn:hover {
   background: var(--color-accent);
-  color: white;
+  color: var(--color-white);
 }
 
 /* Novelty chip */
@@ -171,7 +171,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: 4px 10px;
+  padding: var(--space-1) 10px;
   border-radius: 12px;
   font-size: var(--font-size-xsmall);
   font-weight: 500;
@@ -179,8 +179,8 @@
 }
 
 .claimsChartTable__noveltyChip--not-novel {
-  background: rgba(220, 38, 38, 0.1);
-  color: #dc2626;
+  background: var(--color-danger-subtle);
+  color: var(--color-status-danger);
 }
 
 .claimsChartTable__noveltyChip--likely-not-novel {

@@ -42,7 +42,7 @@
   height: 32px;
   border: none;
   background: transparent;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--color-text-muted);
   transition: background-color 150ms ease, color 150ms ease;
