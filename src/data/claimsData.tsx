@@ -1,4 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext, createContext } from 'react';
+
+// Context for passing click handler to nested ClaimTarget components
+type ClaimTargetClickHandler = (ref: string, x: number, y: number) => void;
+const ClaimTargetContext = createContext<ClaimTargetClickHandler | undefined>(undefined);
 
 interface ClaimData {
   claimNumber: number;
@@ -11,7 +15,7 @@ interface ClaimData {
 interface ClaimTargetProps {
   children: React.ReactNode;
   dataRef?: string;
-  onClick?: (ref: string) => void;
+  onClick?: (ref: string, x: number, y: number) => void;
 }
 
 const ClaimTarget: React.FC<ClaimTargetProps> = ({
@@ -19,17 +23,23 @@ const ClaimTarget: React.FC<ClaimTargetProps> = ({
   dataRef,
   onClick,
 }) => {
-  const handleClick = useCallback(() => {
-    onClick?.(dataRef || '');
-  }, [onClick, dataRef]);
+  // Get click handler from context if not provided directly
+  const contextHandler = useContext(ClaimTargetContext);
+  const handler = onClick || contextHandler;
+
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    handler?.(dataRef || '', e.clientX, e.clientY);
+  }, [handler, dataRef]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     // Activate on Enter or Space
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      onClick?.(dataRef || '');
+      // For keyboard activation, position menu at element center
+      const rect = (e.target as HTMLElement).getBoundingClientRect();
+      handler?.(dataRef || '', rect.left + rect.width / 2, rect.top + rect.height);
     }
-  }, [onClick, dataRef]);
+  }, [handler, dataRef]);
 
   return (
     <span
@@ -362,13 +372,19 @@ const claimsDataList: ClaimData[] = [
 ];
 
 // Claims Content Component
-export const ClaimsPageContent: React.FC = () => {
+interface ClaimsPageContentProps {
+  onTargetClick?: (ref: string, x: number, y: number) => void;
+}
+
+export const ClaimsPageContent: React.FC<ClaimsPageContentProps> = ({ onTargetClick }) => {
   return (
-    <div className="claims-page">
-      {claimsDataList.map((claim) => (
-        <ClaimItem key={claim.claimNumber} claim={claim} />
-      ))}
-    </div>
+    <ClaimTargetContext.Provider value={onTargetClick}>
+      <div className="claims-page">
+        {claimsDataList.map((claim) => (
+          <ClaimItem key={claim.claimNumber} claim={claim} />
+        ))}
+      </div>
+    </ClaimTargetContext.Provider>
   );
 };
 

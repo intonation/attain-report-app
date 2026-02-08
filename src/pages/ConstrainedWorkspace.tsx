@@ -9,8 +9,10 @@ import { DocumentViewer } from '../components/DocumentViewer';
 import { ResizeHandle } from '../components/ResizeHandle';
 import { WorkbenchPage, WorkbenchDetailPanel } from '../components/Workbench';
 import type { WorkbenchSelection } from '../components/Workbench';
+import { SelectionContextMenu, type HighlightColor, type ViewPane } from '../components/SelectionContextMenu';
 import { useResponsiveSidebar } from '../hooks';
 import { reportData, claimsData, claimChartData } from '../data/mockData';
+import { workbenchData } from '../data/workbenchData';
 import { StrategicReviewContent } from '../data/strategicReviewData';
 import { ScopeOfAnalysisContent } from '../data/scopeOfAnalysisData';
 import { ClaimsPageContent } from '../data/claimsData';
@@ -63,6 +65,13 @@ export const ConstrainedWorkspace = () => {
   // Document viewer state
   const [isDocumentViewerOpen, setIsDocumentViewerOpen] = useState(false);
   const [viewerCitation, setViewerCitation] = useState<string>('');
+
+  // Context menu state (for claims page target clicks)
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    ref: string;
+  } | null>(null);
 
   // Navigation history for back/forward
   const [navHistory, setNavHistory] = useState<string[]>(['executive-summary']);
@@ -237,6 +246,79 @@ export const ConstrainedWorkspace = () => {
     setWorkbenchScrollToId(id);
   };
 
+  // Context menu handlers for Claims page target clicks
+  const handleClaimTargetClick = (ref: string, x: number, y: number) => {
+    setContextMenu({ x, y, ref });
+  };
+
+  const handleContextMenuClose = () => {
+    setContextMenu(null);
+  };
+
+  const handleHighlight = (color: HighlightColor) => {
+    console.log('Highlight:', contextMenu?.ref, 'with color:', color);
+    // TODO: Implement highlight storage
+    setContextMenu(null);
+  };
+
+  const handleClearHighlight = () => {
+    console.log('Clear highlight:', contextMenu?.ref);
+    // TODO: Implement highlight removal
+    setContextMenu(null);
+  };
+
+  const handleViewInPane = (pane: ViewPane) => {
+    if (!contextMenu?.ref) {
+      setContextMenu(null);
+      return;
+    }
+
+    const ref = contextMenu.ref;
+
+    // Find the entry in workbench data
+    const findEntry = () => {
+      for (const claim of workbenchData) {
+        const entry = claim.entries.find(e => e.id === ref);
+        if (entry) {
+          return { entry, priorArtReference: claim.priorArtReference };
+        }
+      }
+      return null;
+    };
+
+    if (pane === 'left') {
+      // Open workbench in left pane and scroll to the entry
+      setActiveNavItem('workbench');
+      setWorkbenchScrollToId(ref);
+      // Close split view if open
+      setIsSplitView(false);
+    } else if (pane === 'right') {
+      // Open workbench in right pane (split view) and scroll to the entry
+      setIsSplitView(true);
+      setRightPaneDocId('workbench');
+      setWorkbenchScrollToId(ref);
+      // Auto-collapse sidebar in split view
+      setSidebarCollapsed(true);
+    } else if (pane === 'details') {
+      // Open the workbench detail panel for this entry
+      const found = findEntry();
+      if (found) {
+        // Navigate to workbench and select the entry
+        setActiveNavItem('workbench');
+        setWorkbenchSelection({ entry: found.entry, priorArtReference: found.priorArtReference });
+        setIsWorkbenchPanelOpen(true);
+        setWorkbenchScrollToId(ref);
+        // Close other panels
+        setIsSplitView(false);
+        setIsDetailPanelOpen(false);
+        setDetailRow(null);
+        setSelectedRowId(undefined);
+      }
+    }
+
+    setContextMenu(null);
+  };
+
   // Clear workbench scroll target after it's been used (allows repeated clicks on same ID)
   useEffect(() => {
     if (workbenchScrollToId) {
@@ -409,7 +491,7 @@ export const ConstrainedWorkspace = () => {
                 <p>Full patent claims with annotated features and relationships.</p>
               </div>
             </header>
-            <ClaimsPageContent />
+            <ClaimsPageContent onTargetClick={handleClaimTargetClick} />
           </div>
         );
 
@@ -603,6 +685,18 @@ export const ConstrainedWorkspace = () => {
           )}
         </div>
       </div>
+
+      {/* Selection Context Menu */}
+      {contextMenu && (
+        <SelectionContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onHighlight={handleHighlight}
+          onClear={handleClearHighlight}
+          onViewInPane={handleViewInPane}
+          onCancel={handleContextMenuClose}
+        />
+      )}
     </div>
   );
 };

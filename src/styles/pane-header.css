@@ -40,7 +40,7 @@
 }
 
 .paneHeader__navBtn:hover:not(:disabled) {
-  background-color: var(--color-grey-light);
+  background-color: var(--color-grey-mid);
   color: var(--color-text);
 }
 
@@ -161,7 +161,7 @@
 }
 
 .paneHeader__actionBtn:hover {
-  background-color: var(--color-grey-light);
+  background-color: var(--color-grey-mid);
   color: var(--color-text);
 }
 

@@ -4,7 +4,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   SplitIcon,
-  MaximiseIcon,
+  ExpandDiagonalIcon,
   KebabIcon,
   DownloadIcon,
   CopyIcon,
@@ -145,7 +145,7 @@ export const PaneHeader = ({
             aria-label={isSplitView ? 'Maximise panel' : 'Split view'}
             aria-pressed={isSplitView}
           >
-            {isSplitView ? <MaximiseIcon /> : <SplitIcon />}
+            {isSplitView ? <ExpandDiagonalIcon /> : <SplitIcon />}
           </button>
         )}
 

@@ -28,7 +28,8 @@
 .toolbar__appInfo {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 0;
+  line-height: 1.2;
 }
 
 .toolbar__appLine1 {
