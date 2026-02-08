@@ -126,7 +126,7 @@
   background: transparent;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--color-text-muted);
   cursor: pointer;
@@ -154,7 +154,7 @@
   pointer-events: none;
 }
 
-/* Export button styling - 14px minimum */
+/* Export button styling */
 .toolbar__right .button--primary {
   display: flex;
   align-items: center;
@@ -164,7 +164,7 @@
   border: none;
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-sm);
-  font-size: 14px; /* Minimum 14px */
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);

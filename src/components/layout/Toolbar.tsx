@@ -38,7 +38,7 @@ export const Toolbar = ({
           Clear Highlighting
         </button>
         <div className="toolbar__divider" />
-        <Button variant="primary" size="small">
+        <Button variant="primary" size="small" style={{ fontSize: '12px' }}>
           <DownloadIcon />
           Export
         </Button>
