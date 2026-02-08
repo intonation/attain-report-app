@@ -37,7 +37,7 @@ export const ClaimCard = ({ claim, onGoToClaimChart, onInspect }: ClaimCardProps
             size="small"
             onClick={() => handleClick?.(claim.claimNumber)}
           >
-            Go to claims chart
+            View in claims chart
           </Button>
         </div>
       </div>

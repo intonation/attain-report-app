@@ -7,14 +7,12 @@ import { InspectPanel } from '../components/InspectPanel';
 import { ClaimsChartTable } from '../components/ClaimsChartTable';
 import { ClaimDetailPanel } from '../components/ClaimDetailPanel';
 import { DocumentViewer } from '../components/DocumentViewer';
+import { useResponsiveSidebar } from '../hooks';
 import { reportData, claimsData, claimChartData } from '../data/mockData';
 import type { ClaimChartRow } from '../data/mockData';
 
 // Navigation items that should trigger full-width mode (sidebar collapsed)
 const FULL_WIDTH_NAV_ITEMS = ['claim-charts'];
-
-// Breakpoint at which we auto-collapse sidebar when inspect panel opens
-const INSPECT_COLLAPSE_BREAKPOINT = 1400;
 
 // Document items for dropdown selector
 const DOCUMENT_ITEMS = [
@@ -29,9 +27,16 @@ export const ReportExecutiveSummaryAppFrame = () => {
   const [activeNavItem, setActiveNavItem] = useState('executive-summary');
   const [isInspectOpen, setIsInspectOpen] = useState(false);
   const [inspectClaimNumber, setInspectClaimNumber] = useState<number>(1);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isSplitView, setIsSplitView] = useState(false);
   const [rightPaneDocId, setRightPaneDocId] = useState('executive-summary');
+
+  // Responsive sidebar with localStorage persistence and first-load emphasis
+  const {
+    collapsed: sidebarCollapsed,
+    setCollapsed: setSidebarCollapsed,
+    showEmphasis,
+    onEmphasisComplete,
+  } = useResponsiveSidebar();
 
   // Claims chart row selection state
   const [selectedRowId, setSelectedRowId] = useState<string | undefined>(undefined);
@@ -44,16 +49,13 @@ export const ReportExecutiveSummaryAppFrame = () => {
 
   const mainScrollRef = useRef<HTMLDivElement>(null);
   const rightPaneScrollRef = useRef<HTMLDivElement>(null);
-  const userToggledSidebarRef = useRef(false);
-  const isInitialLoadRef = useRef(true);
-  const wasCollapsedByInspectRef = useRef(false);
 
   // Auto-collapse sidebar for full-width pages
   useEffect(() => {
     if (FULL_WIDTH_NAV_ITEMS.includes(activeNavItem)) {
       setSidebarCollapsed(true);
     }
-  }, [activeNavItem]);
+  }, [activeNavItem, setSidebarCollapsed]);
 
   // Reset scroll position on navigation (scroll main container, not window)
   useEffect(() => {
@@ -61,33 +63,6 @@ export const ReportExecutiveSummaryAppFrame = () => {
       mainScrollRef.current.scrollTop = 0;
     }
   }, [activeNavItem]);
-
-  // Auto-collapse/expand sidebar based on inspect panel, detail panel, or split view state and viewport width
-  useEffect(() => {
-    // Never auto-collapse on initial load
-    if (isInitialLoadRef.current) {
-      isInitialLoadRef.current = false;
-      return;
-    }
-
-    // Don't auto-adjust if user has manually toggled sidebar
-    if (userToggledSidebarRef.current) {
-      return;
-    }
-
-    const isNarrow = window.innerWidth < INSPECT_COLLAPSE_BREAKPOINT;
-    const needsMoreSpace = isInspectOpen || isSplitView || isDetailPanelOpen || isDocumentViewerOpen;
-
-    if (needsMoreSpace && isNarrow && !sidebarCollapsed) {
-      // Collapse sidebar when any right panel opens and viewport is narrow
-      wasCollapsedByInspectRef.current = true;
-      setSidebarCollapsed(true);
-    } else if (!needsMoreSpace && wasCollapsedByInspectRef.current) {
-      // Re-expand sidebar when all panels are closed (if we collapsed it)
-      wasCollapsedByInspectRef.current = false;
-      setSidebarCollapsed(false);
-    }
-  }, [isInspectOpen, isSplitView, isDetailPanelOpen, isDocumentViewerOpen, sidebarCollapsed]);
 
   const handleInspectClaim = (claimNumber: number) => {
     setInspectClaimNumber(claimNumber);
@@ -97,9 +72,6 @@ export const ReportExecutiveSummaryAppFrame = () => {
   };
 
   const handleSidebarCollapsedChange = (collapsed: boolean) => {
-    // Mark that user has manually toggled
-    userToggledSidebarRef.current = true;
-    wasCollapsedByInspectRef.current = false;
     setSidebarCollapsed(collapsed);
   };
 
@@ -118,11 +90,10 @@ export const ReportExecutiveSummaryAppFrame = () => {
   const handleSplit = () => {
     setIsSplitView(true);
     setIsInspectOpen(false); // Close inspect when opening split view
-    // Set right pane to a different document if possible
-    const otherDoc = DOCUMENT_ITEMS.find(d => d.id !== activeNavItem);
-    if (otherDoc) {
-      setRightPaneDocId(otherDoc.id);
-    }
+    // Set right pane to same document as left pane
+    setRightPaneDocId(activeNavItem);
+    // Auto-collapse sidebar in split view mode
+    setSidebarCollapsed(true);
   };
 
   const handleCloseSplitView = () => {
@@ -178,11 +149,11 @@ export const ReportExecutiveSummaryAppFrame = () => {
     fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-2)',
-    fontFamily: 'times',
+    fontFamily: 'var(--font-serif)',
   };
 
   const summaryStyles: React.CSSProperties = {
-    fontSize: 'var(--font-size-small)',
+    fontSize: '1rem', /* 14px body text */
     lineHeight: 'var(--line-height-body)',
     color: 'var(--color-text)',
     marginBottom: 'var(--space-8)',
@@ -194,7 +165,7 @@ export const ReportExecutiveSummaryAppFrame = () => {
     fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-5)',
-    fontFamily: 'times',
+    fontFamily: 'var(--font-serif)',
   };
 
   // Render document content based on document ID
@@ -260,6 +231,8 @@ export const ReportExecutiveSummaryAppFrame = () => {
           onNavigate={handleNavigate}
           collapsed={sidebarCollapsed}
           onCollapsedChange={handleSidebarCollapsedChange}
+          showEmphasis={showEmphasis}
+          onEmphasisComplete={onEmphasisComplete}
         />
       </div>
 

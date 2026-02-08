@@ -47,7 +47,7 @@
 /* Disabled state for navigation buttons */
 .paneHeader__navBtn:disabled,
 .paneHeader__navBtn--disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: default;
   pointer-events: none;
 }
@@ -166,13 +166,13 @@
 }
 
 .paneHeader__actionBtn--active {
-  background-color: var(--color-accent-subtle);
-  color: var(--color-accent);
+  background-color: var(--color-grey-light);
+  color: var(--color-text);
 }
 
 .paneHeader__actionBtn--active:hover {
-  background-color: var(--color-accent-subtle);
-  color: var(--color-accent);
+  background-color: var(--color-grey-mid, rgba(0, 0, 0, 0.1));
+  color: var(--color-text);
 }
 
 /* Disabled action buttons */

@@ -239,6 +239,23 @@ export const SplitIcon = (props: IconProps) => (
   </StrokeIcon>
 );
 
+export const MaximiseIcon = (props: IconProps) => (
+  <StrokeIcon {...props}>
+    {/* Top-left corner arrow */}
+    <polyline points="4 9 4 4 9 4" style={pathStyle} />
+    <line x1="4" y1="4" x2="10" y2="10" style={pathStyle} />
+    {/* Top-right corner arrow */}
+    <polyline points="15 4 20 4 20 9" style={pathStyle} />
+    <line x1="20" y1="4" x2="14" y2="10" style={pathStyle} />
+    {/* Bottom-left corner arrow */}
+    <polyline points="4 15 4 20 9 20" style={pathStyle} />
+    <line x1="4" y1="20" x2="10" y2="14" style={pathStyle} />
+    {/* Bottom-right corner arrow */}
+    <polyline points="20 15 20 20 15 20" style={pathStyle} />
+    <line x1="20" y1="20" x2="14" y2="14" style={pathStyle} />
+  </StrokeIcon>
+);
+
 export const InspectPanelIcon = (props: IconProps) => (
   <FillIcon {...props}>
     <path d="M21 3C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H21ZM20 5H13V19H20V5ZM11 5H4V19H11V5Z" />

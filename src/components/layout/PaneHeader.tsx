@@ -4,6 +4,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   SplitIcon,
+  MaximiseIcon,
   KebabIcon,
   DownloadIcon,
   CopyIcon,
@@ -90,7 +91,7 @@ export const PaneHeader = ({
           <button
             className="paneHeader__navBtn"
             onClick={handlePrevious}
-            disabled={disablePrevious}
+            disabled={disablePrevious || !onPrevious}
             aria-label="Previous"
           >
             <ArrowLeftIcon />
@@ -98,7 +99,7 @@ export const PaneHeader = ({
           <button
             className="paneHeader__navBtn"
             onClick={handleNext}
-            disabled={disableNext}
+            disabled={disableNext || !onNext}
             aria-label="Next"
           >
             <ArrowRightIcon />
@@ -140,10 +141,11 @@ export const PaneHeader = ({
           <button
             className={`paneHeader__actionBtn ${isSplitView ? 'paneHeader__actionBtn--active' : ''}`}
             onClick={onSplitToggle}
-            aria-label={isSplitView ? 'Close split view' : 'Open split view'}
+            title={isSplitView ? 'Maximise panel' : 'Split view'}
+            aria-label={isSplitView ? 'Maximise panel' : 'Split view'}
             aria-pressed={isSplitView}
           >
-            <SplitIcon />
+            {isSplitView ? <MaximiseIcon /> : <SplitIcon />}
           </button>
         )}
 

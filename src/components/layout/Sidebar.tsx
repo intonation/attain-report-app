@@ -21,8 +21,6 @@ const LogoIcon = () => (
   </svg>
 );
 
-const COLLAPSE_BREAKPOINT = 1200;
-
 interface NavItem {
   id: string;
   label: string;
@@ -54,6 +52,10 @@ interface SidebarProps {
   onNavigate: (itemId: string) => void;
   collapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
+  /** Show emphasis animation on toggle button (first visit) */
+  showEmphasis?: boolean;
+  /** Callback when emphasis animation completes */
+  onEmphasisComplete?: () => void;
 }
 
 export const Sidebar = ({
@@ -61,50 +63,38 @@ export const Sidebar = ({
   onNavigate,
   collapsed: controlledCollapsed,
   onCollapsedChange,
+  showEmphasis = false,
+  onEmphasisComplete,
 }: SidebarProps) => {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   // Initialize with the active item already marked as visited (it's the page we're on)
   const [visitedItemIds, setVisitedItemIds] = useState<Set<string>>(() => new Set([activeItem]));
-  const userToggledRef = useRef(false);
   const hasAnimatedRef = useRef(false);
-  const isInitialLoadRef = useRef(true);
+  const emphasisTimeoutRef = useRef<number | null>(null);
 
   // Mark animation as complete (called by first section after animation runs)
   const markAnimationComplete = () => {
     hasAnimatedRef.current = true;
-    // After animation completes, allow responsive collapse
-    isInitialLoadRef.current = false;
   };
 
-  // Responsive collapse based on viewport width (only after initial load)
+  // Handle emphasis animation timeout
   useEffect(() => {
-    const mediaQuery = window.matchMedia(`(max-width: ${COLLAPSE_BREAKPOINT}px)`);
+    if (showEmphasis && onEmphasisComplete) {
+      emphasisTimeoutRef.current = window.setTimeout(() => {
+        onEmphasisComplete();
+      }, 2000);
+    }
 
-    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
-      // Skip auto-collapse on initial load - always show expanded first
-      if (isInitialLoadRef.current) {
-        return;
-      }
-      // Only auto-collapse if user hasn't manually toggled
-      if (!userToggledRef.current) {
-        if (onCollapsedChange) {
-          onCollapsedChange(e.matches);
-        } else {
-          setInternalCollapsed(e.matches);
-        }
+    return () => {
+      if (emphasisTimeoutRef.current) {
+        clearTimeout(emphasisTimeoutRef.current);
       }
     };
-
-    // Listen for changes (don't check initial state - we want expanded on load)
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [onCollapsedChange]);
+  }, [showEmphasis, onEmphasisComplete]);
 
   // Use controlled state if provided, otherwise use internal state
   const collapsed = controlledCollapsed ?? internalCollapsed;
   const setCollapsed = (value: boolean) => {
-    // Mark that user has manually toggled
-    userToggledRef.current = true;
     if (onCollapsedChange) {
       onCollapsedChange(value);
     } else {
@@ -124,7 +114,7 @@ export const Sidebar = ({
         <LogoIcon />
         {!collapsed && <span className="sidebarLogoText">Acme Automotive</span>}
         <button
-          className="sidebarCollapseBtn"
+          className={`sidebarCollapseBtn ${showEmphasis ? 'sidebarCollapseBtn--emphasis' : ''}`}
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >

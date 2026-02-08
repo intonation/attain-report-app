@@ -13,22 +13,12 @@ export const claimsData: ClaimData[] = [
   {
     claimNumber: 1,
     isNovel: 'novel',
-    reasoning: `This claim is novel. Graves describes zone-based safety levels and comfort considerations but does not describe using a predicted headway value as the comfort selective input to determine the deceleration strategy (see claim charts L1-8 L1-8 L1-10).`,
-  },
-  {
-    claimNumber: 12,
-    isNovel: 'likely-novel',
-    reasoning: `This claim is likely novel. The reference discloses a vehicle control system with predictive braking but does not appear to teach coordinating multiple controller modules under sensor degradation conditions as claimed (see claim charts L12-1 L12-4 L12-5).`,
-  },
-  {
-    claimNumber: 7,
-    isNovel: 'likely-not-novel',
-    reasoning: `This claim may be anticipated by the combination of Graves and Breuer. Graves discloses the basic headway calculation method, while Breuer teaches similar velocity threshold parameters. Further review recommended (see Breuer paras [0032]-[0035]).`,
+    reasoning: `Claim 1 addresses an adaptive cruise controller that restores a target headway to a forward vehicle while reducing passenger discomfort. The invention of claim 1 requires that, when current headway falls below target headway, an elastic cruise control module determines a deceleration strategy that is selectively comfort-optimized based on a predicted headway computed for a future time using the forward vehicle's current relative speed and acceleration. On the current record, claim 1 is novel over Graves et al. because Graves' action-conditioned predictions and comfort criteria are described in terms of zone-based safety/comfort values and state predictions rather than a predicted headway value used as the comfort-selective input to determine the deceleration strategy (see claim charts, L1-8, L1-9, L1-10).`,
   },
   {
     claimNumber: 18,
-    isNovel: 'not-novel',
-    reasoning: `This claim is anticipated by Graves. The reference explicitly discloses determining a discrete risk category from forward vehicle relative kinematics as the basis for deceleration strategy selection (see Graves Fig. 4, paras [0045]-[0048]).`,
+    isNovel: 'novel',
+    reasoning: `Claim 18 addresses a computer program on non-transitory storage that implements adaptive cruise control to increase headway when current headway falls below a target headway. The invention of claim 18 requires selecting a deceleration strategy that selectively optimizes comfort based on a determined risk category, where that risk category is selected from a discrete set based on the forward vehicle's current relative speed and acceleration. On the current record, claim 18 is novel over Graves et al. because Graves describes zone-based safety levels and comfort considerations but does not describe determining a discrete risk category from forward-vehicle relative kinematics as the basis for comfort-selective strategy determination (see claim charts, L18-7, L18-8).`,
   },
 ];
 

@@ -227,6 +227,34 @@
   height: 20px;
 }
 
+/* First-visit emphasis animation */
+.sidebarCollapseBtn--emphasis {
+  animation: sidebarEmphasisPulse 2s ease-in-out;
+}
+
+@keyframes sidebarEmphasisPulse {
+  0% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  20% {
+    background-color: var(--color-accent-subtle, rgba(36, 135, 144, 0.1));
+    box-shadow: 0 0 0 4px var(--color-accent-subtle, rgba(36, 135, 144, 0.1));
+  }
+  40% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  60% {
+    background-color: var(--color-accent-subtle, rgba(36, 135, 144, 0.1));
+    box-shadow: 0 0 0 4px var(--color-accent-subtle, rgba(36, 135, 144, 0.1));
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
 /* Item read states */
 .sidebarItemUnread {
   background: transparent;

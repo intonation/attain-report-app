@@ -7,11 +7,13 @@ import { ClaimsChartTable } from '../components/ClaimsChartTable';
 import { ClaimDetailPanel } from '../components/ClaimDetailPanel';
 import { DocumentViewer } from '../components/DocumentViewer';
 import { ResizeHandle } from '../components/ResizeHandle';
+import { useResponsiveSidebar } from '../hooks';
 import { reportData, claimsData, claimChartData } from '../data/mockData';
+import { StrategicReviewContent } from '../data/strategicReviewData';
+import { ScopeOfAnalysisContent } from '../data/scopeOfAnalysisData';
+import { ClaimsPageContent } from '../data/claimsData';
+import { GravesReferenceSummaryContent } from '../data/gravesReferenceSummaryData';
 import type { ClaimChartRow } from '../data/mockData';
-
-// Breakpoint for responsive sidebar collapse/expand
-const SIDEBAR_COLLAPSE_BREAKPOINT = 1200;
 
 // Panel size constraints
 const SIDEBAR_MIN_WIDTH = 200;
@@ -34,9 +36,16 @@ const DOCUMENT_ITEMS = [
 
 export const ConstrainedWorkspace = () => {
   const [activeNavItem, setActiveNavItem] = useState('executive-summary');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isSplitView, setIsSplitView] = useState(false);
   const [rightPaneDocId, setRightPaneDocId] = useState('scope-of-analysis');
+
+  // Responsive sidebar with localStorage persistence and first-load emphasis
+  const {
+    collapsed: sidebarCollapsed,
+    setCollapsed: setSidebarCollapsed,
+    showEmphasis,
+    onEmphasisComplete,
+  } = useResponsiveSidebar();
 
   // Claims chart row selection state
   const [selectedRowId, setSelectedRowId] = useState<string | undefined>(undefined);
@@ -58,26 +67,6 @@ export const ConstrainedWorkspace = () => {
 
   const mainScrollRef = useRef<HTMLDivElement>(null);
   const rightPaneScrollRef = useRef<HTMLDivElement>(null);
-  const userToggledSidebarRef = useRef(false);
-
-  // Responsive sidebar collapse/expand based on viewport width
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(`(max-width: ${SIDEBAR_COLLAPSE_BREAKPOINT}px)`);
-
-    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
-      // Only auto-collapse/expand if user hasn't manually toggled
-      if (!userToggledSidebarRef.current) {
-        setSidebarCollapsed(e.matches);
-      }
-    };
-
-    // Set initial state based on viewport
-    handleChange(mediaQuery);
-
-    // Listen for changes
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
 
   // Reset scroll position on navigation
   useEffect(() => {
@@ -103,7 +92,6 @@ export const ConstrainedWorkspace = () => {
   };
 
   const handleSidebarCollapsedChange = (collapsed: boolean) => {
-    userToggledSidebarRef.current = true;
     setSidebarCollapsed(collapsed);
   };
 
@@ -135,11 +123,10 @@ export const ConstrainedWorkspace = () => {
       setIsSplitView(true);
       setIsDetailPanelOpen(false);
       setIsDocumentViewerOpen(false);
-      // Set right pane to a different document
-      const otherDoc = DOCUMENT_ITEMS.find(d => d.id !== activeNavItem);
-      if (otherDoc) {
-        setRightPaneDocId(otherDoc.id);
-      }
+      // Set right pane to same document as left pane
+      setRightPaneDocId(activeNavItem);
+      // Auto-collapse sidebar in split view mode
+      setSidebarCollapsed(true);
     }
   };
 
@@ -220,11 +207,11 @@ export const ConstrainedWorkspace = () => {
     fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-2)',
-    fontFamily: 'times',
+    fontFamily: 'var(--font-serif)',
   };
 
   const summaryStyles: React.CSSProperties = {
-    fontSize: 'var(--font-size-small)',
+    fontSize: '1rem', /* 14px body text */
     lineHeight: 'var(--line-height-body)',
     color: 'var(--color-text)',
     marginBottom: 'var(--space-8)',
@@ -235,7 +222,7 @@ export const ConstrainedWorkspace = () => {
     fontWeight: 500,
     color: 'var(--color-text)',
     marginBottom: 'var(--space-5)',
-    fontFamily: 'times',
+    fontFamily: 'var(--font-serif)',
   };
 
   const mainContentStyles: React.CSSProperties = {
@@ -313,27 +300,49 @@ export const ConstrainedWorkspace = () => {
         );
 
       case 'scope-of-analysis':
-        return renderPlaceholder(
-          'Scope of Analysis',
-          'This section will contain the scope definition, included patents, prior art references, and analysis boundaries.'
+        return (
+          <div style={mainContentStyles} className="contentMount">
+            <header>
+              <h1 style={titleStyles}>Scope of Analysis</h1>
+              <div style={summaryStyles}>
+                <p>Summary of objections raised in the official action and claim groupings for analysis.</p>
+              </div>
+            </header>
+            <ScopeOfAnalysisContent onCitationClick={(citation) => handleCitationClick(citation.location)} />
+          </div>
         );
 
       case 'strategic-review':
-        return renderPlaceholder(
-          'Strategic Review',
-          'Strategic recommendations and key findings will be presented here, including risk assessment and recommended actions.'
+        return (
+          <div style={mainContentStyles} className="contentMount">
+            <header>
+              <h1 style={titleStyles}>Strategic Review</h1>
+              <div style={summaryStyles}>
+                <p>Analysis of patent claims against prior art references, with novelty assessments and supporting evidence.</p>
+              </div>
+            </header>
+            <StrategicReviewContent onCitationClick={(citation) => handleCitationClick(citation.location)} />
+          </div>
         );
 
       case 'claims':
-        return renderPlaceholder(
-          'Claims',
-          'Full claim text and claim dependency charts will be displayed in this section.'
+        return (
+          <div style={mainContentStyles} className="contentMount">
+            <header>
+              <h1 style={titleStyles}>Claims</h1>
+              <div style={summaryStyles}>
+                <p>Full patent claims with annotated features and relationships.</p>
+              </div>
+            </header>
+            <ClaimsPageContent />
+          </div>
         );
 
       case 'summary-graves':
-        return renderPlaceholder(
-          'Summary: Graves et al.',
-          'Detailed summary of the Graves et al. (US 2019/0329772 A1) reference including key teachings and relevance to the subject patent.'
+        return (
+          <div style={mainContentStyles} className="contentMount">
+            <GravesReferenceSummaryContent onCitationClick={(citation) => handleCitationClick(citation.location)} />
+          </div>
         );
 
       case 'claim-charts':
@@ -374,6 +383,8 @@ export const ConstrainedWorkspace = () => {
           onNavigate={handleNavigate}
           collapsed={sidebarCollapsed}
           onCollapsedChange={handleSidebarCollapsedChange}
+          showEmphasis={showEmphasis}
+          onEmphasisComplete={onEmphasisComplete}
         />
         {!sidebarCollapsed && (
           <ResizeHandle
@@ -404,6 +415,8 @@ export const ConstrainedWorkspace = () => {
               onSelect={handleLeftPaneDocumentSelect}
               onPrevious={handlePrevious}
               onNext={handleNext}
+              disablePrevious={historyIndex === 0}
+              disableNext={historyIndex >= navHistory.length - 1}
               onSplitToggle={handleSplitToggle}
               isSplitView={isSplitView}
               showNavigation={true}

@@ -21,7 +21,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       fontSize: '14px',
       lineHeight: 1.4,
       fontWeight: 500,
-      borderRadius: 0,
+      borderRadius: 'var(--radius-sm)',
       border: '1.5px solid transparent',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,

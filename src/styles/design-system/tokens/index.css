@@ -1,6 +1,7 @@
 /* Design System Tokens */
 
-@import './open-props.css';
-@import './radix-colors.css';
+/* Note: open-props.css and radix-colors.css require npm packages - skipping */
+/* @import './open-props.css'; */
+/* @import './radix-colors.css'; */
 @import './semantic.css';
 @import './base.css';

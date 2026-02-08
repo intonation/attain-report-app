@@ -2,6 +2,10 @@
    Bridge to Attain design-system tokens — shared source
    ========================================================= */
 
+/* Local design-system tokens */
+@import "./design-system/tokens/index.css";
+
+/* External design-system (optional - may not exist) */
 @import "../../attain-design-system/src/styles/tokens/index.css";
 @import "../../attain-design-system/src/styles/layout/index.css";
 @import "../../attain-design-system/src/styles/components/index.css";
