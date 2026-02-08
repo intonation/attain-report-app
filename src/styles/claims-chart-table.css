@@ -504,20 +504,23 @@
 
 /* Citation button (clickable) */
 .claimsChartTable__citationBtn {
-  display: inline-block;
-  padding: 2px var(--space-2);
-  background: var(--color-accent-subtle);
+  display: inline;
+  padding: 0;
+  background: transparent;
   border: none;
-  border-radius: var(--radius-sm);
   font-size: var(--font-size-xsmall);
-  color: var(--color-accent);
+  font-family: inherit;
+  color: #3B60E4;
   cursor: pointer;
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
 }
 
 .claimsChartTable__citationBtn:hover {
-  background: var(--color-accent);
-  color: var(--color-white);
+  color: #2D4BB8;
+  text-decoration-style: solid;
 }
 
 /* Filter Summary */

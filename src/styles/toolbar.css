@@ -15,6 +15,9 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .toolbar__logo {
@@ -23,6 +26,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  flex-shrink: 0;
 }
 
 .toolbar__appInfo {
@@ -30,6 +34,8 @@
   flex-direction: column;
   gap: 0;
   line-height: 1.2;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .toolbar__appLine1 {
@@ -41,17 +47,24 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .toolbar__appNumber {
   font-size: 14px; /* Minimum 14px */
   font-weight: 600;
   color: var(--color-text);
+  flex-shrink: 0;
 }
 
 .toolbar__appTitle {
   font-size: 14px; /* Minimum 14px */
   color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .toolbar__version {

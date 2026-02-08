@@ -38,6 +38,45 @@ const PdfJumpLink: React.FC<PdfJumpLinkProps> = ({ citation, onClick }) => (
   </button>
 );
 
+// Claim link component
+interface ClaimLinkProps {
+  claimNumber: number;
+  onClick?: (claimNumber: number) => void;
+}
+
+const ClaimLink: React.FC<ClaimLinkProps> = ({ claimNumber, onClick }) => (
+  <button
+    type="button"
+    className="strategic-review__claim-link"
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick?.(claimNumber);
+    }}
+  >
+    {claimNumber}
+  </button>
+);
+
+// Render claim list like "Claims 1, 19" with clickable numbers
+const renderClaimList = (
+  prefix: string,
+  claimNumbers: number[],
+  onClaimClick?: (claimNumber: number) => void
+): React.ReactNode => {
+  return (
+    <>
+      {prefix}
+      {claimNumbers.map((num, idx) => (
+        <React.Fragment key={num}>
+          <ClaimLink claimNumber={num} onClick={onClaimClick} />
+          {idx < claimNumbers.length - 1 && ', '}
+        </React.Fragment>
+      ))}
+    </>
+  );
+};
+
 // Render text with inline citations
 const renderTextWithCitations = (
   text: string,
@@ -66,16 +105,18 @@ const renderTextWithCitations = (
 // Strategic Review Content Component
 interface StrategicReviewContentProps {
   onCitationClick?: (citation: Citation) => void;
+  onClaimClick?: (claimNumber: number) => void;
 }
 
 export const StrategicReviewContent: React.FC<StrategicReviewContentProps> = ({
   onCitationClick,
+  onClaimClick,
 }) => {
   return (
     <div className="strategic-review">
       {/* Claims 1, 19 Section */}
       <section className="strategic-review__section">
-        <div className="strategic-review__claim-label">Claims 1, 19</div>
+        <div className="strategic-review__claim-label">{renderClaimList('Claims ', [1, 19], onClaimClick)}</div>
 
         <p className="strategic-review__paragraph">
           [1] Claim 1 recites an adaptive cruise controller that autonomously adapts an ego vehicle's speed to maintain a target headway to a forward vehicle. It requires a comparison module that determines whether current headway is below the target headway and, upon that condition, an elastic adaptive cruise control module that determines a deceleration strategy that a controller implements. The deceleration strategy is selectively comfort-optimized in dependence on a predicted headway computed for a future time instant based on the forward vehicle's current speed and acceleration relative to the ego vehicle.
@@ -144,7 +185,7 @@ export const StrategicReviewContent: React.FC<StrategicReviewContentProps> = ({
 
       {/* Claim 18 Section */}
       <section className="strategic-review__section">
-        <div className="strategic-review__claim-label">Claim 18</div>
+        <div className="strategic-review__claim-label">{renderClaimList('Claim ', [18], onClaimClick)}</div>
 
         <p className="strategic-review__paragraph">
           [1] Claim 18 focuses on comfort-selective deceleration based on a discrete risk category, rather than on a predicted headway computed for a future time instant. Claim 18 recites a computer program embodied on non-transitory computer-readable storage with executable instructions that, when executed, implement an adaptive cruise control method. The method responds to detecting that current headway is below target headway by determining and implementing a deceleration strategy for increasing to the target headway, where the strategy selectively optimizes comfort in dependence on a determined risk category of the ego vehicle. The risk category is determined as one of a discrete set of risk categories based on the forward vehicle's current speed and acceleration relative to the ego vehicle.

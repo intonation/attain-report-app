@@ -1,0 +1,200 @@
+/* Claim Summary Panel styles */
+
+.claimSummaryPanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-paper);
+}
+
+.claimSummaryPanel--empty {
+  align-items: center;
+  justify-content: center;
+}
+
+.claimSummaryPanel__emptyText {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+/* Header */
+.claimSummaryPanel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.claimSummaryPanel__headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.claimSummaryPanel__title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.claimSummaryPanel__closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.claimSummaryPanel__closeBtn:hover {
+  background-color: var(--color-grey-light);
+  color: var(--color-text);
+}
+
+/* Badge */
+.claimSummaryPanel__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) 10px;
+  border-radius: 12px;
+  font-size: var(--font-size-xsmall);
+  font-weight: 500;
+}
+
+.claimSummaryPanel__badge--novel {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.claimSummaryPanel__badge--likely-novel {
+  background: rgba(101, 163, 13, 0.1);
+  color: #65a30d;
+}
+
+.claimSummaryPanel__badge--likely-not-novel {
+  background: rgba(202, 138, 4, 0.1);
+  color: #ca8a04;
+}
+
+.claimSummaryPanel__badge--not-novel {
+  background: var(--color-danger-subtle);
+  color: var(--color-status-danger);
+}
+
+/* Content */
+.claimSummaryPanel__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+/* Sections */
+.claimSummaryPanel__section {
+  margin-bottom: var(--space-6);
+}
+
+.claimSummaryPanel__section:last-child {
+  margin-bottom: 0;
+}
+
+.claimSummaryPanel__sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.claimSummaryPanel__text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.claimSummaryPanel__lineCount {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-3) 0;
+}
+
+/* Lines summary */
+.claimSummaryPanel__linesSummary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.claimSummaryPanel__lineItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+}
+
+.claimSummaryPanel__lineId {
+  font-size: var(--font-size-small);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.claimSummaryPanel__lineConclusion {
+  font-size: var(--font-size-xsmall);
+  font-weight: 500;
+}
+
+.claimSummaryPanel__lineConclusion--novel {
+  color: #16a34a;
+}
+
+.claimSummaryPanel__lineConclusion--likely-novel {
+  color: #65a30d;
+}
+
+.claimSummaryPanel__lineConclusion--likely-not-novel {
+  color: #ca8a04;
+}
+
+.claimSummaryPanel__lineConclusion--not-novel {
+  color: #dc2626;
+}
+
+/* Actions */
+.claimSummaryPanel__actions {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.claimSummaryPanel__actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-small);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.claimSummaryPanel__actionBtn:hover {
+  background: var(--color-accent);
+  color: white;
+}

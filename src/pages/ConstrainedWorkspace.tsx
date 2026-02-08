@@ -6,6 +6,7 @@ import { Sidebar } from '../components/layout/Sidebar';
 import { ClaimCard } from '../components/ClaimCard';
 import { ClaimsChartTable } from '../components/ClaimsChartTable';
 import { ClaimDetailPanel } from '../components/ClaimDetailPanel';
+import { ClaimSummaryPanel } from '../components/ClaimSummaryPanel';
 import { DocumentViewer } from '../components/DocumentViewer';
 import { ResizeHandle } from '../components/ResizeHandle';
 import { WorkbenchPage, WorkbenchDetailPanel } from '../components/Workbench';
@@ -18,7 +19,7 @@ import { StrategicReviewContent } from '../data/strategicReviewData';
 import { ScopeOfAnalysisContent } from '../data/scopeOfAnalysisData';
 import { ClaimsPageContent } from '../data/claimsData';
 import { GravesReferenceSummaryContent } from '../data/gravesReferenceSummaryData';
-import type { ClaimChartRow } from '../data/mockData';
+import type { ClaimChartRow, ClaimChart } from '../data/mockData';
 
 // Panel size constraints
 const SIDEBAR_MIN_WIDTH = 200;
@@ -70,6 +71,10 @@ export const ConstrainedWorkspace = () => {
   const [isWorkbenchPanelOpen, setIsWorkbenchPanelOpen] = useState(false);
   const [workbenchScrollToId, setWorkbenchScrollToId] = useState<string | null>(null);
 
+  // Claim summary panel state (for claim-level details, not line-level)
+  const [claimSummary, setClaimSummary] = useState<ClaimChart | null>(null);
+  const [isClaimSummaryPanelOpen, setIsClaimSummaryPanelOpen] = useState(false);
+
   // Document viewer state
   const [isDocumentViewerOpen, setIsDocumentViewerOpen] = useState(false);
   const [viewerCitation, setViewerCitation] = useState<string>('');
@@ -119,7 +124,7 @@ export const ConstrainedWorkspace = () => {
     }
   }, [activeNavItem]);
 
-  // Canonical handler: navigate to claim-charts and select a specific row
+  // Canonical handler: navigate to claim-charts and highlight a specific row (without opening detail panel)
   const goToClaimChartRow = (claimNumber: number) => {
     handleNavigate('claim-charts');
 
@@ -129,9 +134,72 @@ export const ConstrainedWorkspace = () => {
     if (matchingChart && matchingChart.rows.length > 0) {
       const firstRow = matchingChart.rows[0];
       setSelectedRowId(firstRow.claimId);
-      setDetailRow(firstRow);
-      setIsDetailPanelOpen(true);
+      // Don't open detail panel - wait for user to click the row
+      setDetailRow(null);
+      setIsDetailPanelOpen(false);
       setIsSplitView(false);
+    }
+  };
+
+  // Open claim summary panel for a claim without navigating away from current page
+  const openClaimSummaryPanel = (claimNumber: number) => {
+    const claimLabel = `Claim ${claimNumber}`;
+    const matchingChart = claimChartData.find(chart => chart.claimNumber === claimLabel);
+
+    // Create a placeholder if no data exists
+    const chartToShow = matchingChart || {
+      claimNumber: claimLabel,
+      noveltyStatus: 'Novel' as const,
+      summary: 'Detailed analysis for this claim is not yet available.',
+      priorArtReference: 'Graves et al. (US 2019/0329772 A1)',
+      rows: [],
+    };
+
+    setClaimSummary(chartToShow);
+    setIsClaimSummaryPanelOpen(true);
+    setIsSplitView(false);
+    // Close other panels
+    setIsDetailPanelOpen(false);
+    setDetailRow(null);
+    setSelectedRowId(undefined);
+    setIsWorkbenchPanelOpen(false);
+    setWorkbenchSelection(null);
+  };
+
+  const handleClaimSummaryPanelClose = () => {
+    setClaimSummary(null);
+    setIsClaimSummaryPanelOpen(false);
+  };
+
+  // Navigate to claim chart from the claim summary panel
+  const handleViewClaimChart = (claimNumber: string) => {
+    handleNavigate('claim-charts');
+    // Find the first row for this claim
+    const matchingChart = claimChartData.find(chart => chart.claimNumber === claimNumber);
+    if (matchingChart && matchingChart.rows.length > 0) {
+      const firstRow = matchingChart.rows[0];
+      setSelectedRowId(firstRow.claimId);
+    }
+    // Close the claim summary panel
+    setIsClaimSummaryPanelOpen(false);
+    setClaimSummary(null);
+  };
+
+  // Handle click on a claim chart reference (L1-8, L18-7, etc.) - opens detail panel directly
+  const handleClaimChartRefClick = (refId: string) => {
+    // Find the row matching this refId across all claim charts
+    for (const chart of claimChartData) {
+      const row = chart.rows.find(r => r.claimId === refId);
+      if (row) {
+        setDetailRow(row);
+        setSelectedRowId(row.claimId);
+        setIsDetailPanelOpen(true);
+        setIsSplitView(false);
+        // Close workbench panel if open
+        setIsWorkbenchPanelOpen(false);
+        setWorkbenchSelection(null);
+        return;
+      }
     }
   };
 
@@ -258,6 +326,53 @@ export const ConstrainedWorkspace = () => {
       }
     }
     return null;
+  };
+
+  // Get relationships for a given claim row (extract related R entries from workbench data)
+  const getRelationshipsForRow = (row: ClaimChartRow | null) => {
+    if (!row) return [];
+
+    // Extract claim number from claimId (e.g., "L1-8" -> "Claim 1")
+    const match = row.claimId.match(/^L(\d+)-/);
+    if (!match) return [];
+
+    const claimNumber = `Claim ${match[1]}`;
+    const claimData = workbenchData.find(c => c.claimNumber === claimNumber);
+    if (!claimData) return [];
+
+    // Get relationship entries for this claim
+    return claimData.entries
+      .filter(e => e.type === 'Relationship')
+      .map(e => ({
+        id: e.id,
+        name: e.name,
+        conclusion: e.refConclusion,
+        strength: e.refStrength,
+        relatedNodes: [], // Could extract F refs from name if needed
+      }));
+  };
+
+  // Get relationships for a workbench entry (find all R entries in the same claim)
+  const getRelationshipsForEntry = (entry: typeof workbenchData[0]['entries'][0] | null) => {
+    if (!entry) return [];
+
+    // Find which claim this entry belongs to
+    for (const claim of workbenchData) {
+      const found = claim.entries.find(e => e.id === entry.id);
+      if (found) {
+        // Return all relationship entries for this claim
+        return claim.entries
+          .filter(e => e.type === 'Relationship')
+          .map(e => ({
+            id: e.id,
+            name: e.name,
+            conclusion: e.refConclusion,
+            strength: e.refStrength,
+            relatedNodes: [],
+          }));
+      }
+    }
+    return [];
   };
 
   // Handle reference node click from within details panel
@@ -482,6 +597,7 @@ export const ConstrainedWorkspace = () => {
                   key={claim.claimNumber}
                   claim={claim}
                   onGoToClaimChart={goToClaimChartRow}
+                  onClaimChartRefClick={handleClaimChartRefClick}
                 />
               ))}
             </section>
@@ -497,7 +613,11 @@ export const ConstrainedWorkspace = () => {
                 <p>Summary of objections raised in the official action and claim groupings for analysis.</p>
               </div>
             </header>
-            <ScopeOfAnalysisContent onCitationClick={(citation) => handleCitationClick(citation.location)} />
+            <ScopeOfAnalysisContent
+              onCitationClick={(citation) => handleCitationClick(citation.location)}
+              onClaimClick={openClaimSummaryPanel}
+              onReferenceClick={handleNavigate}
+            />
           </div>
         );
 
@@ -510,7 +630,10 @@ export const ConstrainedWorkspace = () => {
                 <p>Analysis of patent claims against prior art references, with novelty assessments and supporting evidence.</p>
               </div>
             </header>
-            <StrategicReviewContent onCitationClick={(citation) => handleCitationClick(citation.location)} />
+            <StrategicReviewContent
+              onCitationClick={(citation) => handleCitationClick(citation.location)}
+              onClaimClick={openClaimSummaryPanel}
+            />
           </div>
         );
 
@@ -692,6 +815,8 @@ export const ConstrainedWorkspace = () => {
                 row={detailRow}
                 onClose={handleDetailPanelClose}
                 onCitationClick={handleCitationClick}
+                findWorkbenchEntry={findWorkbenchEntry}
+                relationships={getRelationshipsForRow(detailRow)}
               />
             </div>
           )}
@@ -713,6 +838,27 @@ export const ConstrainedWorkspace = () => {
                 onClose={handleWorkbenchPanelClose}
                 onIdClick={handleWorkbenchIdClick}
                 onCitationClick={handleCitationClick}
+                findWorkbenchEntry={findWorkbenchEntry}
+                relationships={getRelationshipsForEntry(workbenchSelection?.entry ?? null)}
+              />
+            </div>
+          )}
+
+          {/* Right Pane - Claim Summary Panel (claim-level, not line-level) */}
+          {isClaimSummaryPanelOpen && !isSplitView && (
+            <div
+              className="appShell__inspectPane"
+              style={{ width: sidePanelWidth, position: 'relative' }}
+            >
+              <ResizeHandle
+                direction="horizontal"
+                position="left"
+                onResize={handleSidePanelResize}
+              />
+              <ClaimSummaryPanel
+                claim={claimSummary}
+                onClose={handleClaimSummaryPanelClose}
+                onViewClaimChart={handleViewClaimChart}
               />
             </div>
           )}
