@@ -133,9 +133,10 @@ export const ConstrainedWorkspace = () => {
     setRightPaneDocId(id);
   };
 
-  // Toggle split view from toolbar
+  // Toggle split view from left pane (or enter split view)
   const handleSplitToggle = () => {
     if (isSplitView) {
+      // Maximise left pane - just close split view
       setIsSplitView(false);
     } else {
       setIsSplitView(true);
@@ -146,6 +147,19 @@ export const ConstrainedWorkspace = () => {
       // Auto-collapse sidebar in split view mode
       setSidebarCollapsed(true);
     }
+  };
+
+  // Maximise right pane - swap documents and close split view
+  const handleRightPaneMaximise = () => {
+    // Make the right pane's document the main document
+    setActiveNavItem(rightPaneDocId);
+    // Add to navigation history
+    const newHistory = navHistory.slice(0, historyIndex + 1);
+    newHistory.push(rightPaneDocId);
+    setNavHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+    // Close split view
+    setIsSplitView(false);
   };
 
   // History navigation
@@ -458,7 +472,7 @@ export const ConstrainedWorkspace = () => {
                 items={DOCUMENT_ITEMS}
                 selectedId={rightPaneDocId}
                 onSelect={handleRightPaneDocumentSelect}
-                onSplitToggle={handleSplitToggle}
+                onSplitToggle={handleRightPaneMaximise}
                 isSplitView={isSplitView}
                 showNavigation={true}
                 showKebab={true}
