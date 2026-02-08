@@ -3,98 +3,191 @@
 
 **URL:** `/option-a` or `/`
 
+**Principle:** User-directed routing via context menu. User chooses where content appears.
+
 ---
 
-### Routing Rules
+## Interaction Path Matrix
 
-| User Action | Result |
+### By Page: What Opens When You Click
+
+| Page | Clickable Element | What Opens | User Choice? |
+|------|-------------------|------------|--------------|
+| **Executive Summary** | Claim card "View in claims chart" | Navigate to Claim Charts + open detail | No |
+| | L-ref link (L1-8, L18-7) | Claim Detail Panel | No |
+| **Scope of Analysis** | Claim number (1, 2, 18...) | Claim Summary Panel | No |
+| | Reference name (Graves et al.) | Navigate to Reference Summary | No |
+| | Citation (p.4, top) | Document Viewer | No |
+| **Strategic Review** | Claim number (1, 18, 19...) | Claim Summary Panel | No |
+| | Citation (p.12, top) | Document Viewer | No |
+| **Claims** | F/R node (F1-1, R1-2) | Context menu appears | **Yes** |
+| **Claim Charts** | Table row | Claim Detail Panel | No |
+| | Citation in row | Document Viewer | No |
+| **Workbench** | Table row | Workbench Detail Panel | No |
+| | Citation | Document Viewer | No |
+| **Reference Summaries** | Citation (p.5, top) | Document Viewer | No |
+
+---
+
+### Context Menu Options (Claims Page Only)
+
+When clicking F/R nodes on the Claims page, user sees:
+
+| Menu Option | Result |
 |-------------|--------|
-| Click reference node (F/R) | Context menu appears at cursor |
-| Select "Left pane" | Workbench opens in main pane, scrolls to entry |
-| Select "Right pane" | Split view activates, Workbench in right pane |
-| Select "Details pane" | Details panel opens on right edge |
-| Click citation | Document viewer opens |
-| Click claim chart row | Claim details panel opens |
+| **Left pane** | Workbench opens in main pane, scrolls to entry |
+| **Right pane** | Split view activates, Workbench in right pane |
+| **Details pane** | Details panel opens on right edge |
+| **Highlight** (5 colors) | Marks the node with selected color |
+| **Clear highlight** | Removes highlight from node |
+| **Cancel** | Closes menu, no action |
 
 ---
 
-### Pane Behaviour
+### By Element Type: Consistent Behaviour
+
+| Element Type | Visual Style | Click Behaviour |
+|--------------|--------------|-----------------|
+| **Claim number** | Blue, dotted underline | Opens Claim Summary Panel |
+| **L-ref** (L1-8) | Blue, dotted underline | Opens Claim Detail Panel for that row |
+| **F/R node** (F1-1) | Inline in claim text | Context menu (Claims page) or direct panel |
+| **Reference name** | Blue, dotted underline | Navigates to Reference Summary page |
+| **Citation** | Blue, dotted underline | Opens Document Viewer |
+| **Table row** | Hover highlight | Opens detail panel for that row |
+
+---
+
+## Pane Layout
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ TOOLBAR                                                     │
-├────────┬────────────────────────────────────────────────────┤
-│        │                                                    │
-│        │  MAIN PANE              │  DETAILS PANE            │
-│  NAV   │  (or split view)        │  (conditional)           │
-│        │                         │                          │
-│        │  Content determined     │  Opens when:             │
-│        │  by nav selection       │  • Node → Details        │
-│        │  or context menu        │  • Row click             │
-│        │                         │  • Citation click        │
-│        │                         │                          │
-└────────┴─────────────────────────┴──────────────────────────┘
+├────────┬──────────────────────────┬─────────────────────────┤
+│        │                          │                         │
+│  SIDE  │  MAIN PANE               │  INSPECT PANE           │
+│  BAR   │  (or SPLIT VIEW)         │  (conditional)          │
+│        │                          │                         │
+│  Has:  │  Can show:               │  Panel types:           │
+│  work- │  • Any document page     │  • ClaimSummaryPanel    │
+│  bench │  • Workbench (full)      │  • ClaimDetailPanel     │
+│  nav   │  • Split: two docs       │  • WorkbenchDetailPanel │
+│        │                          │  • DocumentViewer       │
+│        │  User controls via:      │                         │
+│        │  • Sidebar nav           │  Opens via:             │
+│        │  • Context menu          │  • Direct clicks        │
+│        │  • Pane header dropdown  │  • Context menu choice  │
+└────────┴──────────────────────────┴─────────────────────────┘
 ```
 
-**Split view:** Activated via context menu "Right pane" or pane header toggle
-**Details pane:** Slides in from right, resizable, closable
-**Document viewer:** Opens between main pane and details pane
+---
+
+## Detailed Flow Diagrams
+
+### From Executive Summary
+
+```
+Executive Summary
+       │
+       ├─── Click "View in claims chart" button
+       │           │
+       │           ▼
+       │    Navigate to Claim Charts
+       │    Row selected + ClaimDetailPanel opens
+       │
+       └─── Click L-ref (L1-8, L18-7)
+                   │
+                   ▼
+            ClaimDetailPanel opens
+            Shows that specific row's details
+```
+
+### From Claims Page (Context Menu)
+
+```
+Claims Page
+       │
+       └─── Click F/R node (F1-1, R1-2)
+                   │
+                   ▼
+            Context Menu appears
+                   │
+       ┌───────────┼───────────┬───────────┐
+       ▼           ▼           ▼           ▼
+   Left pane   Right pane   Details    Highlight
+       │           │           │           │
+       ▼           ▼           ▼           ▼
+   Workbench   Split view   Workbench   Color
+   in main     activates    DetailPanel applied
+   pane        with WB      opens       to node
+```
+
+### From Claim Charts
+
+```
+Claim Charts
+       │
+       ├─── Click table row
+       │           │
+       │           ▼
+       │    ClaimDetailPanel opens
+       │    Shows row details with analysis
+       │           │
+       │           └─── Click F/R link in panel
+       │                       │
+       │                       ▼
+       │                Scrolls Workbench to entry
+       │                (if Workbench visible)
+       │
+       └─── Click citation in row
+                   │
+                   ▼
+            DocumentViewer opens
+```
+
+### From Workbench Page
+
+```
+Workbench Page
+       │
+       ├─── Click table row
+       │           │
+       │           ▼
+       │    WorkbenchDetailPanel opens
+       │    Shows full entry details
+       │
+       └─── Click citation
+                   │
+                   ▼
+            DocumentViewer opens
+```
 
 ---
 
-### Navigation Entry Points
+## Split View Behaviour
 
-| Entry Point | Location | Behaviour |
-|-------------|----------|-----------|
-| Sidebar nav | Left rail | Changes main pane content |
-| Pane header dropdown | Top of pane | Changes pane content (split view) |
-| Context menu | On node click | Routes to chosen pane |
-| "View in claims chart" button | Claim cards | Jumps to claim charts + selects row |
-
----
-
-### Claim Chart Jump Behaviour
-
-**Trigger:** "View in claims chart" button on ClaimCard
-
-**Flow:**
-1. Navigate main pane to Claim Charts
-2. Scroll to matching claim section
-3. Select first row of that claim
-4. Open claim details panel
+| Trigger | Result |
+|---------|--------|
+| Context menu → "Right pane" | Split view with Workbench on right |
+| Pane header split toggle | Split view with current doc duplicated |
+| Pane header dropdown | Change document in that pane |
+| Maximize button (right pane) | Right doc becomes main, split closes |
+| Maximize button (left pane) | Split closes, left remains |
 
 ---
 
-### Inspect Behaviour
+## Override Behaviour
 
-**Reference nodes (F1-1, R1-2, etc.):**
-1. Click → Context menu appears
-2. User selects destination pane
-3. Content routes to selected pane
-4. If "Details pane" selected, panel shows full entry info
-
-**Claim chart rows:**
-1. Click → Claim details panel opens immediately
-2. No context menu (direct routing)
-
-**Citations:**
-1. Click → Document viewer opens immediately
-2. No context menu (direct routing)
-
----
-
-### Override Behaviour
-
-| Current State | User Action | Override |
-|---------------|-------------|----------|
+| Current State | User Action | Result |
+|---------------|-------------|--------|
 | Details panel open | Click different node → Details | Replaces panel content |
-| Split view active | Select "Left pane" from menu | Closes split view |
+| Split view active | Select "Left pane" from menu | Closes split view, shows Workbench |
 | Document viewer open | Click different citation | Replaces viewer content |
 | Both panels open | — | Sidebar auto-collapses |
+| Workbench in main | Click node → Details | Panel opens alongside |
 
 ---
 
-### Context Menu Structure
+## Context Menu Structure
 
 ```
 ┌──────────────────────┐
@@ -113,10 +206,43 @@
 
 ---
 
-### Key Characteristics
+## Navigation vs Panel Opening
 
-- **User-directed routing** — user chooses destination
-- **Highlighting capability** — annotation for review workflow
-- **Workbench accessible** — full page available in nav
-- **Split view supported** — side-by-side comparison
-- **2 clicks to evidence** — node → menu → destination
+| Action | Type | Stays on Page? |
+|--------|------|----------------|
+| Click claim number | Panel | Yes |
+| Click L-ref | Panel | Yes |
+| Click F/R node | Menu → choice | Depends on choice |
+| Click citation | Panel | Yes |
+| Click table row | Panel | Yes |
+| Click reference name | Navigation | No - goes to Reference Summary |
+| Click "View in claims chart" | Navigation | No - goes to Claim Charts |
+| Click sidebar nav item | Navigation | No - changes page |
+| Context menu → Left pane | Navigation | No - goes to Workbench |
+| Context menu → Right pane | Split view | Sort of - adds pane |
+| Context menu → Details | Panel | Yes |
+
+---
+
+## What's Available (vs Option B)
+
+| Feature | Status | Purpose |
+|---------|--------|---------|
+| Context menu | Available | User chooses destination |
+| Highlighting | Available | Annotation for review workflow |
+| Split view | Available | Side-by-side comparison |
+| Workbench page | Available | Full table view of all entries |
+| User pane selection | Available | Flexibility in layout |
+
+---
+
+## Key Characteristics
+
+| Attribute | Value |
+|-----------|-------|
+| Clicks to evidence | 2 (node → menu → destination) |
+| User decisions | 1 per node click |
+| Pane destinations | User choice (3 options) |
+| Behaviour predictability | Medium |
+| Learning curve | Medium |
+| Flexibility | High |

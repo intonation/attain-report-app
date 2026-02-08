@@ -7,21 +7,40 @@
 
 ---
 
-### Routing Rules
+## Interaction Path Matrix
 
-| User Action | Location | Destination |
-|-------------|----------|-------------|
-| Document click | Sidebar | Main reading pane |
-| Claim card button | Executive Summary | Claims chart row (navigate + select) |
-| Claim chart row click | Claims Chart | Details pane (right) |
-| Reference node click | Inline in content | Details pane (right) |
-| Reference node click | Inside details pane | Rewrites details pane |
-| Citation click | Inline in content | Document viewer |
-| Citation click | Inside details pane | Document viewer |
+### By Page: What Opens When You Click
+
+| Page | Clickable Element | What Opens | Panel Type |
+|------|-------------------|------------|------------|
+| **Executive Summary** | Claim card "View in claims chart" | Navigate to Claim Charts, highlight row | Navigation |
+| | L-ref link (L1-8, L18-7) | Claim Detail Panel | Right panel |
+| **Scope of Analysis** | Claim number (1, 2, 18...) | Claim Summary Panel | Right panel |
+| | Reference name (Graves et al.) | Navigate to Reference Summary | Navigation |
+| | Citation (p.4, top) | Document Viewer | Right panel |
+| **Strategic Review** | Claim number (1, 18, 19...) | Claim Summary Panel | Right panel |
+| | Citation (p.12, top) | Document Viewer | Right panel |
+| **Claims** | F/R node (F1-1, R1-2) | Workbench Detail Panel | Right panel |
+| **Claim Charts** | Table row | Claim Detail Panel | Right panel |
+| | Citation in row | Document Viewer | Right panel |
+| **Reference Summaries** | Citation (p.5, top) | Document Viewer | Right panel |
 
 ---
 
-### Pane Behaviour
+### By Element Type: Consistent Behaviour
+
+| Element Type | Visual Style | Click Behaviour |
+|--------------|--------------|-----------------|
+| **Claim number** | Blue, dotted underline | Opens Claim Summary Panel |
+| **L-ref** (L1-8) | Blue, dotted underline | Opens Claim Detail Panel for that row |
+| **F/R node** (F1-1) | Inline in claim text | Opens Workbench Detail Panel |
+| **Reference name** | Blue, dotted underline | Navigates to Reference Summary page |
+| **Citation** | Blue, dotted underline | Opens Document Viewer |
+| **Table row** | Hover highlight | Opens detail panel for that row |
+
+---
+
+## Panel Hierarchy
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -29,128 +48,168 @@
 ├────────┬──────────────────────────┬─────────────────────────┤
 │        │                          │                         │
 │  SIDE  │  MAIN PANE               │  INSPECT PANE           │
-│  BAR   │  (reading)               │  (details)              │
+│  BAR   │  (reading)               │  (one at a time)        │
 │        │                          │                         │
-│  • No  │  Always shows:           │  Shows on:              │
-│  work- │  • Executive Summary     │  • Row click → Claim    │
-│  bench │  • Scope of Analysis     │  • Node click → Entry   │
-│        │  • Strategic Review      │  • Citation → Document  │
-│        │  • Claims                │                         │
-│        │  • Claim Charts          │  Rewrites on each click │
-│        │  • Reference Summaries   │                         │
-│        │                          │                         │
+│  • No  │  Pages:                  │  Panel types:           │
+│  work- │  • Executive Summary     │  • ClaimSummaryPanel    │
+│  bench │  • Scope of Analysis     │  • ClaimDetailPanel     │
+│        │  • Strategic Review      │  • WorkbenchDetailPanel │
+│        │  • Claims                │  • DocumentViewer       │
+│        │  • Claim Charts          │                         │
+│        │  • Reference Summaries   │  Only one shows at a    │
+│        │                          │  time. Each click       │
+│        │                          │  replaces previous.     │
 └────────┴──────────────────────────┴─────────────────────────┘
 ```
 
-**Key behaviours:**
-- Details pane is the single destination for all inspection
-- Each click replaces previous content (no stacking)
-- No split view available
-- No workbench page in navigation
+---
+
+## Detailed Flow Diagrams
+
+### From Executive Summary
+
+```
+Executive Summary
+       │
+       ├─── Click "View in claims chart" button
+       │           │
+       │           ▼
+       │    Navigate to Claim Charts
+       │    Row highlighted (panel NOT open)
+       │    User clicks row to open panel
+       │
+       └─── Click L-ref (L1-8, L18-7)
+                   │
+                   ▼
+            ClaimDetailPanel opens
+            Shows that specific row's details
+```
+
+### From Scope of Analysis
+
+```
+Scope of Analysis
+       │
+       ├─── Click claim number (1, 18, etc.)
+       │           │
+       │           ▼
+       │    ClaimSummaryPanel opens
+       │    Shows claim-level summary
+       │    "View in claim chart" button available
+       │
+       ├─── Click reference (Graves et al.)
+       │           │
+       │           ▼
+       │    Navigate to Reference Summary page
+       │
+       └─── Click citation (p.4, top)
+                   │
+                   ▼
+            DocumentViewer opens
+            Shows PDF at that location
+```
+
+### From Strategic Review
+
+```
+Strategic Review
+       │
+       ├─── Click claim number (1, 18, 19)
+       │           │
+       │           ▼
+       │    ClaimSummaryPanel opens
+       │    Shows claim-level summary
+       │
+       └─── Click citation (p.12, top)
+                   │
+                   ▼
+            DocumentViewer opens
+```
+
+### From Claims Page
+
+```
+Claims Page
+       │
+       └─── Click F/R node (F1-1, R1-2)
+                   │
+                   ▼
+            WorkbenchDetailPanel opens
+            Shows interpretation, evidence, conclusion
+                   │
+                   └─── Click another F/R in panel
+                               │
+                               ▼
+                        Panel REWRITES to new entry
+                        (breadcrumb navigation available)
+```
+
+### From Claim Charts
+
+```
+Claim Charts
+       │
+       ├─── Click table row
+       │           │
+       │           ▼
+       │    ClaimDetailPanel opens
+       │    Shows row details with analysis
+       │           │
+       │           └─── Click F/R link in panel
+       │                       │
+       │                       ▼
+       │                Panel navigates to that entry
+       │                (breadcrumb shows path)
+       │
+       └─── Click citation in row
+                   │
+                   ▼
+            DocumentViewer opens
+```
 
 ---
 
-### Flow Diagrams
-
-**Claim inspection flow:**
-```
-Claim Card → "View in claims chart" → Claims Chart (main pane)
-                                           │
-                                           ▼
-                                      Row selected
-                                           │
-                                           ▼
-                                   ClaimDetailPanel (right)
-```
-
-**Reference node flow (inline):**
-```
-Claims page → Click "adaptive cruise controller" (F1-1)
-                           │
-                           ▼
-                 WorkbenchDetailPanel (right)
-                 Shows F1-1 interpretation,
-                 evidence, conclusion
-```
-
-**Reference node flow (in details pane):**
-```
-WorkbenchDetailPanel showing F1-1
-           │
-           ▼
-    Click "F1-2" link in text
-           │
-           ▼
-WorkbenchDetailPanel rewrites to F1-2
-```
-
-**Citation flow:**
-```
-Any page → Click citation (e.g., "col.4, ll.12-18")
-                         │
-                         ▼
-              DocumentViewer (right)
-              Shows referenced passage
-```
-
----
-
-### Override Behaviour
+## Panel Mutual Exclusivity
 
 | Current State | User Action | Result |
 |---------------|-------------|--------|
-| Details panel showing F1-1 | Click F1-2 in content | Panel rewrites to F1-2 |
-| Details panel showing F1-1 | Click F1-3 link in panel | Panel rewrites to F1-3 |
-| Document viewer open | Click citation | Viewer rewrites to new citation |
-| Details panel open | Click citation | Document viewer opens, details closes |
-| Document viewer open | Click reference node | Details opens, viewer closes |
-
-**Mutual exclusivity:** Only one right-panel type at a time.
+| ClaimSummaryPanel open | Click claim number | Panel rewrites to new claim |
+| ClaimDetailPanel open | Click different row | Panel rewrites to new row |
+| ClaimDetailPanel open | Click F/R link | Panel navigates (breadcrumb) |
+| WorkbenchDetailPanel open | Click F/R in panel | Panel rewrites to new entry |
+| DocumentViewer open | Click citation | Viewer updates to new citation |
+| Any panel open | Click different element type | Previous closes, new opens |
 
 ---
 
-### What's Removed (vs Option A)
+## Navigation vs Panel Opening
+
+| Action | Type | Stays on Page? |
+|--------|------|----------------|
+| Click claim number | Panel | Yes |
+| Click L-ref | Panel | Yes |
+| Click F/R node | Panel | Yes |
+| Click citation | Panel | Yes |
+| Click table row | Panel | Yes |
+| Click reference name | Navigation | No - goes to Reference Summary |
+| Click "View in claims chart" | Navigation | No - goes to Claim Charts |
+| Click sidebar nav item | Navigation | No - changes page |
+
+---
+
+## What's Not Available (vs Option A)
 
 | Feature | Status | Reason |
 |---------|--------|--------|
 | Context menu | Removed | No pane choice needed |
 | Highlighting | Removed | Annotation is separate concern |
-| Left pane option | Removed | System routes to details |
-| Right pane option | Removed | System routes to details |
 | Split view | Removed | Single-focus reading model |
 | Workbench page | Removed | Details panel serves this purpose |
+| User pane selection | Removed | System decides destination |
 
 ---
 
-### Implementation
-
-```tsx
-// Reference node click - inline in content
-const handleClaimTargetClick = (ref, x, y) => {
-  if (interactionMode === 'system') {
-    const found = findWorkbenchEntry(ref);
-    if (found) {
-      setWorkbenchSelection({ entry: found.entry, ... });
-      setIsWorkbenchPanelOpen(true);
-    }
-  }
-};
-
-// Reference node click - inside details panel
-const handleWorkbenchIdClick = (id) => {
-  if (interactionMode === 'system') {
-    const found = findWorkbenchEntry(id);
-    if (found) {
-      setWorkbenchSelection({ entry: found.entry, ... });
-      // Panel rewrites automatically
-    }
-  }
-};
-```
-
----
-
-### Key Characteristics
+## Key Characteristics
 
 | Attribute | Value |
 |-----------|-------|
