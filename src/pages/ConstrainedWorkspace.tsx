@@ -249,11 +249,6 @@ export const ConstrainedWorkspace = () => {
     setViewerCitation('');
   };
 
-  // Handle feature/relationship ID click from workbench detail panel - scroll workbench table to that row
-  const handleWorkbenchIdClick = (id: string) => {
-    setWorkbenchScrollToId(id);
-  };
-
   // Find workbench entry by ref ID
   const findWorkbenchEntry = (ref: string) => {
     for (const claim of workbenchData) {
@@ -263,6 +258,20 @@ export const ConstrainedWorkspace = () => {
       }
     }
     return null;
+  };
+
+  // Handle reference node click from within details panel
+  const handleWorkbenchIdClick = (id: string) => {
+    if (interactionMode === 'system') {
+      // System mode: rewrite details panel with new entry
+      const found = findWorkbenchEntry(id);
+      if (found) {
+        setWorkbenchSelection({ entry: found.entry, priorArtReference: found.priorArtReference });
+      }
+    } else {
+      // Contextual mode: scroll workbench table to that row
+      setWorkbenchScrollToId(id);
+    }
   };
 
   // Context menu handlers for Claims page target clicks

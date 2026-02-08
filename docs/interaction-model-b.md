@@ -3,17 +3,21 @@
 
 **URL:** `/option-b`
 
+**Principle:** No user-chosen pane destinations. System routes automatically based on what was clicked and where.
+
 ---
 
 ### Routing Rules
 
-| User Action | Result |
-|-------------|--------|
-| Click reference node (F/R) | Details panel opens immediately |
-| Click citation | Document viewer opens |
-| Click claim chart row | Claim details panel opens |
-
-**No context menu. No destination choice. System routes automatically.**
+| User Action | Location | Destination |
+|-------------|----------|-------------|
+| Document click | Sidebar | Main reading pane |
+| Claim card button | Executive Summary | Claims chart row (navigate + select) |
+| Claim chart row click | Claims Chart | Details pane (right) |
+| Reference node click | Inline in content | Details pane (right) |
+| Reference node click | Inside details pane | Rewrites details pane |
+| Citation click | Inline in content | Document viewer |
+| Citation click | Inside details pane | Document viewer |
 
 ---
 
@@ -22,102 +26,137 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ TOOLBAR                                                     │
-├────────┬────────────────────────────────────────────────────┤
-│        │                                                    │
-│        │  MAIN PANE              │  DETAILS PANE            │
-│  NAV   │                         │  (always used)           │
-│        │  Content determined     │                          │
-│  (no   │  by nav selection       │  Opens on any:           │
-│  work- │                         │  • Node click            │
-│  bench)│  No split view          │  • Row click             │
-│        │  in this model          │  • Citation click        │
-│        │                         │                          │
-└────────┴─────────────────────────┴──────────────────────────┘
+├────────┬──────────────────────────┬─────────────────────────┤
+│        │                          │                         │
+│  SIDE  │  MAIN PANE               │  INSPECT PANE           │
+│  BAR   │  (reading)               │  (details)              │
+│        │                          │                         │
+│  • No  │  Always shows:           │  Shows on:              │
+│  work- │  • Executive Summary     │  • Row click → Claim    │
+│  bench │  • Scope of Analysis     │  • Node click → Entry   │
+│        │  • Strategic Review      │  • Citation → Document  │
+│        │  • Claims                │                         │
+│        │  • Claim Charts          │  Rewrites on each click │
+│        │  • Reference Summaries   │                         │
+│        │                          │                         │
+└────────┴──────────────────────────┴─────────────────────────┘
 ```
 
-**Split view:** Not available
-**Details pane:** Always the destination for inspecting content
-**Document viewer:** Opens for citations only
-**Workbench:** Removed from navigation
+**Key behaviours:**
+- Details pane is the single destination for all inspection
+- Each click replaces previous content (no stacking)
+- No split view available
+- No workbench page in navigation
 
 ---
 
-### Navigation Entry Points
+### Flow Diagrams
 
-| Entry Point | Location | Behaviour |
-|-------------|----------|-----------|
-| Sidebar nav | Left rail | Changes main pane content |
-| Pane header dropdown | Top of pane | Changes pane content |
-| Node click | Inline in content | Opens details panel |
-| "View in claims chart" button | Claim cards | Jumps to claim charts + selects row |
+**Claim inspection flow:**
+```
+Claim Card → "View in claims chart" → Claims Chart (main pane)
+                                           │
+                                           ▼
+                                      Row selected
+                                           │
+                                           ▼
+                                   ClaimDetailPanel (right)
+```
 
-**Removed:** Workbench from sidebar and dropdowns
+**Reference node flow (inline):**
+```
+Claims page → Click "adaptive cruise controller" (F1-1)
+                           │
+                           ▼
+                 WorkbenchDetailPanel (right)
+                 Shows F1-1 interpretation,
+                 evidence, conclusion
+```
 
----
+**Reference node flow (in details pane):**
+```
+WorkbenchDetailPanel showing F1-1
+           │
+           ▼
+    Click "F1-2" link in text
+           │
+           ▼
+WorkbenchDetailPanel rewrites to F1-2
+```
 
-### Claim Chart Jump Behaviour
-
-**Trigger:** "View in claims chart" button on ClaimCard
-
-**Flow:**
-1. Navigate main pane to Claim Charts
-2. Scroll to matching claim section
-3. Select first row of that claim
-4. Open claim details panel
-
-*Same as Candidate A*
-
----
-
-### Inspect Behaviour
-
-**Reference nodes (F1-1, R1-2, etc.):**
-1. Click → Details panel opens immediately
-2. Panel shows full entry info (interpretation, evidence, conclusion)
-3. No intermediate menu
-
-**Claim chart rows:**
-1. Click → Claim details panel opens immediately
-2. Same as Candidate A
-
-**Citations:**
-1. Click → Document viewer opens immediately
-2. Same as Candidate A
+**Citation flow:**
+```
+Any page → Click citation (e.g., "col.4, ll.12-18")
+                         │
+                         ▼
+              DocumentViewer (right)
+              Shows referenced passage
+```
 
 ---
 
 ### Override Behaviour
 
-| Current State | User Action | Override |
-|---------------|-------------|----------|
-| Details panel open | Click different node | Replaces panel content |
-| Document viewer open | Click different citation | Replaces viewer content |
-| Details + viewer open | — | Sidebar auto-collapses |
+| Current State | User Action | Result |
+|---------------|-------------|--------|
+| Details panel showing F1-1 | Click F1-2 in content | Panel rewrites to F1-2 |
+| Details panel showing F1-1 | Click F1-3 link in panel | Panel rewrites to F1-3 |
+| Document viewer open | Click citation | Viewer rewrites to new citation |
+| Details panel open | Click citation | Document viewer opens, details closes |
+| Document viewer open | Click reference node | Details opens, viewer closes |
 
-**Simpler state management — fewer possible configurations**
+**Mutual exclusivity:** Only one right-panel type at a time.
 
 ---
 
-### What's Removed
+### What's Removed (vs Option A)
 
-| Feature | Status |
-|---------|--------|
-| Context menu | ✗ Removed |
-| Highlighting (5 colors) | ✗ Removed |
-| Clear highlight | ✗ Removed |
-| "View in left pane" | ✗ Removed |
-| "View in right pane" | ✗ Removed |
-| Split view | ✗ Removed |
-| Workbench page | ✗ Removed from nav |
+| Feature | Status | Reason |
+|---------|--------|--------|
+| Context menu | Removed | No pane choice needed |
+| Highlighting | Removed | Annotation is separate concern |
+| Left pane option | Removed | System routes to details |
+| Right pane option | Removed | System routes to details |
+| Split view | Removed | Single-focus reading model |
+| Workbench page | Removed | Details panel serves this purpose |
+
+---
+
+### Implementation
+
+```tsx
+// Reference node click - inline in content
+const handleClaimTargetClick = (ref, x, y) => {
+  if (interactionMode === 'system') {
+    const found = findWorkbenchEntry(ref);
+    if (found) {
+      setWorkbenchSelection({ entry: found.entry, ... });
+      setIsWorkbenchPanelOpen(true);
+    }
+  }
+};
+
+// Reference node click - inside details panel
+const handleWorkbenchIdClick = (id) => {
+  if (interactionMode === 'system') {
+    const found = findWorkbenchEntry(id);
+    if (found) {
+      setWorkbenchSelection({ entry: found.entry, ... });
+      // Panel rewrites automatically
+    }
+  }
+};
+```
 
 ---
 
 ### Key Characteristics
 
-- **System-directed routing** — no user choice on destination
-- **No highlighting** — no annotation capability
-- **No Workbench** — removed from navigation
-- **No split view** — single pane focus
-- **1 click to evidence** — node → details panel
-- **Lower cognitive load** — fewer decisions
-- **Predictable** — same action = same result
+| Attribute | Value |
+|-----------|-------|
+| Clicks to evidence | 1 |
+| User decisions | 0 (system decides) |
+| Pane destinations | Fixed (always right) |
+| Behaviour predictability | High |
+| Learning curve | Low |
+| Flexibility | Low |
