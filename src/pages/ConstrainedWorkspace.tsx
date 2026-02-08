@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useInteractionMode } from '../contexts/InteractionModeContext';
 import { Toolbar } from '../components/layout/Toolbar';
 import { PaneHeader } from '../components/layout/PaneHeader';
 import { Sidebar } from '../components/layout/Sidebar';
@@ -40,6 +41,13 @@ const DOCUMENT_ITEMS = [
 ];
 
 export const ConstrainedWorkspace = () => {
+  const interactionMode = useInteractionMode();
+
+  // Filter out workbench in system mode
+  const documentItems = interactionMode === 'system'
+    ? DOCUMENT_ITEMS.filter(item => item.id !== 'workbench')
+    : DOCUMENT_ITEMS;
+
   const [activeNavItem, setActiveNavItem] = useState('executive-summary');
   const [isSplitView, setIsSplitView] = useState(false);
   const [rightPaneDocId, setRightPaneDocId] = useState('scope-of-analysis');
@@ -246,9 +254,35 @@ export const ConstrainedWorkspace = () => {
     setWorkbenchScrollToId(id);
   };
 
+  // Find workbench entry by ref ID
+  const findWorkbenchEntry = (ref: string) => {
+    for (const claim of workbenchData) {
+      const entry = claim.entries.find(e => e.id === ref);
+      if (entry) {
+        return { entry, priorArtReference: claim.priorArtReference };
+      }
+    }
+    return null;
+  };
+
   // Context menu handlers for Claims page target clicks
   const handleClaimTargetClick = (ref: string, x: number, y: number) => {
-    setContextMenu({ x, y, ref });
+    if (interactionMode === 'system') {
+      // System mode: directly open details panel for this entry
+      const found = findWorkbenchEntry(ref);
+      if (found) {
+        setWorkbenchSelection({ entry: found.entry, priorArtReference: found.priorArtReference });
+        setIsWorkbenchPanelOpen(true);
+        // Close other panels
+        setIsSplitView(false);
+        setIsDetailPanelOpen(false);
+        setDetailRow(null);
+        setSelectedRowId(undefined);
+      }
+    } else {
+      // Contextual mode: show context menu
+      setContextMenu({ x, y, ref });
+    }
   };
 
   const handleContextMenuClose = () => {
@@ -275,17 +309,6 @@ export const ConstrainedWorkspace = () => {
 
     const ref = contextMenu.ref;
 
-    // Find the entry in workbench data
-    const findEntry = () => {
-      for (const claim of workbenchData) {
-        const entry = claim.entries.find(e => e.id === ref);
-        if (entry) {
-          return { entry, priorArtReference: claim.priorArtReference };
-        }
-      }
-      return null;
-    };
-
     if (pane === 'left') {
       // Open workbench in left pane and scroll to the entry
       setActiveNavItem('workbench');
@@ -301,7 +324,7 @@ export const ConstrainedWorkspace = () => {
       setSidebarCollapsed(true);
     } else if (pane === 'details') {
       // Open the workbench detail panel for this entry
-      const found = findEntry();
+      const found = findWorkbenchEntry(ref);
       if (found) {
         // Navigate to workbench and select the entry
         setActiveNavItem('workbench');
@@ -555,6 +578,7 @@ export const ConstrainedWorkspace = () => {
           onCollapsedChange={handleSidebarCollapsedChange}
           showEmphasis={showEmphasis}
           onEmphasisComplete={onEmphasisComplete}
+          hideWorkbench={interactionMode === 'system'}
         />
         {!sidebarCollapsed && (
           <ResizeHandle
@@ -580,7 +604,7 @@ export const ConstrainedWorkspace = () => {
           <div className="appShell__pane">
             <PaneHeader
               title={leftPaneDocTitle}
-              items={DOCUMENT_ITEMS}
+              items={documentItems}
               selectedId={activeNavItem}
               onSelect={handleLeftPaneDocumentSelect}
               onPrevious={handlePrevious}
@@ -607,7 +631,7 @@ export const ConstrainedWorkspace = () => {
             <div className="appShell__pane">
               <PaneHeader
                 title={rightPaneDocTitle}
-                items={DOCUMENT_ITEMS}
+                items={documentItems}
                 selectedId={rightPaneDocId}
                 onSelect={handleRightPaneDocumentSelect}
                 onSplitToggle={handleRightPaneMaximise}

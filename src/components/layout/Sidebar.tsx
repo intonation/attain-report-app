@@ -64,6 +64,8 @@ interface SidebarProps {
   showEmphasis?: boolean;
   /** Callback when emphasis animation completes */
   onEmphasisComplete?: () => void;
+  /** Hide workbench from navigation (for system mode) */
+  hideWorkbench?: boolean;
 }
 
 export const Sidebar = ({
@@ -73,7 +75,12 @@ export const Sidebar = ({
   onCollapsedChange,
   showEmphasis = false,
   onEmphasisComplete,
+  hideWorkbench = false,
 }: SidebarProps) => {
+  // Filter out workbench if hideWorkbench is true
+  const filteredDocumentItems = hideWorkbench
+    ? generatedDocumentsItems.filter(item => item.id !== 'workbench')
+    : generatedDocumentsItems;
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   // Initialize with the active item already marked as visited (it's the page we're on)
   const [visitedItemIds, setVisitedItemIds] = useState<Set<string>>(() => new Set([activeItem]));
@@ -146,7 +153,7 @@ export const Sidebar = ({
             <SidebarSection
               title="GENERATED DOCUMENTS"
               startDelay={100}
-              items={generatedDocumentsItems}
+              items={filteredDocumentItems}
               activeItem={activeItem}
               visitedItemIds={visitedItemIds}
               onNavigate={handleNavigate}
