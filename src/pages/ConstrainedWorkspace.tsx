@@ -68,6 +68,24 @@ export const ConstrainedWorkspace = () => {
   const mainScrollRef = useRef<HTMLDivElement>(null);
   const rightPaneScrollRef = useRef<HTMLDivElement>(null);
 
+  // Track if sidebar was auto-collapsed due to space constraints
+  const wasAutoCollapsed = useRef(false);
+
+  // Auto-collapse sidebar when both detail panel and document viewer are open
+  useEffect(() => {
+    const bothPanelsOpen = isDetailPanelOpen && isDocumentViewerOpen;
+
+    if (bothPanelsOpen && !sidebarCollapsed) {
+      // Both panels open and sidebar is expanded - auto-collapse it
+      wasAutoCollapsed.current = true;
+      setSidebarCollapsed(true);
+    } else if (!bothPanelsOpen && wasAutoCollapsed.current && sidebarCollapsed) {
+      // One panel closed and sidebar was auto-collapsed - restore it
+      wasAutoCollapsed.current = false;
+      setSidebarCollapsed(false);
+    }
+  }, [isDetailPanelOpen, isDocumentViewerOpen, sidebarCollapsed, setSidebarCollapsed]);
+
   // Reset scroll position on navigation
   useEffect(() => {
     if (mainScrollRef.current) {
@@ -424,7 +442,10 @@ export const ConstrainedWorkspace = () => {
               showSplit={true}
               showDropdown={isSplitView}
             />
-            <div className="appShell__paneContent" ref={mainScrollRef}>
+            <div
+              className={`appShell__paneContent ${activeNavItem === 'claim-charts' ? 'appShell__paneContent--claims' : ''}`}
+              ref={mainScrollRef}
+            >
               {renderDocumentContent(activeNavItem)}
             </div>
           </div>
@@ -444,7 +465,10 @@ export const ConstrainedWorkspace = () => {
                 showSplit={true}
                 showDropdown={true}
               />
-              <div className="appShell__paneContent" ref={rightPaneScrollRef}>
+              <div
+                className={`appShell__paneContent ${rightPaneDocId === 'claim-charts' ? 'appShell__paneContent--claims' : ''}`}
+                ref={rightPaneScrollRef}
+              >
                 {renderDocumentContent(rightPaneDocId)}
               </div>
             </div>

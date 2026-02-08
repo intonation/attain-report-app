@@ -18,12 +18,16 @@ export const Toolbar = ({
 }: ToolbarProps) => {
   return (
     <header className="toolbar">
-      {/* Left section - app info */}
+      {/* Left section - app info (two lines) */}
       <div className="toolbar__left">
         <div className="toolbar__appInfo">
-          <span className="toolbar__appNumber">{applicationNumber}</span>
-          <span className="toolbar__appTitle">{applicationTitle}</span>
-          <span className="toolbar__version">{version}</span>
+          <div className="toolbar__appLine1">
+            <span className="toolbar__appNumber">{applicationNumber}</span>
+          </div>
+          <div className="toolbar__appLine2">
+            <span className="toolbar__appTitle">{applicationTitle}</span>
+            <span className="toolbar__version">{version}</span>
+          </div>
         </div>
       </div>
 

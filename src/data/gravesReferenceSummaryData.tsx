@@ -8,22 +8,6 @@ interface Citation {
   location: string;
 }
 
-// Parse citation string format: #["ref", "file.pdf", "text...", "page info"]
-// Note: This format may have multiple text segments, we take the last as location
-const parseCitation = (citationStr: string): Citation | null => {
-  // Match the citation format with 4 quoted strings
-  const match = citationStr.match(/\["([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)"\]/);
-  if (match) {
-    return {
-      refId: match[1],
-      filename: match[2],
-      text: match[3],
-      location: match[4],
-    };
-  }
-  return null;
-};
-
 // PDF Jump Link component
 interface PdfJumpLinkProps {
   citation: Citation;
@@ -39,70 +23,6 @@ const PdfJumpLink: React.FC<PdfJumpLinkProps> = ({ citation, onClick }) => (
     {citation.location}
   </button>
 );
-
-// Render text with inline citations
-// Handles both single citations and semicolon-separated multiple citations
-const renderTextWithCitations = (
-  text: string,
-  onCitationClick?: (citation: Citation) => void
-): React.ReactNode[] => {
-  // Split on citation patterns, keeping the delimiters
-  const citationPattern = /(#\["[^"]+",\s*"[^"]+",\s*"[^"]+",\s*"[^"]+",\s*"[^"]+"\])/g;
-  const parts = text.split(citationPattern);
-
-  return parts.map((part, index) => {
-    if (part.startsWith('#[')) {
-      const citation = parseCitation(part.substring(1));
-      if (citation) {
-        return (
-          <PdfJumpLink
-            key={index}
-            citation={citation}
-            onClick={onCitationClick}
-          />
-        );
-      }
-    }
-    return <span key={index}>{part}</span>;
-  });
-};
-
-// Parse grouped citations like (#[...]; #[...])
-const renderCitationGroup = (
-  citationGroup: string,
-  onCitationClick?: (citation: Citation) => void
-): React.ReactNode => {
-  // Remove outer parentheses if present
-  const inner = citationGroup.replace(/^\(|\)$/g, '');
-
-  // Split by semicolon to get individual citations
-  const citations = inner.split(/;\s*#/).map((c, i) =>
-    i === 0 ? c : '#' + c
-  );
-
-  const elements: React.ReactNode[] = [];
-
-  citations.forEach((citationStr, idx) => {
-    const trimmed = citationStr.trim();
-    if (trimmed.startsWith('#[')) {
-      const citation = parseCitation(trimmed.substring(1));
-      if (citation) {
-        if (idx > 0) {
-          elements.push(<span key={`sep-${idx}`}>; </span>);
-        }
-        elements.push(
-          <PdfJumpLink
-            key={`cite-${idx}`}
-            citation={citation}
-            onClick={onCitationClick}
-          />
-        );
-      }
-    }
-  });
-
-  return <span>({elements})</span>;
-};
 
 // Graves Reference Summary Content Component
 interface GravesReferenceSummaryContentProps {
