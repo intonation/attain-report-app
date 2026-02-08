@@ -14,7 +14,7 @@
 | Page | Clickable Element | What Opens | User Choice? |
 |------|-------------------|------------|--------------|
 | **Executive Summary** | Claim card "View in claims chart" | Navigate to Claim Charts + highlight row | No |
-| | L-ref link (L1-8, L18-7) | Claim Detail Panel | No |
+| | L-ref link (L1-8, L18-7) | Navigate to Claim Charts + highlight row | No |
 | **Scope of Analysis** | Claim number (1, 2, 18...) | Context menu appears | **Yes** |
 | | Reference name (Graves et al.) | Navigate to Reference Summary | No |
 | | Citation (p.4, top) | Document Viewer | No |
@@ -62,7 +62,7 @@ Context menus appear in two scenarios:
 | Element Type | Visual Style | Click Behaviour |
 |--------------|--------------|-----------------|
 | **Claim number** | Blue, dotted underline | Context menu (user chooses destination) |
-| **L-ref** (L1-8) | Blue, dotted underline | Opens Claim Detail Panel for that row |
+| **L-ref** (L1-8) | Blue, dotted underline | Navigates to Claim Charts, highlights row |
 | **F/R node** (F1-1) | Inline in claim text | Context menu (user chooses destination) |
 | **Reference name** | Blue, dotted underline | Navigates to Reference Summary page |
 | **Citation** | Blue, dotted underline | Opens Document Viewer |
@@ -105,13 +105,15 @@ Executive Summary
        │           │
        │           ▼
        │    Navigate to Claim Charts
-       │    Row selected + ClaimDetailPanel opens
+       │    Row highlighted (panel NOT open)
+       │    User clicks row to open panel
        │
        └─── Click L-ref (L1-8, L18-7)
                    │
                    ▼
-            ClaimDetailPanel opens
-            Shows that specific row's details
+            Navigate to Claim Charts
+            Row highlighted (panel NOT open)
+            User clicks row to open panel
 ```
 
 ### From Scope of Analysis / Strategic Review (Context Menu)
@@ -245,7 +247,7 @@ Workbench Page
 | Action | Type | Stays on Page? |
 |--------|------|----------------|
 | Click claim number | Menu → choice | Depends on choice |
-| Click L-ref | Panel | Yes |
+| Click L-ref | Navigation | No - goes to Claim Charts |
 | Click F/R node | Menu → choice | Depends on choice |
 | Click citation | Panel | Yes |
 | Click table row | Panel | Yes |

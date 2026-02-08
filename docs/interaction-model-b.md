@@ -14,16 +14,20 @@
 | Page | Clickable Element | What Opens | Panel Type |
 |------|-------------------|------------|------------|
 | **Executive Summary** | Claim card "View in claims chart" | Navigate to Claim Charts, highlight row | Navigation |
-| | L-ref link (L1-8, L18-7) | Claim Detail Panel | Right panel |
+| | L-ref link (L1-8, L18-7) | Navigate to Claim Charts, highlight row | Navigation |
 | **Scope of Analysis** | Claim number (1, 2, 18...) | Claim Summary Panel | Right panel |
+| | Paragraph number [1], [2]... | Claim Summary Panel | Right panel |
 | | Reference name (Graves et al.) | Navigate to Reference Summary | Navigation |
 | | Citation (p.4, top) | Document Viewer | Right panel |
-| **Strategic Review** | Claim number (1, 18, 19...) | Claim Summary Panel | Right panel |
+| **Strategic Review** | Claim title (Claims 1, 19) | Claim Summary Panel | Right panel |
+| | Claim number (1, 18, 19...) | Claim Summary Panel | Right panel |
+| | Paragraph number [1], [2]... | Claim Summary Panel | Right panel |
 | | Citation (p.12, top) | Document Viewer | Right panel |
 | **Claims** | F/R node (F1-1, R1-2) | Workbench Detail Panel | Right panel |
 | **Claim Charts** | Table row | Claim Detail Panel | Right panel |
 | | Citation in row | Document Viewer | Right panel |
-| **Reference Summaries** | Citation (p.5, top) | Document Viewer | Right panel |
+| **Reference Summaries** | Paragraph number [1] | Claim Summary Panel | Right panel |
+| | Citation (p.5, top) | Document Viewer | Right panel |
 
 ---
 
@@ -31,8 +35,10 @@
 
 | Element Type | Visual Style | Click Behaviour |
 |--------------|--------------|-----------------|
+| **Claim title** | Blue, dotted underline | Opens Claim Summary Panel |
 | **Claim number** | Blue, dotted underline | Opens Claim Summary Panel |
-| **L-ref** (L1-8) | Blue, dotted underline | Opens Claim Detail Panel for that row |
+| **Paragraph number** [1] | Blue, dotted underline | Opens Claim Summary Panel |
+| **L-ref** (L1-8) | Blue, dotted underline | Navigates to Claim Charts, highlights row |
 | **F/R node** (F1-1) | Inline in claim text | Opens Workbench Detail Panel |
 | **Reference name** | Blue, dotted underline | Navigates to Reference Summary page |
 | **Citation** | Blue, dotted underline | Opens Document Viewer |
@@ -40,7 +46,7 @@
 
 ---
 
-## Panel Hierarchy
+## Pane Layout
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -81,8 +87,9 @@ Executive Summary
        └─── Click L-ref (L1-8, L18-7)
                    │
                    ▼
-            ClaimDetailPanel opens
-            Shows that specific row's details
+            Navigate to Claim Charts
+            Row highlighted (panel NOT open)
+            User clicks row to open panel
 ```
 
 ### From Scope of Analysis
@@ -96,6 +103,12 @@ Scope of Analysis
        │    ClaimSummaryPanel opens
        │    Shows claim-level summary
        │    "View in claim chart" button available
+       │
+       ├─── Click paragraph number [1], [2]...
+       │           │
+       │           ▼
+       │    ClaimSummaryPanel opens
+       │    Shows claim-level summary
        │
        ├─── Click reference (Graves et al.)
        │           │
@@ -114,7 +127,19 @@ Scope of Analysis
 ```
 Strategic Review
        │
+       ├─── Click claim title (Claims 1, 19)
+       │           │
+       │           ▼
+       │    ClaimSummaryPanel opens
+       │    Shows claim-level summary
+       │
        ├─── Click claim number (1, 18, 19)
+       │           │
+       │           ▼
+       │    ClaimSummaryPanel opens
+       │    Shows claim-level summary
+       │
+       ├─── Click paragraph number [1], [2]...
        │           │
        │           ▼
        │    ClaimSummaryPanel opens
@@ -167,6 +192,23 @@ Claim Charts
             DocumentViewer opens
 ```
 
+### From Reference Summary
+
+```
+Reference Summary (Graves et al.)
+       │
+       ├─── Click paragraph number [1]
+       │           │
+       │           ▼
+       │    ClaimSummaryPanel opens
+       │    Shows claim-level summary
+       │
+       └─── Click citation (p.5, top)
+                   │
+                   ▼
+            DocumentViewer opens
+```
+
 ---
 
 ## Panel Mutual Exclusivity
@@ -174,6 +216,7 @@ Claim Charts
 | Current State | User Action | Result |
 |---------------|-------------|--------|
 | ClaimSummaryPanel open | Click claim number | Panel rewrites to new claim |
+| ClaimSummaryPanel open | Click paragraph number | Panel rewrites to new claim |
 | ClaimDetailPanel open | Click different row | Panel rewrites to new row |
 | ClaimDetailPanel open | Click F/R link | Panel navigates (breadcrumb) |
 | WorkbenchDetailPanel open | Click F/R in panel | Panel rewrites to new entry |
@@ -182,12 +225,24 @@ Claim Charts
 
 ---
 
+## Override Behaviour
+
+| Current State | User Action | Result |
+|---------------|-------------|--------|
+| Details panel open | Click different element | Panel replaces with new content |
+| Document viewer open | Click different citation | Viewer updates to new citation |
+| Any panel open | Navigate via sidebar | Panel closes, new page loads |
+
+---
+
 ## Navigation vs Panel Opening
 
 | Action | Type | Stays on Page? |
 |--------|------|----------------|
+| Click claim title | Panel | Yes |
 | Click claim number | Panel | Yes |
-| Click L-ref | Panel | Yes |
+| Click paragraph number | Panel | Yes |
+| Click L-ref | Navigation | No - goes to Claim Charts |
 | Click F/R node | Panel | Yes |
 | Click citation | Panel | Yes |
 | Click table row | Panel | Yes |
@@ -215,7 +270,7 @@ Claim Charts
 |-----------|-------|
 | Clicks to evidence | 1 |
 | User decisions | 0 (system decides) |
-| Pane destinations | Fixed (always right) |
+| Pane destinations | Fixed (always right panel) |
 | Behaviour predictability | High |
 | Learning curve | Low |
 | Flexibility | Low |
