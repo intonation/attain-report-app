@@ -7,6 +7,8 @@ import { ClaimsChartTable } from '../components/ClaimsChartTable';
 import { ClaimDetailPanel } from '../components/ClaimDetailPanel';
 import { DocumentViewer } from '../components/DocumentViewer';
 import { ResizeHandle } from '../components/ResizeHandle';
+import { WorkbenchPage, WorkbenchDetailPanel } from '../components/Workbench';
+import type { WorkbenchSelection } from '../components/Workbench';
 import { useResponsiveSidebar } from '../hooks';
 import { reportData, claimsData, claimChartData } from '../data/mockData';
 import { StrategicReviewContent } from '../data/strategicReviewData';
@@ -31,6 +33,7 @@ const DOCUMENT_ITEMS = [
   { id: 'claims', label: 'Claims' },
   { id: 'summary-graves', label: 'Summary: Graves et al.' },
   { id: 'claim-charts', label: 'Claim Charts' },
+  { id: 'workbench', label: 'Workbench' },
   { id: 'documents-overview', label: 'Documents Overview' },
 ];
 
@@ -51,6 +54,10 @@ export const ConstrainedWorkspace = () => {
   const [selectedRowId, setSelectedRowId] = useState<string | undefined>(undefined);
   const [detailRow, setDetailRow] = useState<ClaimChartRow | null>(null);
   const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
+
+  // Workbench entry selection state
+  const [workbenchSelection, setWorkbenchSelection] = useState<WorkbenchSelection | null>(null);
+  const [isWorkbenchPanelOpen, setIsWorkbenchPanelOpen] = useState(false);
 
   // Document viewer state
   const [isDocumentViewerOpen, setIsDocumentViewerOpen] = useState(false);
@@ -73,7 +80,8 @@ export const ConstrainedWorkspace = () => {
 
   // Auto-collapse sidebar when both detail panel and document viewer are open
   useEffect(() => {
-    const bothPanelsOpen = isDetailPanelOpen && isDocumentViewerOpen;
+    const detailPanelOpen = isDetailPanelOpen || isWorkbenchPanelOpen;
+    const bothPanelsOpen = detailPanelOpen && isDocumentViewerOpen;
 
     if (bothPanelsOpen && !sidebarCollapsed) {
       // Both panels open and sidebar is expanded - auto-collapse it
@@ -84,7 +92,7 @@ export const ConstrainedWorkspace = () => {
       wasAutoCollapsed.current = false;
       setSidebarCollapsed(false);
     }
-  }, [isDetailPanelOpen, isDocumentViewerOpen, sidebarCollapsed, setSidebarCollapsed]);
+  }, [isDetailPanelOpen, isWorkbenchPanelOpen, isDocumentViewerOpen, sidebarCollapsed, setSidebarCollapsed]);
 
   // Reset scroll position on navigation
   useEffect(() => {
@@ -185,12 +193,31 @@ export const ConstrainedWorkspace = () => {
     setSelectedRowId(row.claimId);
     setIsDetailPanelOpen(true);
     setIsSplitView(false);
+    // Close workbench panel if open
+    setIsWorkbenchPanelOpen(false);
+    setWorkbenchSelection(null);
   };
 
   const handleDetailPanelClose = () => {
     setDetailRow(null);
     setSelectedRowId(undefined);
     setIsDetailPanelOpen(false);
+  };
+
+  // Handle entry click from workbench
+  const handleWorkbenchEntrySelect = (selection: WorkbenchSelection) => {
+    setWorkbenchSelection(selection);
+    setIsWorkbenchPanelOpen(true);
+    setIsSplitView(false);
+    // Close claims detail panel if open
+    setIsDetailPanelOpen(false);
+    setDetailRow(null);
+    setSelectedRowId(undefined);
+  };
+
+  const handleWorkbenchPanelClose = () => {
+    setWorkbenchSelection(null);
+    setIsWorkbenchPanelOpen(false);
   };
 
   const handleCitationClick = (citation: string) => {
@@ -392,6 +419,18 @@ export const ConstrainedWorkspace = () => {
           </div>
         );
 
+      case 'workbench':
+        return (
+          <div style={{ width: '100%' }}>
+            <WorkbenchPage
+              showTitle={true}
+              selectedEntryId={workbenchSelection?.entry.id}
+              onEntrySelect={handleWorkbenchEntrySelect}
+              onCitationClick={handleCitationClick}
+            />
+          </div>
+        );
+
       case 'documents-overview':
         return renderPlaceholder(
           'Documents Overview',
@@ -520,6 +559,26 @@ export const ConstrainedWorkspace = () => {
               <ClaimDetailPanel
                 row={detailRow}
                 onClose={handleDetailPanelClose}
+                onCitationClick={handleCitationClick}
+              />
+            </div>
+          )}
+
+          {/* Right Pane - Workbench Detail Panel, resizable */}
+          {isWorkbenchPanelOpen && !isSplitView && (
+            <div
+              className="appShell__inspectPane"
+              style={{ width: sidePanelWidth, position: 'relative' }}
+            >
+              <ResizeHandle
+                direction="horizontal"
+                position="left"
+                onResize={handleSidePanelResize}
+              />
+              <WorkbenchDetailPanel
+                entry={workbenchSelection?.entry ?? null}
+                priorArtReference={workbenchSelection?.priorArtReference ?? ''}
+                onClose={handleWorkbenchPanelClose}
                 onCitationClick={handleCitationClick}
               />
             </div>

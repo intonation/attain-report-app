@@ -27,6 +27,16 @@ interface NavItem {
   icon?: React.ReactNode;
 }
 
+// Workbench icon - grid of squares for feature/relationship analysis
+const WorkbenchIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="5" height="5" rx="1" />
+    <rect x="9" y="2" width="5" height="5" rx="1" />
+    <rect x="2" y="9" width="5" height="5" rx="1" />
+    <rect x="9" y="9" width="5" height="5" rx="1" />
+  </svg>
+);
+
 const generatedDocumentsItems: NavItem[] = [
   { id: 'executive-summary', label: 'Executive Summary', icon: <GeneratedAnalysisIcon /> },
   { id: 'scope-of-analysis', label: 'Scope of analysis', icon: <GeneratedAnalysisIcon /> },
@@ -34,6 +44,7 @@ const generatedDocumentsItems: NavItem[] = [
   { id: 'claims', label: 'Claims', icon: <GeneratedAnalysisIcon /> },
   { id: 'summary-graves', label: 'Summary: Graves et al.', icon: <GeneratedAnalysisIcon /> },
   { id: 'claim-charts', label: 'Claim Charts', icon: <GeneratedTablesIcon /> },
+  { id: 'workbench', label: 'Workbench', icon: <WorkbenchIcon /> },
 ];
 
 const priorArtItems: NavItem[] = [
