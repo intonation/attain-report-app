@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrambleHeading } from "../primitives/ScrambleHeading";
 
 type Item = {
   id: string;
   label: string;
+  icon?: ReactNode;
 };
 
 interface SidebarSectionProps {
@@ -108,6 +110,7 @@ export function SidebarSection({
                 className={`sidebarItem ${i < visibleCount ? "visible" : ""} ${isActive ? "active" : ""} ${stateClass} ${skipAnimation ? "skipAnimation" : ""}`}
                 onClick={() => onNavigate(item.id)}
               >
+                {item.icon && <span className="sidebarItemIcon">{item.icon}</span>}
                 <span className="sidebarItemLabel">{item.label}</span>
               </button>
             );

@@ -24,27 +24,24 @@ const LogoIcon = () => (
 interface NavItem {
   id: string;
   label: string;
+  icon?: React.ReactNode;
 }
 
 const generatedDocumentsItems: NavItem[] = [
-  { id: 'executive-summary', label: 'Executive Summary' },
-  { id: 'scope-of-analysis', label: 'Scope of analysis' },
-  { id: 'strategic-review', label: 'Strategic Review' },
-  { id: 'claims', label: 'Claims' },
-  { id: 'summary-graves', label: 'Summary: Graves et al.: US 2019/0329772 A1' },
-];
-
-const generatedTableItems: NavItem[] = [
-  { id: 'claim-charts', label: 'Claim Charts' },
-  { id: 'documents-overview', label: 'Documents Overview' },
+  { id: 'executive-summary', label: 'Executive Summary', icon: <GeneratedAnalysisIcon /> },
+  { id: 'scope-of-analysis', label: 'Scope of analysis', icon: <GeneratedAnalysisIcon /> },
+  { id: 'strategic-review', label: 'Strategic Review', icon: <GeneratedAnalysisIcon /> },
+  { id: 'claims', label: 'Claims', icon: <GeneratedAnalysisIcon /> },
+  { id: 'summary-graves', label: 'Summary: Graves et al.', icon: <GeneratedAnalysisIcon /> },
+  { id: 'claim-charts', label: 'Claim Charts', icon: <GeneratedTablesIcon /> },
 ];
 
 const priorArtItems: NavItem[] = [
-  { id: 'claims-on-file', label: 'Claims on File' },
-  { id: 'patent-specification', label: 'Patent Specification' },
-  { id: 'us-17-774-135-oa', label: 'US 17/774,135 OA' },
-  { id: 'breuer-et-al', label: 'Breuer et al.: US 2015/0012204' },
-  { id: 'graves-et-al', label: 'Graves et al.: US 2019/0329772 A1' },
+  { id: 'claims-on-file', label: 'Claims on File', icon: <PriorArtIcon /> },
+  { id: 'patent-specification', label: 'Patent Specification', icon: <PriorArtIcon /> },
+  { id: 'us-17-774-135-oa', label: 'US 17/774,135 OA', icon: <PriorArtIcon /> },
+  { id: 'breuer-et-al', label: 'Breuer et al.: US 2015/0012204', icon: <PriorArtIcon /> },
+  { id: 'graves-et-al', label: 'Graves et al.: US 2019/0329772 A1', icon: <PriorArtIcon /> },
 ];
 
 interface SidebarProps {
@@ -137,7 +134,6 @@ export const Sidebar = ({
 
             <SidebarSection
               title="GENERATED DOCUMENTS"
-              sectionIcon={<GeneratedAnalysisIcon />}
               startDelay={100}
               items={generatedDocumentsItems}
               activeItem={activeItem}
@@ -148,20 +144,8 @@ export const Sidebar = ({
             />
 
             <SidebarSection
-              title="GENERATED TABLES"
-              sectionIcon={<GeneratedTablesIcon />}
-              startDelay={400}
-              items={generatedTableItems}
-              activeItem={activeItem}
-              visitedItemIds={visitedItemIds}
-              onNavigate={handleNavigate}
-              skipAnimation={hasAnimatedRef.current}
-            />
-
-            <SidebarSection
               title="PRIOR ART"
-              sectionIcon={<PriorArtIcon />}
-              startDelay={700}
+              startDelay={500}
               items={priorArtItems}
               activeItem={activeItem}
               visitedItemIds={visitedItemIds}

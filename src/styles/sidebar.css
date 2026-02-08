@@ -200,6 +200,20 @@
   height: 16px;
 }
 
+.sidebarItemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+}
+
+.sidebarItem.active .sidebarItemIcon {
+  color: var(--color-text);
+}
+
 /* Sidebar collapse button - 32px hit area */
 .sidebarCollapseBtn {
   display: flex;
