@@ -58,6 +58,7 @@ export const ConstrainedWorkspace = () => {
   // Workbench entry selection state
   const [workbenchSelection, setWorkbenchSelection] = useState<WorkbenchSelection | null>(null);
   const [isWorkbenchPanelOpen, setIsWorkbenchPanelOpen] = useState(false);
+  const [workbenchScrollToId, setWorkbenchScrollToId] = useState<string | null>(null);
 
   // Document viewer state
   const [isDocumentViewerOpen, setIsDocumentViewerOpen] = useState(false);
@@ -230,6 +231,21 @@ export const ConstrainedWorkspace = () => {
     setIsDocumentViewerOpen(false);
     setViewerCitation('');
   };
+
+  // Handle feature/relationship ID click from workbench detail panel - scroll workbench table to that row
+  const handleWorkbenchIdClick = (id: string) => {
+    setWorkbenchScrollToId(id);
+  };
+
+  // Clear workbench scroll target after it's been used (allows repeated clicks on same ID)
+  useEffect(() => {
+    if (workbenchScrollToId) {
+      const timeout = setTimeout(() => {
+        setWorkbenchScrollToId(null);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [workbenchScrollToId]);
 
   // Resize handlers
   const handleSidebarResize = useCallback((delta: number) => {
@@ -427,6 +443,7 @@ export const ConstrainedWorkspace = () => {
               selectedEntryId={workbenchSelection?.entry.id}
               onEntrySelect={handleWorkbenchEntrySelect}
               onCitationClick={handleCitationClick}
+              highlightedEntryId={workbenchScrollToId ?? undefined}
             />
           </div>
         );
@@ -579,6 +596,7 @@ export const ConstrainedWorkspace = () => {
                 entry={workbenchSelection?.entry ?? null}
                 priorArtReference={workbenchSelection?.priorArtReference ?? ''}
                 onClose={handleWorkbenchPanelClose}
+                onIdClick={handleWorkbenchIdClick}
                 onCitationClick={handleCitationClick}
               />
             </div>

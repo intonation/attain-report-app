@@ -33,8 +33,9 @@ export const Toolbar = ({
 
       {/* Right section - Clear highlighting and Export */}
       <div className="toolbar__right">
-        <button className="toolbar__iconBtn" aria-label="Clear all highlighting">
+        <button className="toolbar__outlineBtn" aria-label="Clear all highlighting">
           <DiamondIcon />
+          Clear Highlighting
         </button>
         <div className="toolbar__divider" />
         <Button variant="primary" size="small">

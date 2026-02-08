@@ -13,7 +13,6 @@
   z-index: 10;
   background: var(--color-canvas);
   padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-border);
 }
 
 .claimsChartTable__context {
@@ -25,7 +24,7 @@
 }
 
 .claimsChartTable__contextClaim {
-  font-size: var(--font-size-body);
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-text);
 }
@@ -192,7 +191,7 @@
 
 .claimsChartTable__filterPanelHeader h3 {
   margin: 0;
-  font-size: var(--font-size-body);
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-text);
 }
@@ -293,14 +292,13 @@
 .claimsChartTable__wrapper {
   overflow-x: auto;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
   background: var(--color-paper);
 }
 
 .claimsChartTable__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--font-size-small);
+  font-size: 14px;
   table-layout: fixed;
   min-width: 800px;
 }
@@ -361,6 +359,10 @@
 /* Cell styles */
 .claimsChartTable__cell--id {
   white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  color: #1e40af;
 }
 
 .claimsChartTable__cell--claimText {
@@ -393,17 +395,6 @@
 
 .claimsChartTable__row--selected:hover {
   background-color: var(--color-accent-subtle);
-}
-
-/* Row highlight animation */
-.claimsChartTable__row--highlighted {
-  animation: claimsChartRowHighlight 1.5s ease-out;
-}
-
-@keyframes claimsChartRowHighlight {
-  0% { background-color: #fef08a; }
-  70% { background-color: #fef08a; }
-  100% { background-color: transparent; }
 }
 
 /* No results */
@@ -537,5 +528,4 @@
   text-align: center;
   border-top: 1px solid var(--color-border);
   background: var(--color-grey-light);
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }

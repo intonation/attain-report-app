@@ -1,21 +1,6 @@
 import type { ClaimChartRow, NoveltyConclusion } from '../data/mockData';
-import { Badge, type BadgeVariant } from './base/Badge';
 import { ReferenceToken, type ReferenceVariant } from './base/ReferenceToken';
 import '../styles/claim-detail-panel.css';
-
-// Helper to map novelty conclusion to badge variant
-function getNoveltyVariant(status: NoveltyConclusion): BadgeVariant {
-  switch (status) {
-    case 'Novel':
-      return 'novel';
-    case 'Likely novel':
-      return 'likely-novel';
-    case 'Likely not novel':
-      return 'likely-not-novel';
-    case 'Not novel':
-      return 'not-novel';
-  }
-}
 
 // Helper to map reference code to variant
 function getReferenceVariant(code: string): ReferenceVariant {
@@ -51,12 +36,30 @@ function StrengthBar({ strength }: { strength: string }) {
   const percentage = (current / total) * 100;
 
   return (
-    <div className="claimDetailPanel__strengthBar">
-      <div
-        className="claimDetailPanel__strengthFill"
-        style={{ width: `${percentage}%` }}
-      />
+    <div className="claimDetailPanel__strengthContainer">
+      <div className="claimDetailPanel__strengthBar">
+        <div
+          className="claimDetailPanel__strengthFill"
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      <span className="claimDetailPanel__strengthValue">{strength}</span>
     </div>
+  );
+}
+
+// Conclusion badge for the card
+function ConclusionBadge({ conclusion }: { conclusion: NoveltyConclusion }) {
+  const isNovel = conclusion === 'Novel' || conclusion === 'Likely novel';
+  const color = isNovel ? '#16a34a' : '#dc2626';
+
+  return (
+    <span className={`claimDetailPanel__conclusionBadge ${isNovel ? 'claimDetailPanel__conclusionBadge--novel' : 'claimDetailPanel__conclusionBadge--not-novel'}`}>
+      <svg width="10" height="10" viewBox="0 0 10 10">
+        <circle cx="5" cy="5" r="5" fill={color} />
+      </svg>
+      {conclusion}
+    </span>
   );
 }
 
@@ -79,12 +82,7 @@ export function ClaimDetailPanel({ row, onClose, onCitationClick }: ClaimDetailP
     <div className="claimDetailPanel">
       {/* Header */}
       <div className="claimDetailPanel__header">
-        <div className="claimDetailPanel__headerLeft">
-          <ReferenceToken variant={getReferenceVariant(row.claimId)}>{row.claimId}</ReferenceToken>
-          <Badge variant={getNoveltyVariant(row.conclusion)}>
-            {row.conclusion}
-          </Badge>
-        </div>
+        <span className="claimDetailPanel__title">{row.claimId}</span>
         <button
           className="claimDetailPanel__closeBtn"
           onClick={onClose}
@@ -135,12 +133,19 @@ export function ClaimDetailPanel({ row, onClose, onCitationClick }: ClaimDetailP
           </section>
         )}
 
-        {/* Strength Section */}
+        {/* Conclusion Card */}
         <section className="claimDetailPanel__section">
-          <h3 className="claimDetailPanel__sectionTitle">Strength</h3>
-          <div className="claimDetailPanel__strengthContainer">
-            <StrengthBar strength={row.strength} />
-            <span className="claimDetailPanel__strengthValue">{row.strength}</span>
+          <div className="claimDetailPanel__conclusionCard">
+            <div className="claimDetailPanel__conclusionGrid">
+              <div className="claimDetailPanel__conclusionCol">
+                <h3 className="claimDetailPanel__sectionTitle">Conclusion</h3>
+                <ConclusionBadge conclusion={row.conclusion} />
+              </div>
+              <div className="claimDetailPanel__conclusionCol">
+                <h3 className="claimDetailPanel__sectionTitle">Strength</h3>
+                <StrengthBar strength={row.strength} />
+              </div>
+            </div>
           </div>
         </section>
       </div>

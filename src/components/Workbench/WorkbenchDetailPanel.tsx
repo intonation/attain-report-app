@@ -62,16 +62,22 @@ function ParsedText({ text, onIdClick }: ParsedTextProps) {
   return <>{parts}</>;
 }
 
-/* ── Strength Badge Component ────────────────────────────────────── */
+/* ── Strength Bar Component ────────────────────────────────────── */
 
-function StrengthBadge({ strength }: { strength: string }) {
-  const value = parseInt(strength.split('/')[0], 10);
-  const isLow = value <= 2;
+function StrengthBar({ strength }: { strength: string }) {
+  const [value, max] = strength.split('/').map(n => parseInt(n, 10));
+  const percentage = (value / max) * 100;
 
   return (
-    <span className={`workbench__strength-badge ${isLow ? 'workbench__strength-low' : 'workbench__strength-high'}`}>
-      {strength}
-    </span>
+    <div className="workbench__strength-container">
+      <div className="workbench__strength-bar">
+        <div
+          className="workbench__strength-fill"
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      <span className="workbench__strength-value">{strength}</span>
+    </div>
   );
 }
 
@@ -183,7 +189,12 @@ export function WorkbenchDetailPanel({ entry, priorArtReference, onClose, onIdCl
           <section className="workbench__detail-panel-section">
             <h3>Citation</h3>
             <div className="workbench__tag-group">
-              <span className="workbench__tag-citation">{entry.refMapping}</span>
+              <button
+                className="workbench__tag-citation"
+                onClick={() => onCitationClick?.(entry.refMapping!)}
+              >
+                {entry.refMapping}
+              </button>
             </div>
           </section>
         )}
@@ -199,13 +210,15 @@ export function WorkbenchDetailPanel({ entry, priorArtReference, onClose, onIdCl
 
         <section className="workbench__detail-panel-section">
           <div className="workbench__detail-panel-conclusion-card">
-            <div className="workbench__dp-conclusion-row">
-              <h3>Conclusion</h3>
-              <span className="workbench__dp-conclusion-label">Strength</span>
-            </div>
-            <div className="workbench__dp-conclusion-row">
-              <ConclusionBadge conclusion={entry.refConclusion} />
-              <StrengthBadge strength={entry.refStrength} />
+            <div className="workbench__dp-conclusion-grid">
+              <div className="workbench__dp-conclusion-col">
+                <h3>Conclusion</h3>
+                <ConclusionBadge conclusion={entry.refConclusion} />
+              </div>
+              <div className="workbench__dp-conclusion-col">
+                <h3>Strength</h3>
+                <StrengthBar strength={entry.refStrength} />
+              </div>
             </div>
           </div>
         </section>

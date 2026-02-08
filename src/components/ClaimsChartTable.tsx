@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ClaimChart, ClaimChartRow, NoveltyConclusion } from '../data/mockData';
 import { Badge, type BadgeVariant } from './base/Badge';
-import { ReferenceToken, type ReferenceVariant } from './base/ReferenceToken';
+import { ReferenceToken } from './base/ReferenceToken';
 import '../styles/claims-chart-table.css';
 
 /* ── Types ──────────────────────────────────────────────────────── */
@@ -148,14 +148,6 @@ function getNoveltyVariant(status: NoveltyConclusion): BadgeVariant {
     case 'Likely not novel': return 'likely-not-novel';
     case 'Not novel': return 'not-novel';
   }
-}
-
-function getReferenceVariant(code: string): ReferenceVariant {
-  if (code.startsWith('L')) return 'line';
-  if (code.startsWith('C')) return 'claim';
-  if (code.startsWith('F')) return 'feature';
-  if (code.startsWith('R')) return 'relationship';
-  return 'line';
 }
 
 function getStatusColor(status: ConclusionStatus): string {
@@ -507,7 +499,7 @@ export function ClaimsChartTable({
                 >
                   {visibleBaseColumns.has('id') && (
                     <td className="claimsChartTable__cell--id">
-                      <ReferenceToken variant={getReferenceVariant(row.claimId)}>{row.claimId}</ReferenceToken>
+                      {row.claimId}
                     </td>
                   )}
                   {visibleBaseColumns.has('claimText') && (
