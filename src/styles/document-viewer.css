@@ -70,7 +70,7 @@
 }
 
 .documentViewer__locationValue {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   font-weight: 500;
   color: var(--color-text);
 }
@@ -106,7 +106,7 @@
 }
 
 .documentViewer__placeholderText {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   color: var(--color-text);
   margin-bottom: var(--space-4);
 }

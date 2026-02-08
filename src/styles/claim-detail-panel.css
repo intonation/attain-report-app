@@ -118,13 +118,13 @@
 }
 
 .claimDetailPanel__claimText {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   line-height: 1.6;
   color: var(--color-text);
 }
 
 .claimDetailPanel__quotation {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   line-height: 1.6;
   color: var(--color-text-muted);
   font-style: italic;
@@ -160,7 +160,7 @@
 
 .claimDetailPanel__analysis,
 .claimDetailPanel__counteranalysis {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   line-height: 1.6;
   color: var(--color-text);
 }

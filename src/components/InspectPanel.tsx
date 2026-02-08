@@ -1,4 +1,4 @@
-import { InspectPanelIcon } from './icons';
+import { InspectPanelIcon, CloseIcon } from './icons';
 
 interface InspectPanelProps {
   onClose: () => void;
@@ -21,18 +21,6 @@ const MOCK_INSPECT_DATA = {
     analysis: 'Although the reference discloses stored charging-related data in memory 130 (charging profiles and a charge log with timestamps), it does not disclose schedule data associated with a user or used to',
   },
 };
-
-const CloseIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <path
-      d="M15 5L5 15M5 5L15 15"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 export const InspectPanel = ({ onClose, claimNumber: _claimNumber = 1, embedded = false }: InspectPanelProps) => {
   // claimNumber is available for future use

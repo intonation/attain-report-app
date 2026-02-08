@@ -3,11 +3,12 @@ import {
   GeneratedAnalysisIcon,
   GeneratedTablesIcon,
   PriorArtIcon,
-  SidepanelIcon,
   AllCasesIcon,
   UsersIcon,
   SettingsIcon,
   LogOutIcon,
+  OpenMenuIcon,
+  CloseMenuIcon,
 } from '../icons';
 import { SidebarSection } from './SidebarSection';
 import '../../styles/sidebar.css';
@@ -47,12 +48,6 @@ const priorArtItems: NavItem[] = [
   { id: 'breuer-et-al', label: 'Breuer et al.: US 2015/0012204' },
   { id: 'graves-et-al', label: 'Graves et al.: US 2019/0329772 A1' },
 ];
-
-const ExpandIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
 
 interface SidebarProps {
   activeItem: string;
@@ -133,7 +128,7 @@ export const Sidebar = ({
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {collapsed ? <ExpandIcon /> : <SidepanelIcon />}
+          {collapsed ? <OpenMenuIcon /> : <CloseMenuIcon />}
         </button>
       </div>
 

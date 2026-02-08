@@ -1,4 +1,5 @@
 /* Toolbar styles */
+
 .toolbar {
   display: flex;
   align-items: center;
@@ -31,13 +32,13 @@
 }
 
 .toolbar__appNumber {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   font-weight: 600;
   color: var(--color-text);
 }
 
 .toolbar__appTitle {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   color: var(--color-text-muted);
   max-width: 400px;
   overflow: hidden;
@@ -46,7 +47,7 @@
 }
 
 .toolbar__version {
-  font-size: var(--font-size-xsmall);
+  font-size: 12px;
   font-family: var(--font-mono);
   color: var(--color-text-muted);
   background-color: var(--color-grey-light);
@@ -70,21 +71,23 @@
 .toolbar__right {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
+/* Icon button - 32px hit area for 16px icon */
 .toolbar__iconBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: none;
   background: transparent;
   border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--color-text-muted);
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+              color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .toolbar__iconBtn:hover {
@@ -93,8 +96,8 @@
 }
 
 .toolbar__iconBtn svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 .toolbar__iconBtn--active {
@@ -107,7 +110,14 @@
   color: var(--color-accent);
 }
 
-/* Export button styling */
+/* Disabled state */
+.toolbar__iconBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Export button styling - 14px minimum */
 .toolbar__right .button--primary {
   display: flex;
   align-items: center;
@@ -117,7 +127,7 @@
   border: none;
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   font-weight: 500;
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);

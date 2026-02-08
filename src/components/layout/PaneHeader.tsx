@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
   SplitIcon,
   KebabIcon,
   DownloadIcon,
@@ -23,6 +23,10 @@ interface PaneHeaderProps {
   showKebab?: boolean;
   showSplit?: boolean;
   showDropdown?: boolean;
+  /** Disable previous navigation (e.g., at start of list) */
+  disablePrevious?: boolean;
+  /** Disable next navigation (e.g., at end of list) */
+  disableNext?: boolean;
 }
 
 export const PaneHeader = ({
@@ -38,6 +42,8 @@ export const PaneHeader = ({
   showKebab = true,
   showSplit = true,
   showDropdown = true,
+  disablePrevious = false,
+  disableNext = false,
 }: PaneHeaderProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isKebabOpen, setIsKebabOpen] = useState(false);
@@ -64,9 +70,43 @@ export const PaneHeader = ({
     setIsDropdownOpen(false);
   };
 
+  const handlePrevious = () => {
+    if (!disablePrevious && onPrevious) {
+      onPrevious();
+    }
+  };
+
+  const handleNext = () => {
+    if (!disableNext && onNext) {
+      onNext();
+    }
+  };
+
   return (
     <div className="paneHeader">
-      {/* Dropdown selector - only shown in split view */}
+      {/* Navigation arrows - placed before dropdown */}
+      {showNavigation && (
+        <div className="paneHeader__nav">
+          <button
+            className="paneHeader__navBtn"
+            onClick={handlePrevious}
+            disabled={disablePrevious}
+            aria-label="Previous"
+          >
+            <ArrowLeftIcon />
+          </button>
+          <button
+            className="paneHeader__navBtn"
+            onClick={handleNext}
+            disabled={disableNext}
+            aria-label="Next"
+          >
+            <ArrowRightIcon />
+          </button>
+        </div>
+      )}
+
+      {/* Dropdown selector */}
       {showDropdown && (
         <div className="paneHeader__dropdown" ref={dropdownRef}>
           <button
@@ -91,26 +131,6 @@ export const PaneHeader = ({
               ))}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Navigation arrows */}
-      {showNavigation && (
-        <div className="paneHeader__nav">
-          <button
-            className="paneHeader__navBtn"
-            onClick={onPrevious}
-            aria-label="Previous"
-          >
-            <ChevronLeftIcon />
-          </button>
-          <button
-            className="paneHeader__navBtn"
-            onClick={onNext}
-            aria-label="Next"
-          >
-            <ChevronRightIcon />
-          </button>
         </div>
       )}
 

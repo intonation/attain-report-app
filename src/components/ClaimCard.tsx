@@ -20,8 +20,8 @@ export const ClaimCard = ({ claim, onGoToClaimChart, onInspect }: ClaimCardProps
 
   return (
     <Card padded className="claim-card">
-      <div className="stack">
-        <div className="toolbar-row">
+      <div className="claim-card__content">
+        <div className="claim-card__header">
           <h3 className="title-claim">Claim {claim.claimNumber}</h3>
           <Badge variant={claim.isNovel}>
             {claim.isNovel === 'novel' ? 'Novel' :
@@ -29,15 +29,17 @@ export const ClaimCard = ({ claim, onGoToClaimChart, onInspect }: ClaimCardProps
              claim.isNovel === 'likely-not-novel' ? 'Likely not novel' : 'Not novel'}
           </Badge>
         </div>
-        <p>{claim.reasoning}</p>
-        {claim.references && <p className="text-muted text-xsmall">{claim.references}</p>}
-        <Button
-          variant="secondary"
-          size="small"
-          onClick={() => handleClick?.(claim.claimNumber)}
-        >
-          Go to claims chart
-        </Button>
+        <p className="claim-card__reasoning">{claim.reasoning}</p>
+        {claim.references && <p className="claim-card__references">{claim.references}</p>}
+        <div className="claim-card__actions">
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => handleClick?.(claim.claimNumber)}
+          >
+            Go to claims chart
+          </Button>
+        </div>
       </div>
     </Card>
   );

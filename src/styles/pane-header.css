@@ -1,4 +1,11 @@
 /* Pane Header styles */
+
+/* Standardized icon button radius */
+:root {
+  --icon-btn-radius: var(--radius-sm);
+  --icon-label-gap: 10px; /* 10px standardized gap */
+}
+
 .paneHeader {
   display: flex;
   align-items: center;
@@ -15,23 +22,40 @@
   gap: var(--space-1);
 }
 
+/* Icon button base - 32px hit area for 16px icon */
 .paneHeader__navBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: none;
   background: transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--icon-btn-radius);
   cursor: pointer;
   color: var(--color-text-muted);
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+              color var(--motion-duration-fast) var(--motion-ease-standard),
+              opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.paneHeader__navBtn:hover {
+.paneHeader__navBtn:hover:not(:disabled) {
   background-color: var(--color-grey-light);
   color: var(--color-text);
+}
+
+/* Disabled state for navigation buttons */
+.paneHeader__navBtn:disabled,
+.paneHeader__navBtn--disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+.paneHeader__navBtn:disabled:hover,
+.paneHeader__navBtn--disabled:hover {
+  background-color: transparent;
+  color: var(--color-text-muted);
 }
 
 .paneHeader__dropdown {
@@ -47,11 +71,11 @@
 .paneHeader__dropdownBtn {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--icon-label-gap);
   padding: var(--space-2) var(--space-3);
   border: none;
   background: transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--icon-btn-radius);
   cursor: pointer;
   font-family: var(--font-sans);
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
@@ -62,7 +86,7 @@
 }
 
 .paneHeader__title {
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px per typography rules */
   font-weight: 500;
   color: var(--color-text);
 }
@@ -78,7 +102,7 @@
   top: 100%;
   left: 0;
   margin-top: var(--space-1);
-  min-width: 220px;
+  width: 240px;
   background-color: var(--color-paper);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -95,10 +119,13 @@
   background: transparent;
   text-align: left;
   font-family: var(--font-sans);
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   color: var(--color-text);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .paneHeader__dropdownItem:hover {
@@ -117,6 +144,7 @@
   margin-left: auto;
 }
 
+/* Action button - 32px hit area */
 .paneHeader__actionBtn {
   display: flex;
   align-items: center;
@@ -125,10 +153,11 @@
   height: 32px;
   border: none;
   background: transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--icon-btn-radius);
   cursor: pointer;
   color: var(--color-text-muted);
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+              color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .paneHeader__actionBtn:hover {
@@ -144,6 +173,14 @@
 .paneHeader__actionBtn--active:hover {
   background-color: var(--color-accent-subtle);
   color: var(--color-accent);
+}
+
+/* Disabled action buttons */
+.paneHeader__actionBtn:disabled,
+.paneHeader__actionBtn--disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
 }
 
 .paneHeader__kebab {
@@ -167,14 +204,14 @@
 .paneHeader__kebabItem {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--icon-label-gap);
   width: 100%;
   padding: var(--space-3) var(--space-4);
   border: none;
   background: transparent;
   text-align: left;
   font-family: var(--font-sans);
-  font-size: var(--font-size-small);
+  font-size: 14px; /* Minimum 14px */
   color: var(--color-text);
   cursor: pointer;
   transition: background-color var(--motion-duration-fast) var(--motion-ease-standard);

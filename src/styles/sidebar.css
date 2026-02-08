@@ -1,11 +1,15 @@
+/* Sidebar styles */
+
+/* Use standardized icon-label gap */
 .sidebarContainer {
-    width: 100%;
-    padding: var(--space-4);
-    border-radius: 0;
-    background: var(--color-white);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  --icon-label-gap: 10px; /* 10px standardized gap */
+  width: 100%;
+  padding: var(--space-4);
+  border-radius: 0;
+  background: var(--color-white);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebarContainer.collapsed {
@@ -28,7 +32,7 @@
 .sidebarLogo {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--icon-label-gap);
   padding: var(--space-2) 10px;
   margin-bottom: var(--space-4);
   border-bottom: 1px solid var(--color-border-default);
@@ -52,7 +56,7 @@
 .sidebarSectionHeaderBtn {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--icon-label-gap);
   width: 100%;
   background: none;
   border: 0;
@@ -75,11 +79,14 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  /* 32px hit area for 16px icon */
+  width: 32px;
+  height: 32px;
 }
 
 .sidebarSectionIcon svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .sidebarSectionHeaderBtn:hover {
@@ -143,11 +150,11 @@
   transform: translateY(0);
 }
 
-/* Menu items */
+/* Menu items - 1rem (14px) per typography rules */
 .sidebarItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--icon-label-gap);
   padding: var(--space-2) 10px;
   border-radius: var(--radius-md);
   opacity: 0;
@@ -160,7 +167,8 @@
   background: transparent;
   cursor: pointer;
   font-family: var(--font-sans);
-  font-size: var(--font-size-small);
+  font-size: 1rem; /* 14px - sidebar menu text */
+  font-weight: 400; /* Default weight */
   color: var(--color-text);
   text-align: left;
 }
@@ -192,22 +200,26 @@
   height: 16px;
 }
 
+/* Sidebar collapse button - 32px hit area */
 .sidebarCollapseBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
   border: none;
   background: transparent;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   margin-left: auto;
-  opacity: 0.8;
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  color: var(--color-text-muted);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+              color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .sidebarCollapseBtn:hover {
-  opacity: 1;
+  background-color: var(--color-grey-light);
+  color: var(--color-text);
 }
 
 .sidebarCollapseBtn svg {
@@ -218,7 +230,7 @@
 /* Item read states */
 .sidebarItemUnread {
   background: transparent;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .sidebarItemVisited {
@@ -248,7 +260,7 @@
 .sidebarBottomItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--icon-label-gap);
   padding: var(--space-2) 10px;
   border-radius: var(--radius-md);
   width: 100%;
@@ -256,10 +268,11 @@
   background: transparent;
   cursor: pointer;
   font-family: var(--font-sans);
-  font-size: var(--font-size-small);
+  font-size: 1rem; /* 14px - sidebar menu text */
   color: var(--color-text-muted);
   text-align: left;
-  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard);
+  transition: background-color var(--motion-duration-fast) var(--motion-ease-standard),
+              color var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .sidebarBottomItem:hover {

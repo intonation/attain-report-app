@@ -17,7 +17,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ? 'var(--space-2) var(--space-3)'
         : 'var(--space-3) var(--space-5)',
       fontFamily: 'var(--font-sans)',
-      fontSize: size === 'small' ? 'var(--font-size-xsmall)' : 'var(--font-size-small)',
+      // Minimum 14px font size per UI consistency rules
+      fontSize: '14px',
       lineHeight: 1.4,
       fontWeight: 500,
       borderRadius: 0,
