@@ -153,7 +153,8 @@
   align-items: center;
 }
 
-.appShell__paneContent--claims {
+.appShell__paneContent--claims,
+.appShell__paneContent--workbench {
   padding-top: 0;
   padding-left: var(--space-6);
   padding-right: var(--space-6);

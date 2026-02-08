@@ -496,7 +496,7 @@ export const ConstrainedWorkspace = () => {
               showDropdown={isSplitView}
             />
             <div
-              className={`appShell__paneContent ${activeNavItem === 'claim-charts' ? 'appShell__paneContent--claims' : ''}`}
+              className={`appShell__paneContent ${activeNavItem === 'claim-charts' ? 'appShell__paneContent--claims' : ''} ${activeNavItem === 'workbench' ? 'appShell__paneContent--workbench' : ''}`}
               ref={mainScrollRef}
             >
               {renderDocumentContent(activeNavItem)}
@@ -519,7 +519,7 @@ export const ConstrainedWorkspace = () => {
                 showDropdown={true}
               />
               <div
-                className={`appShell__paneContent ${rightPaneDocId === 'claim-charts' ? 'appShell__paneContent--claims' : ''}`}
+                className={`appShell__paneContent ${rightPaneDocId === 'claim-charts' ? 'appShell__paneContent--claims' : ''} ${rightPaneDocId === 'workbench' ? 'appShell__paneContent--workbench' : ''}`}
                 ref={rightPaneScrollRef}
               >
                 {renderDocumentContent(rightPaneDocId)}
