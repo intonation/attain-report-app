@@ -41,7 +41,7 @@ const PdfJumpLink: React.FC<PdfJumpLinkProps> = ({ citation, onClick }) => (
 // Claim link component
 interface ClaimLinkProps {
   claimNumber: number;
-  onClick?: (claimNumber: number) => void;
+  onClick?: (claimNumber: number, x: number, y: number) => void;
 }
 
 const ClaimLink: React.FC<ClaimLinkProps> = ({ claimNumber, onClick }) => (
@@ -51,18 +51,64 @@ const ClaimLink: React.FC<ClaimLinkProps> = ({ claimNumber, onClick }) => (
     onClick={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      onClick?.(claimNumber);
+      onClick?.(claimNumber, e.clientX, e.clientY);
     }}
   >
     {claimNumber}
   </button>
 );
 
+// Paragraph number link component (e.g., [1], [2], [3])
+interface ParagraphNumLinkProps {
+  num: number;
+  claimNumber: number; // The claim this paragraph refers to
+  onClick?: (claimNumber: number, x: number, y: number) => void;
+}
+
+const ParagraphNumLink: React.FC<ParagraphNumLinkProps> = ({ num, claimNumber, onClick }) => (
+  <button
+    type="button"
+    className="strategic-review__paragraph-num-link"
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick?.(claimNumber, e.clientX, e.clientY);
+    }}
+  >
+    [{num}]
+  </button>
+);
+
+// Claim title link component (makes entire "Claims 1, 19" or "Claim 18" clickable)
+interface ClaimTitleLinkProps {
+  claimNumbers: number[];
+  onClick?: (claimNumber: number, x: number, y: number) => void;
+}
+
+const ClaimTitleLink: React.FC<ClaimTitleLinkProps> = ({ claimNumbers, onClick }) => {
+  const prefix = claimNumbers.length > 1 ? 'Claims ' : 'Claim ';
+  const primaryClaim = claimNumbers[0]; // Use first claim for context menu
+
+  return (
+    <button
+      type="button"
+      className="strategic-review__claim-title-link"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick?.(primaryClaim, e.clientX, e.clientY);
+      }}
+    >
+      {prefix}{claimNumbers.join(', ')}
+    </button>
+  );
+};
+
 // Render claim list like "Claims 1, 19" with clickable numbers
 const renderClaimList = (
   prefix: string,
   claimNumbers: number[],
-  onClaimClick?: (claimNumber: number) => void
+  onClaimClick?: (claimNumber: number, x: number, y: number) => void
 ): React.ReactNode => {
   return (
     <>
@@ -105,7 +151,7 @@ const renderTextWithCitations = (
 // Strategic Review Content Component
 interface StrategicReviewContentProps {
   onCitationClick?: (citation: Citation) => void;
-  onClaimClick?: (claimNumber: number) => void;
+  onClaimClick?: (claimNumber: number, x: number, y: number) => void;
 }
 
 export const StrategicReviewContent: React.FC<StrategicReviewContentProps> = ({
@@ -116,18 +162,20 @@ export const StrategicReviewContent: React.FC<StrategicReviewContentProps> = ({
     <div className="strategic-review">
       {/* Claims 1, 19 Section */}
       <section className="strategic-review__section">
-        <div className="strategic-review__claim-label">{renderClaimList('Claims ', [1, 19], onClaimClick)}</div>
+        <div className="strategic-review__claim-label">
+          <ClaimTitleLink claimNumbers={[1, 19]} onClick={onClaimClick} />
+        </div>
 
         <p className="strategic-review__paragraph">
-          [1] Claim 1 recites an adaptive cruise controller that autonomously adapts an ego vehicle's speed to maintain a target headway to a forward vehicle. It requires a comparison module that determines whether current headway is below the target headway and, upon that condition, an elastic adaptive cruise control module that determines a deceleration strategy that a controller implements. The deceleration strategy is selectively comfort-optimized in dependence on a predicted headway computed for a future time instant based on the forward vehicle's current speed and acceleration relative to the ego vehicle.
+          <ParagraphNumLink num={1} claimNumber={1} onClick={onClaimClick} /> Claim 1 recites an adaptive cruise controller that autonomously adapts an ego vehicle's speed to maintain a target headway to a forward vehicle. It requires a comparison module that determines whether current headway is below the target headway and, upon that condition, an elastic adaptive cruise control module that determines a deceleration strategy that a controller implements. The deceleration strategy is selectively comfort-optimized in dependence on a predicted headway computed for a future time instant based on the forward vehicle's current speed and acceleration relative to the ego vehicle.
         </p>
 
         <p className="strategic-review__paragraph">
-          [2] Claims 1 and 19 are, respectively, controller and method claims that require comfort-selective deceleration based on a predicted headway computed for a future time instant.
+          <ParagraphNumLink num={2} claimNumber={1} onClick={onClaimClick} /> {renderClaimList('Claims ', [1, 19], onClaimClick)} are, respectively, controller and method claims that require comfort-selective deceleration based on a predicted headway computed for a future time instant.
         </p>
 
         <p className="strategic-review__paragraph">
-          [3] In one implementation, the ego vehicle's perception system (or perception stack) processes on-board sensor outputs to provide current headway and kinematic information for a forward vehicle relative to the ego vehicle. A comparison module can use current ego-vehicle velocity to calculate the target headway and compare it to the current headway. When current headway is below target headway, an elastic ACC module can calculate additional headway-related quantities (including predicted headway) and select a deceleration strategy. A controller can then execute the selected strategy by providing control signals to vehicle actuators or motors.
+          <ParagraphNumLink num={3} claimNumber={1} onClick={onClaimClick} /> In one implementation, the ego vehicle's perception system (or perception stack) processes on-board sensor outputs to provide current headway and kinematic information for a forward vehicle relative to the ego vehicle. A comparison module can use current ego-vehicle velocity to calculate the target headway and compare it to the current headway. When current headway is below target headway, an elastic ACC module can calculate additional headway-related quantities (including predicted headway) and select a deceleration strategy. A controller can then execute the selected strategy by providing control signals to vehicle actuators or motors.
         </p>
 
         <h3 className="strategic-review__reference-heading">
@@ -135,11 +183,11 @@ export const StrategicReviewContent: React.FC<StrategicReviewContentProps> = ({
         </h3>
 
         <p className="strategic-review__paragraph">
-          [1] A baseline controller uses target speed and target headway (inter-vehicle spacing), and increases or decreases speed to avoid collision when a car approaches from behind or in front ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00932:In the present example, these parameters are target speed and target headway (e. g. inter-vehicle spacing).", "p.12, top"]', onCitationClick)}). In a normal highway driving scenario, a spacing distance is described between a leading front vehicle and an ego vehicle, and another spacing distance is described between a trailing back vehicle and the ego vehicle ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00555:the spacing distance d,,,,,, between the leading front vehicle 306 and the ego vehicle 105 and the spacing distance d,.", "p.5, bottom"]', onCitationClick)}). For predicting safety for front or back safety risk zones, example state-space inputs include current speed, distance to a target vehicle in each zone, and direct or indirect measurement of target-vehicle speed and acceleration ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00715:In an example embodiment, the specific information from the state space (s,) required to predict safety for the front or back SRZs are, for a given time t:", "p.8, para97-para101"]', onCitationClick)}). A safety state function is described as outputting a value between 0 and 1 to indicate safety level, and the distance to a front vehicle can be measured in real time using LIDAR units and SAR units and evaluated against a safety threshold ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00605:The output of the safety state function is a value between 0 and 1 that indicates the safety level of the ego vehicle 105 for the specific safety risk zone, where 1 is safe and 0 is unsafe.", "p.6, top"]', onCitationClick)}). An AS controller module receives action conditioned predictions and selects an action (e.g., an extent to throttle or brake), and the selected actions are provided to a drive control system to control actuators ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00770:In some examples embodiments, AS controller module 412 receives AC predictions 416 from the predictive perception module 402 and selects an action, for example an extent to which the vehicle 105 should throttle or brake.", "p.9, para110"]', onCitationClick)}). An ASP control system is described as predicting a safety risk zone and a comfort risk zone, predicting actions to keep other vehicles out of those zones (with the safety risk zone having higher priority) while maintaining a target speed, and undertaking the action(s) predicted as most likely to succeed ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00563:In example embodiments the ASP control system of ego vehicle 105 is configured to continuously predict the SRZ 310 and the CRZ 312 by monitoring the environment around the ego vehicle 105 and operating state of the ego vehicle 205, predict what actions are most likely to keep other vehicles out of the CRZ 312 and the SRZ 310 (with the SRZ 310 having the higher priority) while maintaining a target speed, and undertake the action(s) predicted as having the greatest likelihood of success.", "p.5, top"]', onCitationClick)}). Once a next action is determined, it can be communicated to an actuator of a drive control system for implementation, and can specify an amount of throttle or an amount of braking ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00820:[0124] Inan example embodiment, once a next action a, is determined, the action is communicated to the appropriate actuator of drive control system 150 for implementation.", "p.10, para124"]', onCitationClick)}). A safety prediction for a safety risk zone is described as indicating a probability that the safety risk zone will be free of obstacles at a predetermined future time ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00703:In some examples, the safety prediction p,,, for a safety risk zone indicates a probability that, based on a specific action, the", "p.8, bottom-top"]', onCitationClick)}). Speed of a target vehicle can be measured directly or indirectly (e.g., change in distance between time samples and/or direct radar unit speed measurement), and acceleration can be measured directly or indirectly (e.g., change in distance over multiple sample periods and/or direct radar unit acceleration measurement) ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00719:Direct and/or indirect measurement of speed of target vehicle in each zone (for example change in distance between given time t and previous sample time t-1 to the target vehicle in each zone z, and/or direct radar unit speed measurement of target vehicle in each zone)", "p.8, para100-para101"]', onCitationClick)}).
+          <ParagraphNumLink num={1} claimNumber={1} onClick={onClaimClick} /> A baseline controller uses target speed and target headway (inter-vehicle spacing), and increases or decreases speed to avoid collision when a car approaches from behind or in front ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00932:In the present example, these parameters are target speed and target headway (e. g. inter-vehicle spacing).", "p.12, top"]', onCitationClick)}). In a normal highway driving scenario, a spacing distance is described between a leading front vehicle and an ego vehicle, and another spacing distance is described between a trailing back vehicle and the ego vehicle ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00555:the spacing distance d,,,,,, between the leading front vehicle 306 and the ego vehicle 105 and the spacing distance d,.", "p.5, bottom"]', onCitationClick)}). For predicting safety for front or back safety risk zones, example state-space inputs include current speed, distance to a target vehicle in each zone, and direct or indirect measurement of target-vehicle speed and acceleration ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00715:In an example embodiment, the specific information from the state space (s,) required to predict safety for the front or back SRZs are, for a given time t:", "p.8, para97-para101"]', onCitationClick)}). A safety state function is described as outputting a value between 0 and 1 to indicate safety level, and the distance to a front vehicle can be measured in real time using LIDAR units and SAR units and evaluated against a safety threshold ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00605:The output of the safety state function is a value between 0 and 1 that indicates the safety level of the ego vehicle 105 for the specific safety risk zone, where 1 is safe and 0 is unsafe.", "p.6, top"]', onCitationClick)}). An AS controller module receives action conditioned predictions and selects an action (e.g., an extent to throttle or brake), and the selected actions are provided to a drive control system to control actuators ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00770:In some examples embodiments, AS controller module 412 receives AC predictions 416 from the predictive perception module 402 and selects an action, for example an extent to which the vehicle 105 should throttle or brake.", "p.9, para110"]', onCitationClick)}). An ASP control system is described as predicting a safety risk zone and a comfort risk zone, predicting actions to keep other vehicles out of those zones (with the safety risk zone having higher priority) while maintaining a target speed, and undertaking the action(s) predicted as most likely to succeed ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00563:In example embodiments the ASP control system of ego vehicle 105 is configured to continuously predict the SRZ 310 and the CRZ 312 by monitoring the environment around the ego vehicle 105 and operating state of the ego vehicle 205, predict what actions are most likely to keep other vehicles out of the CRZ 312 and the SRZ 310 (with the SRZ 310 having the higher priority) while maintaining a target speed, and undertake the action(s) predicted as having the greatest likelihood of success.", "p.5, top"]', onCitationClick)}). Once a next action is determined, it can be communicated to an actuator of a drive control system for implementation, and can specify an amount of throttle or an amount of braking ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00820:[0124] Inan example embodiment, once a next action a, is determined, the action is communicated to the appropriate actuator of drive control system 150 for implementation.", "p.10, para124"]', onCitationClick)}). A safety prediction for a safety risk zone is described as indicating a probability that the safety risk zone will be free of obstacles at a predetermined future time ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00703:In some examples, the safety prediction p,,, for a safety risk zone indicates a probability that, based on a specific action, the", "p.8, bottom-top"]', onCitationClick)}). Speed of a target vehicle can be measured directly or indirectly (e.g., change in distance between time samples and/or direct radar unit speed measurement), and acceleration can be measured directly or indirectly (e.g., change in distance over multiple sample periods and/or direct radar unit acceleration measurement) ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00719:Direct and/or indirect measurement of speed of target vehicle in each zone (for example change in distance between given time t and previous sample time t-1 to the target vehicle in each zone z, and/or direct radar unit speed measurement of target vehicle in each zone)", "p.8, para100-para101"]', onCitationClick)}).
         </p>
 
         <p className="strategic-review__paragraph">
-          [2] One example describes adding comfort by configuring an AS controller to maximize a condition that includes "Front is Comfortable" and "Back is Comfortable" together with "Front is Safe," "Back is Safe," and "Speed is Close to Target" ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00787:[0116] There are many ways to add comfort to the condition, however, in one example embodiment the AS controller 412 is configured to maximize the following statement:", "p.10, para116"]', onCitationClick)}).
+          <ParagraphNumLink num={2} claimNumber={1} onClick={onClaimClick} /> One example describes adding comfort by configuring an AS controller to maximize a condition that includes "Front is Comfortable" and "Back is Comfortable" together with "Front is Safe," "Back is Safe," and "Speed is Close to Target" ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00787:[0116] There are many ways to add comfort to the condition, however, in one example embodiment the AS controller 412 is configured to maximize the following statement:", "p.10, para116"]', onCitationClick)}).
         </p>
 
         <p className="strategic-review__paragraph">
@@ -185,18 +233,20 @@ export const StrategicReviewContent: React.FC<StrategicReviewContentProps> = ({
 
       {/* Claim 18 Section */}
       <section className="strategic-review__section">
-        <div className="strategic-review__claim-label">{renderClaimList('Claim ', [18], onClaimClick)}</div>
+        <div className="strategic-review__claim-label">
+          <ClaimTitleLink claimNumbers={[18]} onClick={onClaimClick} />
+        </div>
 
         <p className="strategic-review__paragraph">
-          [1] Claim 18 focuses on comfort-selective deceleration based on a discrete risk category, rather than on a predicted headway computed for a future time instant. Claim 18 recites a computer program embodied on non-transitory computer-readable storage with executable instructions that, when executed, implement an adaptive cruise control method. The method responds to detecting that current headway is below target headway by determining and implementing a deceleration strategy for increasing to the target headway, where the strategy selectively optimizes comfort in dependence on a determined risk category of the ego vehicle. The risk category is determined as one of a discrete set of risk categories based on the forward vehicle's current speed and acceleration relative to the ego vehicle.
+          <ParagraphNumLink num={1} claimNumber={18} onClick={onClaimClick} /> Claim 18 focuses on comfort-selective deceleration based on a discrete risk category, rather than on a predicted headway computed for a future time instant. Claim 18 recites a computer program embodied on non-transitory computer-readable storage with executable instructions that, when executed, implement an adaptive cruise control method. The method responds to detecting that current headway is below target headway by determining and implementing a deceleration strategy for increasing to the target headway, where the strategy selectively optimizes comfort in dependence on a determined risk category of the ego vehicle. The risk category is determined as one of a discrete set of risk categories based on the forward vehicle's current speed and acceleration relative to the ego vehicle.
         </p>
 
         <p className="strategic-review__paragraph">
-          [2] Claim 18 is a computer-program claim embodied on non-transitory computer-readable storage.
+          <ParagraphNumLink num={2} claimNumber={18} onClick={onClaimClick} /> Claim 18 is a computer-program claim embodied on non-transitory computer-readable storage.
         </p>
 
         <p className="strategic-review__paragraph">
-          [3] In one implementation, a processor executes stored instructions to (i) evaluate whether current headway is below target headway and (ii) determine and implement a deceleration strategy to increase headway toward the target headway. The strategy selection can be conditioned on a risk category so that comfort constraints are applied selectively when appropriate. The risk category can be selected from a discrete set using forward-vehicle kinematics (current speed and acceleration relative to the ego vehicle) as inputs to the risk assessment.
+          <ParagraphNumLink num={3} claimNumber={18} onClick={onClaimClick} /> In one implementation, a processor executes stored instructions to (i) evaluate whether current headway is below target headway and (ii) determine and implement a deceleration strategy to increase headway toward the target headway. The strategy selection can be conditioned on a risk category so that comfort constraints are applied selectively when appropriate. The risk category can be selected from a discrete set using forward-vehicle kinematics (current speed and acceleration relative to the ego vehicle) as inputs to the risk assessment.
         </p>
 
         <h3 className="strategic-review__reference-heading">
@@ -204,7 +254,7 @@ export const StrategicReviewContent: React.FC<StrategicReviewContentProps> = ({
         </h3>
 
         <p className="strategic-review__paragraph">
-          [1] A computer program product is described as comprising a medium tangibly storing thereon executable instructions ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B01116:22. A computer program product comprising a medium tangibly storing thereon executable instructions", "p.16, mid-bottom"]', onCitationClick)}). Executable instructions stored in memory can cause a processor system to determine a current state, make predictions for possible actions, select a vehicle action, and cause the vehicle to implement the action ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00364:The memory tangibly stores thereon executable instructions that,", "p.1, para16"]', onCitationClick)}). A baseline controller uses target speed and target headway (inter-vehicle spacing) as parameters ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00932:In the present example, these parameters are target speed and target headway (e. g. inter-vehicle spacing).", "p.12, top"]', onCitationClick)}). A spacing distance is described between a leading front vehicle and an ego vehicle ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00555:the spacing distance d,,,,,, between the leading front vehicle 306 and the ego vehicle 105", "p.5, bottom"]', onCitationClick)}). A state sub-module is described as constructing a representation of a current state using distance information provided by front and back SAR units (radar) and LIDAR units ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00574:Information used by the state sub-module 410 to construct a representation of the current state of the ego vehicle 105 and its environment at a current time t may for example include distance information provided by front and back SAR units 116 (radar) and LIDAR units 114.", "p.5, bottom"]', onCitationClick)}). An AS controller module receives action conditioned predictions and selects an action (e.g., an extent to throttle or brake), and provides selected actions to a drive control system to control actuators ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00770:In some examples embodiments, AS controller module 412 receives AC predictions 416 from the predictive perception module 402 and selects an action, for example an extent to which the vehicle 105 should throttle or brake.", "p.9, para110"]', onCitationClick)}). An example describes adding comfort via an AS controller condition that includes "Front is Comfortable" and "Back is Comfortable" together with safety and speed being close to target ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00787:[0116] There are many ways to add comfort to the condition, however, in one example embodiment the AS controller 412 is configured to maximize the following statement:", "p.10, para116"]', onCitationClick)}). A safety state function is described as outputting a value between 0 and 1 that indicates the safety level of an ego vehicle for a specific safety risk zone, where 1 is safe and 0 is unsafe ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00605:[0077] The output of the safety state function is a value between 0 and 1 that indicates the safety level of the ego vehicle 105 for the specific safety risk zone, where 1 is safe and 0 is unsafe.", "p.6, top"]', onCitationClick)}).
+          <ParagraphNumLink num={1} claimNumber={18} onClick={onClaimClick} /> A computer program product is described as comprising a medium tangibly storing thereon executable instructions ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B01116:22. A computer program product comprising a medium tangibly storing thereon executable instructions", "p.16, mid-bottom"]', onCitationClick)}). Executable instructions stored in memory can cause a processor system to determine a current state, make predictions for possible actions, select a vehicle action, and cause the vehicle to implement the action ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00364:The memory tangibly stores thereon executable instructions that,", "p.1, para16"]', onCitationClick)}). A baseline controller uses target speed and target headway (inter-vehicle spacing) as parameters ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00932:In the present example, these parameters are target speed and target headway (e. g. inter-vehicle spacing).", "p.12, top"]', onCitationClick)}). A spacing distance is described between a leading front vehicle and an ego vehicle ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00555:the spacing distance d,,,,,, between the leading front vehicle 306 and the ego vehicle 105", "p.5, bottom"]', onCitationClick)}). A state sub-module is described as constructing a representation of a current state using distance information provided by front and back SAR units (radar) and LIDAR units ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00574:Information used by the state sub-module 410 to construct a representation of the current state of the ego vehicle 105 and its environment at a current time t may for example include distance information provided by front and back SAR units 116 (radar) and LIDAR units 114.", "p.5, bottom"]', onCitationClick)}). An AS controller module receives action conditioned predictions and selects an action (e.g., an extent to throttle or brake), and provides selected actions to a drive control system to control actuators ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00770:In some examples embodiments, AS controller module 412 receives AC predictions 416 from the predictive perception module 402 and selects an action, for example an extent to which the vehicle 105 should throttle or brake.", "p.9, para110"]', onCitationClick)}). An example describes adding comfort via an AS controller condition that includes "Front is Comfortable" and "Back is Comfortable" together with safety and speed being close to target ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00787:[0116] There are many ways to add comfort to the condition, however, in one example embodiment the AS controller 412 is configured to maximize the following statement:", "p.10, para116"]', onCitationClick)}). A safety state function is described as outputting a value between 0 and 1 that indicates the safety level of an ego vehicle for a specific safety risk zone, where 1 is safe and 0 is unsafe ({renderTextWithCitations('#["ref_2", "US_2019329772_A1.pdf", "B00605:[0077] The output of the safety state function is a value between 0 and 1 that indicates the safety level of the ego vehicle 105 for the specific safety risk zone, where 1 is safe and 0 is unsafe.", "p.6, top"]', onCitationClick)}).
         </p>
 
         <p className="strategic-review__paragraph">

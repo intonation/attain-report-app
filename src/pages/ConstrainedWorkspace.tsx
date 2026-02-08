@@ -79,11 +79,12 @@ export const ConstrainedWorkspace = () => {
   const [isDocumentViewerOpen, setIsDocumentViewerOpen] = useState(false);
   const [viewerCitation, setViewerCitation] = useState<string>('');
 
-  // Context menu state (for claims page target clicks)
+  // Context menu state (for claims page target clicks and claim links)
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
     ref: string;
+    type: 'workbench' | 'claim';
   } | null>(null);
 
   // Navigation history for back/forward
@@ -185,19 +186,20 @@ export const ConstrainedWorkspace = () => {
     setClaimSummary(null);
   };
 
-  // Handle click on a claim chart reference (L1-8, L18-7, etc.) - opens detail panel directly
+  // Handle click on a claim chart reference (L1-8, L18-7, etc.) - navigates to claims chart and highlights row
   const handleClaimChartRefClick = (refId: string) => {
-    // Find the row matching this refId across all claim charts
+    // Navigate to claims chart
+    handleNavigate('claim-charts');
+
+    // Find the row matching this refId and highlight it
     for (const chart of claimChartData) {
       const row = chart.rows.find(r => r.claimId === refId);
       if (row) {
-        setDetailRow(row);
         setSelectedRowId(row.claimId);
-        setIsDetailPanelOpen(true);
+        // Don't open detail panel - wait for user to click the row
+        setDetailRow(null);
+        setIsDetailPanelOpen(false);
         setIsSplitView(false);
-        // Close workbench panel if open
-        setIsWorkbenchPanelOpen(false);
-        setWorkbenchSelection(null);
         return;
       }
     }
@@ -389,7 +391,7 @@ export const ConstrainedWorkspace = () => {
     }
   };
 
-  // Context menu handlers for Claims page target clicks
+  // Context menu handlers for Claims page target clicks (F/R nodes)
   const handleClaimTargetClick = (ref: string, x: number, y: number) => {
     if (interactionMode === 'system') {
       // System mode: directly open details panel for this entry
@@ -404,8 +406,19 @@ export const ConstrainedWorkspace = () => {
         setSelectedRowId(undefined);
       }
     } else {
-      // Contextual mode: show context menu
-      setContextMenu({ x, y, ref });
+      // Contextual mode: show context menu for workbench entry
+      setContextMenu({ x, y, ref, type: 'workbench' });
+    }
+  };
+
+  // Context menu handler for claim number links (Scope of Analysis, Strategic Review)
+  const handleClaimLinkClick = (claimNumber: number, x: number, y: number) => {
+    if (interactionMode === 'system') {
+      // System mode: directly open claim summary panel
+      openClaimSummaryPanel(claimNumber);
+    } else {
+      // Contextual mode: show context menu for claim
+      setContextMenu({ x, y, ref: String(claimNumber), type: 'claim' });
     }
   };
 
@@ -432,34 +445,67 @@ export const ConstrainedWorkspace = () => {
     }
 
     const ref = contextMenu.ref;
+    const menuType = contextMenu.type;
 
-    if (pane === 'left') {
-      // Open workbench in left pane and scroll to the entry
-      setActiveNavItem('workbench');
-      setWorkbenchScrollToId(ref);
-      // Close split view if open
-      setIsSplitView(false);
-    } else if (pane === 'right') {
-      // Open workbench in right pane (split view) and scroll to the entry
-      setIsSplitView(true);
-      setRightPaneDocId('workbench');
-      setWorkbenchScrollToId(ref);
-      // Auto-collapse sidebar in split view
-      setSidebarCollapsed(true);
-    } else if (pane === 'details') {
-      // Open the workbench detail panel for this entry
-      const found = findWorkbenchEntry(ref);
-      if (found) {
-        // Navigate to workbench and select the entry
-        setActiveNavItem('workbench');
-        setWorkbenchSelection({ entry: found.entry, priorArtReference: found.priorArtReference });
-        setIsWorkbenchPanelOpen(true);
-        setWorkbenchScrollToId(ref);
-        // Close other panels
+    if (menuType === 'claim') {
+      // Handle claim number context menu
+      const claimNumber = parseInt(ref, 10);
+
+      if (pane === 'left') {
+        // Navigate to claim charts in left pane
+        handleNavigate('claim-charts');
+        // Find and highlight the first row for this claim
+        const claimLabel = `Claim ${claimNumber}`;
+        const matchingChart = claimChartData.find(chart => chart.claimNumber === claimLabel);
+        if (matchingChart && matchingChart.rows.length > 0) {
+          setSelectedRowId(matchingChart.rows[0].claimId);
+        }
         setIsSplitView(false);
-        setIsDetailPanelOpen(false);
-        setDetailRow(null);
-        setSelectedRowId(undefined);
+      } else if (pane === 'right') {
+        // Open claim charts in right pane (split view)
+        setIsSplitView(true);
+        setRightPaneDocId('claim-charts');
+        // Find and highlight the first row for this claim
+        const claimLabel = `Claim ${claimNumber}`;
+        const matchingChart = claimChartData.find(chart => chart.claimNumber === claimLabel);
+        if (matchingChart && matchingChart.rows.length > 0) {
+          setSelectedRowId(matchingChart.rows[0].claimId);
+        }
+        setSidebarCollapsed(true);
+      } else if (pane === 'details') {
+        // Open claim summary panel
+        openClaimSummaryPanel(claimNumber);
+      }
+    } else {
+      // Handle workbench entry context menu (original behavior)
+      if (pane === 'left') {
+        // Open workbench in left pane and scroll to the entry
+        setActiveNavItem('workbench');
+        setWorkbenchScrollToId(ref);
+        // Close split view if open
+        setIsSplitView(false);
+      } else if (pane === 'right') {
+        // Open workbench in right pane (split view) and scroll to the entry
+        setIsSplitView(true);
+        setRightPaneDocId('workbench');
+        setWorkbenchScrollToId(ref);
+        // Auto-collapse sidebar in split view
+        setSidebarCollapsed(true);
+      } else if (pane === 'details') {
+        // Open the workbench detail panel for this entry
+        const found = findWorkbenchEntry(ref);
+        if (found) {
+          // Navigate to workbench and select the entry
+          setActiveNavItem('workbench');
+          setWorkbenchSelection({ entry: found.entry, priorArtReference: found.priorArtReference });
+          setIsWorkbenchPanelOpen(true);
+          setWorkbenchScrollToId(ref);
+          // Close other panels
+          setIsSplitView(false);
+          setIsDetailPanelOpen(false);
+          setDetailRow(null);
+          setSelectedRowId(undefined);
+        }
       }
     }
 
@@ -615,7 +661,7 @@ export const ConstrainedWorkspace = () => {
             </header>
             <ScopeOfAnalysisContent
               onCitationClick={(citation) => handleCitationClick(citation.location)}
-              onClaimClick={openClaimSummaryPanel}
+              onClaimClick={handleClaimLinkClick}
               onReferenceClick={handleNavigate}
             />
           </div>
@@ -632,7 +678,7 @@ export const ConstrainedWorkspace = () => {
             </header>
             <StrategicReviewContent
               onCitationClick={(citation) => handleCitationClick(citation.location)}
-              onClaimClick={openClaimSummaryPanel}
+              onClaimClick={handleClaimLinkClick}
             />
           </div>
         );
@@ -653,7 +699,10 @@ export const ConstrainedWorkspace = () => {
       case 'summary-graves':
         return (
           <div style={mainContentStyles} className="contentMount">
-            <GravesReferenceSummaryContent onCitationClick={(citation) => handleCitationClick(citation.location)} />
+            <GravesReferenceSummaryContent
+              onCitationClick={(citation) => handleCitationClick(citation.location)}
+              onClaimClick={handleClaimLinkClick}
+            />
           </div>
         );
 
@@ -812,6 +861,7 @@ export const ConstrainedWorkspace = () => {
                 onResize={handleSidePanelResize}
               />
               <ClaimDetailPanel
+                key={detailRow?.claimId}
                 row={detailRow}
                 onClose={handleDetailPanelClose}
                 onCitationClick={handleCitationClick}
@@ -833,6 +883,7 @@ export const ConstrainedWorkspace = () => {
                 onResize={handleSidePanelResize}
               />
               <WorkbenchDetailPanel
+                key={workbenchSelection?.entry?.id}
                 entry={workbenchSelection?.entry ?? null}
                 priorArtReference={workbenchSelection?.priorArtReference ?? ''}
                 onClose={handleWorkbenchPanelClose}
@@ -856,6 +907,7 @@ export const ConstrainedWorkspace = () => {
                 onResize={handleSidePanelResize}
               />
               <ClaimSummaryPanel
+                key={claimSummary?.claimNumber}
                 claim={claimSummary}
                 onClose={handleClaimSummaryPanelClose}
                 onViewClaimChart={handleViewClaimChart}

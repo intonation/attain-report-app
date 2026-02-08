@@ -24,13 +24,36 @@ const PdfJumpLink: React.FC<PdfJumpLinkProps> = ({ citation, onClick }) => (
   </button>
 );
 
+// Paragraph number link component (e.g., [1])
+interface ParagraphNumLinkProps {
+  num: number;
+  claimNumber: number; // The claim this paragraph refers to
+  onClick?: (claimNumber: number, x: number, y: number) => void;
+}
+
+const ParagraphNumLink: React.FC<ParagraphNumLinkProps> = ({ num, claimNumber, onClick }) => (
+  <button
+    type="button"
+    className="reference-summary__paragraph-num-link"
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick?.(claimNumber, e.clientX, e.clientY);
+    }}
+  >
+    [{num}]
+  </button>
+);
+
 // Graves Reference Summary Content Component
 interface GravesReferenceSummaryContentProps {
   onCitationClick?: (citation: Citation) => void;
+  onClaimClick?: (claimNumber: number, x: number, y: number) => void;
 }
 
 export const GravesReferenceSummaryContent: React.FC<GravesReferenceSummaryContentProps> = ({
   onCitationClick,
+  onClaimClick,
 }) => {
   // Helper to render a citation link
   const cite = (refId: string, filename: string, text: string, location: string) => (
@@ -46,7 +69,7 @@ export const GravesReferenceSummaryContent: React.FC<GravesReferenceSummaryConte
         <h2 className="reference-summary__heading">Reference summary — Graves et al.</h2>
 
         <p className="reference-summary__paragraph">
-          <span className="reference-summary__paragraph-num">[1]</span> In example embodiments, the vehicle control system 115 of vehicle 105 (referred to hereinafter as ego vehicle 105) is configured by adaptive spacing module 172 to implement an adaptive spacing predictive (ASP) control system, and FIG. 4 illustrates that ASP control system 400 receives inputs from the EM wave based sensors 110 and the vehicle sensors 111 and controls actuators of the drive control system 150 (e.g. brake unit 154 and throttle unit 156) ({cite("ref_2", "US_2019329772_A1.pdf", "B00541:[0065] In example embodiments, the vehicle control system 115 of vehicle 105...", "p.5, top")}; {cite("ref_2", "US_2019329772_A1.pdf", "B00567:[0070] FIG. 4 illustrates a block diagram of an adaptive spacing predictive (ASP) control system 400...", "p.5, mid")}).
+          <ParagraphNumLink num={1} claimNumber={1} onClick={onClaimClick} /> In example embodiments, the vehicle control system 115 of vehicle 105 (referred to hereinafter as ego vehicle 105) is configured by adaptive spacing module 172 to implement an adaptive spacing predictive (ASP) control system, and FIG. 4 illustrates that ASP control system 400 receives inputs from the EM wave based sensors 110 and the vehicle sensors 111 and controls actuators of the drive control system 150 (e.g. brake unit 154 and throttle unit 156) ({cite("ref_2", "US_2019329772_A1.pdf", "B00541:[0065] In example embodiments, the vehicle control system 115 of vehicle 105...", "p.5, top")}; {cite("ref_2", "US_2019329772_A1.pdf", "B00567:[0070] FIG. 4 illustrates a block diagram of an adaptive spacing predictive (ASP) control system 400...", "p.5, mid")}).
         </p>
 
         <p className="reference-summary__paragraph">

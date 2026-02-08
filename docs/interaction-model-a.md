@@ -13,12 +13,12 @@
 
 | Page | Clickable Element | What Opens | User Choice? |
 |------|-------------------|------------|--------------|
-| **Executive Summary** | Claim card "View in claims chart" | Navigate to Claim Charts + open detail | No |
+| **Executive Summary** | Claim card "View in claims chart" | Navigate to Claim Charts + highlight row | No |
 | | L-ref link (L1-8, L18-7) | Claim Detail Panel | No |
-| **Scope of Analysis** | Claim number (1, 2, 18...) | Claim Summary Panel | No |
+| **Scope of Analysis** | Claim number (1, 2, 18...) | Context menu appears | **Yes** |
 | | Reference name (Graves et al.) | Navigate to Reference Summary | No |
 | | Citation (p.4, top) | Document Viewer | No |
-| **Strategic Review** | Claim number (1, 18, 19...) | Claim Summary Panel | No |
+| **Strategic Review** | Claim number (1, 18, 19...) | Context menu appears | **Yes** |
 | | Citation (p.12, top) | Document Viewer | No |
 | **Claims** | F/R node (F1-1, R1-2) | Context menu appears | **Yes** |
 | **Claim Charts** | Table row | Claim Detail Panel | No |
@@ -29,17 +29,30 @@
 
 ---
 
-### Context Menu Options (Claims Page Only)
+### Context Menu Options
 
-When clicking F/R nodes on the Claims page, user sees:
+Context menus appear in two scenarios:
+
+**When clicking F/R nodes (Claims page):**
 
 | Menu Option | Result |
 |-------------|--------|
 | **Left pane** | Workbench opens in main pane, scrolls to entry |
 | **Right pane** | Split view activates, Workbench in right pane |
-| **Details pane** | Details panel opens on right edge |
+| **Details pane** | WorkbenchDetailPanel opens on right edge |
 | **Highlight** (5 colors) | Marks the node with selected color |
 | **Clear highlight** | Removes highlight from node |
+| **Cancel** | Closes menu, no action |
+
+**When clicking claim numbers (Scope of Analysis, Strategic Review):**
+
+| Menu Option | Result |
+|-------------|--------|
+| **Left pane** | Navigate to Claim Charts, highlight row |
+| **Right pane** | Split view activates, Claim Charts in right pane |
+| **Details pane** | ClaimSummaryPanel opens on right edge |
+| **Highlight** (5 colors) | Marks the claim link with selected color |
+| **Clear highlight** | Removes highlight from claim link |
 | **Cancel** | Closes menu, no action |
 
 ---
@@ -48,9 +61,9 @@ When clicking F/R nodes on the Claims page, user sees:
 
 | Element Type | Visual Style | Click Behaviour |
 |--------------|--------------|-----------------|
-| **Claim number** | Blue, dotted underline | Opens Claim Summary Panel |
+| **Claim number** | Blue, dotted underline | Context menu (user chooses destination) |
 | **L-ref** (L1-8) | Blue, dotted underline | Opens Claim Detail Panel for that row |
-| **F/R node** (F1-1) | Inline in claim text | Context menu (Claims page) or direct panel |
+| **F/R node** (F1-1) | Inline in claim text | Context menu (user chooses destination) |
 | **Reference name** | Blue, dotted underline | Navigates to Reference Summary page |
 | **Citation** | Blue, dotted underline | Opens Document Viewer |
 | **Table row** | Hover highlight | Opens detail panel for that row |
@@ -99,6 +112,26 @@ Executive Summary
                    ▼
             ClaimDetailPanel opens
             Shows that specific row's details
+```
+
+### From Scope of Analysis / Strategic Review (Context Menu)
+
+```
+Scope of Analysis / Strategic Review
+       │
+       └─── Click claim number (1, 18, 19...)
+                   │
+                   ▼
+            Context Menu appears
+                   │
+       ┌───────────┼───────────┬───────────┐
+       ▼           ▼           ▼           ▼
+   Left pane   Right pane   Details    Highlight
+       │           │           │           │
+       ▼           ▼           ▼           ▼
+   Navigate    Split view   ClaimSumm-  Color
+   to Claim    activates    aryPanel    applied
+   Charts      with Charts  opens       to link
 ```
 
 ### From Claims Page (Context Menu)
@@ -167,7 +200,8 @@ Workbench Page
 
 | Trigger | Result |
 |---------|--------|
-| Context menu → "Right pane" | Split view with Workbench on right |
+| Context menu → "Right pane" (F/R node) | Split view with Workbench on right |
+| Context menu → "Right pane" (claim) | Split view with Claim Charts on right |
 | Pane header split toggle | Split view with current doc duplicated |
 | Pane header dropdown | Change document in that pane |
 | Maximize button (right pane) | Right doc becomes main, split closes |
@@ -210,7 +244,7 @@ Workbench Page
 
 | Action | Type | Stays on Page? |
 |--------|------|----------------|
-| Click claim number | Panel | Yes |
+| Click claim number | Menu → choice | Depends on choice |
 | Click L-ref | Panel | Yes |
 | Click F/R node | Menu → choice | Depends on choice |
 | Click citation | Panel | Yes |
@@ -218,7 +252,8 @@ Workbench Page
 | Click reference name | Navigation | No - goes to Reference Summary |
 | Click "View in claims chart" | Navigation | No - goes to Claim Charts |
 | Click sidebar nav item | Navigation | No - changes page |
-| Context menu → Left pane | Navigation | No - goes to Workbench |
+| Context menu → Left pane (F/R) | Navigation | No - goes to Workbench |
+| Context menu → Left pane (claim) | Navigation | No - goes to Claim Charts |
 | Context menu → Right pane | Split view | Sort of - adds pane |
 | Context menu → Details | Panel | Yes |
 

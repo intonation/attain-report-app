@@ -41,7 +41,7 @@ const PdfJumpLink: React.FC<PdfJumpLinkProps> = ({ citation, onClick }) => (
 // Claim link component
 interface ClaimLinkProps {
   claimNumber: number;
-  onClick?: (claimNumber: number) => void;
+  onClick?: (claimNumber: number, x: number, y: number) => void;
 }
 
 const ClaimLink: React.FC<ClaimLinkProps> = ({ claimNumber, onClick }) => (
@@ -51,7 +51,7 @@ const ClaimLink: React.FC<ClaimLinkProps> = ({ claimNumber, onClick }) => (
     onClick={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      onClick?.(claimNumber);
+      onClick?.(claimNumber, e.clientX, e.clientY);
     }}
   >
     {claimNumber}
@@ -62,7 +62,7 @@ const ClaimLink: React.FC<ClaimLinkProps> = ({ claimNumber, onClick }) => (
 const renderClaimList = (
   prefix: string,
   claimNumbers: number[],
-  onClaimClick?: (claimNumber: number) => void
+  onClaimClick?: (claimNumber: number, x: number, y: number) => void
 ): React.ReactNode => {
   return (
     <>
@@ -120,7 +120,7 @@ const renderTextWithCitations = (
 // Scope of Analysis Content Component
 interface ScopeOfAnalysisContentProps {
   onCitationClick?: (citation: Citation) => void;
-  onClaimClick?: (claimNumber: number) => void;
+  onClaimClick?: (claimNumber: number, x: number, y: number) => void;
   onReferenceClick?: (referenceId: string) => void;
 }
 
