@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useInteractionMode } from '../contexts/InteractionModeContext';
-import { Toolbar } from '../components/layout/Toolbar';
+import { Toolbar, type HighlightColor as ToolbarHighlightColor } from '../components/layout/Toolbar';
 import { PaneHeader } from '../components/layout/PaneHeader';
 import { Sidebar } from '../components/layout/Sidebar';
 import { ClaimCard } from '../components/ClaimCard';
@@ -86,6 +86,9 @@ export const ConstrainedWorkspace = () => {
     ref: string;
     type: 'workbench' | 'claim';
   } | null>(null);
+
+  // Toolbar highlight color state (for Option B / system mode)
+  const [toolbarHighlightColor, setToolbarHighlightColor] = useState<ToolbarHighlightColor | null>(null);
 
   // Navigation history for back/forward
   const [navHistory, setNavHistory] = useState<string[]>(['executive-summary']);
@@ -777,6 +780,14 @@ export const ConstrainedWorkspace = () => {
           applicationNumber="US 17/174,123"
           applicationTitle="Adaptive Cruise Control with Predictive Headway Management"
           version="v0.1"
+          showHighlightPicker={interactionMode === 'system'}
+          activeHighlightColor={toolbarHighlightColor}
+          onHighlightColorSelect={setToolbarHighlightColor}
+          onClearHighlighting={() => {
+            setToolbarHighlightColor(null);
+            // TODO: Clear all highlights from nodes
+            console.log('Clear all highlighting');
+          }}
         />
 
         {/* Workspace area with panes */}

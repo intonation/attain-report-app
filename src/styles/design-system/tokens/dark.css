@@ -1,0 +1,416 @@
+/* =====================================
+   DARK MODE TOKENS
+   Overrides for [data-theme="dark"]
+   ===================================== */
+
+:root[data-theme="dark"] {
+  /* ========================================
+   * Semantic Tokens — Direct values for dark mode
+   * ======================================== */
+  --color-bg-canvas: #1c1917;
+  --color-bg-canvas-warm: #292524;
+  --color-bg-surface: #292524;
+
+  --color-text-primary: #fafaf9;
+  --color-text-secondary: #a8a29e;
+
+  --color-border-default: #44403c;
+
+  --color-action-primary: #c24450;
+  --color-action-primary-hover: #d95561;
+
+  --color-status-success: #22c55e;
+  --color-status-danger: #ef4444;
+  --color-status-warning: #d97706;
+
+  /* ========================================
+   * Domain Tokens — Dark mode
+   * ======================================== */
+  --color-domain-feature: #60a5fa;
+  --color-domain-feature-subtle: rgba(96, 165, 250, 0.15);
+
+  --color-domain-relationship: #e879f9;
+  --color-domain-relationship-subtle: rgba(232, 121, 249, 0.15);
+
+  /* ========================================
+   * Core Colors (primitives) — Dark mode
+   * ======================================== */
+  --color-black: #ffffff;
+  --color-white: #1c1917;
+  --color-dark: #fafaf9;
+
+  /* Grey Ramp — Inverted */
+  --color-grey-dark: #44403c;
+  --color-grey-mid: #44403c;
+  --color-grey-light: #292524;
+
+  /* Accent Colors (dark mode adjusted) */
+  --color-red: #ef4444;
+  --color-green-1: #2dd4bf;
+  --color-green-2: #14b8a6;
+  --color-green-3: #22d3ee;
+
+  /* ========================================
+   * Backwards Compatibility Aliases — Dark mode
+   * ======================================== */
+  --color-canvas: #1c1917;
+  --color-paper: #292524;
+  --color-text: #fafaf9;
+  --color-muted: #a8a29e;
+  --color-text-muted: #a8a29e;
+  --color-border: #44403c;
+  --color-accent: #c24450;
+  --color-accent-subtle: rgba(194, 68, 80, 0.15);
+  --color-danger: #ef4444;
+  --color-danger-subtle: rgba(239, 68, 68, 0.15);
+  --color-feature: #60a5fa;
+  --color-feature-border: rgba(96, 165, 250, 0.4);
+  --color-feature-subtle: rgba(96, 165, 250, 0.15);
+  --color-relationship: #e879f9;
+  --color-relationship-border: rgba(232, 121, 249, 0.4);
+  --color-relationship-subtle: rgba(232, 121, 249, 0.15);
+
+  /* ========================================
+   * Shadow Tokens — Dark mode
+   * ======================================== */
+  --shadow-paper: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  /* ========================================
+   * Ink Ramp — Dark mode (inverted)
+   * ======================================== */
+  --color-ink-900: #fafaf9;
+  --color-ink-800: #e7e5e4;
+  --color-ink-600: #a8a29e;
+  --color-ink-500: #78716c;
+  --color-ink-300: #57534e;
+
+  /* Surface ramp */
+  --color-surface-0: #1c1917;
+  --color-surface-50: #292524;
+  --color-surface-100: #292524;
+
+  --color-border-300: #44403c;
+}
+
+/* ========================================
+ * Dark Mode Specific Component Overrides
+ * ======================================== */
+
+[data-theme="dark"] .pdf-jump-link {
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .pdf-jump-link:hover {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .strategic-review__claim-link,
+[data-theme="dark"] .strategic-review__paragraph-num-link,
+[data-theme="dark"] .strategic-review__claim-title-link,
+[data-theme="dark"] .reference-summary__paragraph-num-link {
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .strategic-review__claim-link:hover,
+[data-theme="dark"] .strategic-review__paragraph-num-link:hover,
+[data-theme="dark"] .strategic-review__claim-title-link:hover,
+[data-theme="dark"] .reference-summary__paragraph-num-link:hover {
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .scope-analysis__claim-link,
+[data-theme="dark"] .scope-analysis__reference-link {
+  color: #2dd4bf;
+}
+
+[data-theme="dark"] .scope-analysis__claim-link:hover,
+[data-theme="dark"] .scope-analysis__reference-link:hover {
+  color: #5eead4;
+}
+
+[data-theme="dark"] .claim-card__ref-link {
+  color: #2dd4bf;
+}
+
+[data-theme="dark"] .claim-card__ref-link:hover {
+  color: #5eead4;
+}
+
+/* Claim target hover state */
+[data-theme="dark"] .claim-target:hover,
+[data-theme="dark"] .claim-target:focus-visible {
+  background-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 1px 0 rgba(96, 165, 250, 0.25);
+}
+
+[data-theme="dark"] .claim-target:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.5);
+}
+
+/* Sidebar hover states */
+[data-theme="dark"] .sidebarItem:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .sidebarItem.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .sidebarBottomItem:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .sidebarCollapseBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar dark mode */
+[data-theme="dark"] .app-shell-main {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+[data-theme="dark"] .app-shell-main::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .app-shell-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Toolbar button hover */
+[data-theme="dark"] .toolbar__iconBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .toolbar__outlineBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #78716c;
+}
+
+/* Table row hover */
+[data-theme="dark"] .scope-analysis__table tbody tr:hover td {
+  background-color: #292524;
+}
+
+/* Table cells */
+[data-theme="dark"] .scope-analysis__table td {
+  background-color: #1c1917;
+}
+
+[data-theme="dark"] .scope-analysis__table th {
+  background-color: #292524;
+}
+
+/* Badge novelty variants - dark mode */
+[data-theme="dark"] .badge--novel {
+  color: #4ade80;
+  background-color: rgba(74, 222, 128, 0.15);
+}
+
+[data-theme="dark"] .badge--likely-novel {
+  color: #a3e635;
+  background-color: rgba(163, 230, 53, 0.15);
+}
+
+[data-theme="dark"] .badge--likely-not-novel {
+  color: #fbbf24;
+  background-color: rgba(251, 191, 36, 0.15);
+}
+
+[data-theme="dark"] .badge--not-novel {
+  color: #f87171;
+  background-color: rgba(248, 113, 113, 0.15);
+}
+
+/* Badge default and muted */
+[data-theme="dark"] .badge--default,
+[data-theme="dark"] .badge--muted {
+  color: #a8a29e;
+  background-color: #44403c;
+}
+
+[data-theme="dark"] .badge--success {
+  color: #2dd4bf;
+  background-color: rgba(45, 212, 191, 0.15);
+}
+
+/* Skeleton loading */
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    #292524 25%,
+    #44403c 50%,
+    #292524 75%
+  );
+}
+
+/* Reference token dark mode */
+[data-theme="dark"] .reference-token--line {
+  border-color: #44403c;
+}
+
+[data-theme="dark"] .reference-token--line:hover {
+  background: #44403c;
+}
+
+[data-theme="dark"] .reference-token--claim {
+  color: #c24450;
+  border-color: #c24450;
+}
+
+[data-theme="dark"] .reference-token--claim:hover {
+  background: rgba(194, 68, 80, 0.15);
+}
+
+[data-theme="dark"] .reference-token--feature {
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+[data-theme="dark"] .reference-token--feature:hover {
+  background: rgba(96, 165, 250, 0.15);
+}
+
+[data-theme="dark"] .reference-token--relationship {
+  color: #e879f9;
+  border-color: rgba(232, 121, 249, 0.5);
+}
+
+[data-theme="dark"] .reference-token--relationship:hover {
+  background: rgba(232, 121, 249, 0.15);
+}
+
+/* Card and claim-item backgrounds */
+[data-theme="dark"] .card {
+  background-color: #292524;
+  border-color: #44403c;
+}
+
+[data-theme="dark"] .claim-item {
+  background-color: #292524;
+  border-color: #44403c;
+}
+
+[data-theme="dark"] .claim-item--cancelled {
+  background-color: #1c1917;
+}
+
+/* Inspection panel */
+[data-theme="dark"] .inspection-panel {
+  background-color: #292524;
+}
+
+[data-theme="dark"] .inspection-panel__header {
+  border-bottom-color: #c24450;
+}
+
+[data-theme="dark"] .inspection-panel__title {
+  color: #fafaf9;
+}
+
+[data-theme="dark"] .panel-section {
+  border-bottom-color: #44403c;
+}
+
+[data-theme="dark"] .panel-section__heading {
+  color: #c24450;
+}
+
+[data-theme="dark"] .conclusion-box {
+  border-color: #44403c;
+}
+
+[data-theme="dark"] .conclusion-box__label {
+  color: #c24450;
+}
+
+[data-theme="dark"] .conclusion-box__value {
+  color: #c24450;
+}
+
+/* Claim item formula */
+[data-theme="dark"] .claim-item__formula {
+  background-color: #1c1917;
+}
+
+/* Strategic review conclusion box */
+[data-theme="dark"] .strategic-review__conclusion {
+  background-color: #1c1917;
+  border-color: #44403c;
+}
+
+/* Context menu */
+[data-theme="dark"] .context-menu {
+  background-color: #292524;
+  border-color: #44403c;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .context-menu__item:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .context-menu__divider {
+  background-color: #44403c;
+}
+
+/* Document viewer */
+[data-theme="dark"] .document-viewer {
+  background-color: #292524;
+}
+
+[data-theme="dark"] .document-viewer__header {
+  background-color: #1c1917;
+  border-bottom-color: #44403c;
+}
+
+/* Workbench table */
+[data-theme="dark"] .workbench-table th {
+  background-color: #292524;
+}
+
+[data-theme="dark"] .workbench-table td {
+  background-color: #1c1917;
+}
+
+[data-theme="dark"] .workbench-table tr:hover td {
+  background-color: #292524;
+}
+
+/* Claim charts table */
+[data-theme="dark"] .claim-charts-table th {
+  background-color: #292524;
+}
+
+[data-theme="dark"] .claim-charts-table td {
+  background-color: #1c1917;
+}
+
+[data-theme="dark"] .claim-charts-table tr:hover td {
+  background-color: #292524;
+}
+
+[data-theme="dark"] .claim-charts-table tr.selected td {
+  background-color: rgba(194, 68, 80, 0.15);
+}
+
+/* Title claim style */
+[data-theme="dark"] .title-claim {
+  color: #fafaf9;
+}
+
+/* Section headings */
+[data-theme="dark"] .scope-analysis__heading,
+[data-theme="dark"] .strategic-review__reference-heading,
+[data-theme="dark"] .reference-summary__heading {
+  border-bottom-color: #44403c;
+}
+
+/* Export button in dark mode */
+[data-theme="dark"] .toolbar__right .button--primary {
+  background-color: #c24450;
+}
+
+[data-theme="dark"] .toolbar__right .button--primary:hover {
+  background-color: #d95561;
+}

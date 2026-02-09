@@ -45,6 +45,13 @@
   flex-shrink: 0;
 }
 
+.sidebarLogoImg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
 .sidebarLogoText {
   font-weight: 600;
   font-size: 15px;

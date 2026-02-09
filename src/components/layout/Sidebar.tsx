@@ -11,13 +11,23 @@ import {
   CloseMenuIcon,
 } from '../icons';
 import { SidebarSection } from './SidebarSection';
+import { useTheme } from '../../contexts/ThemeContext';
+import AttainLogoLight from '../../assets/Attain-Logo-Light.svg';
+import AttainLogoDark from '../../assets/Attain-Logo-Dark.svg';
 import '../../styles/sidebar.css';
 
-// Logo icon component based on Logo.svg
-const LogoIcon = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9.48959 18.2483H4.15448L3.51961 19.7186C3.3117 20.2086 3.20775 20.6133 3.20775 20.9326C3.20775 21.3558 3.37853 21.6677 3.7201 21.8682C3.92058 21.987 4.41437 22.0761 5.20146 22.1355V22.5476H0.178208V22.1355C0.720259 22.0538 1.16578 21.8311 1.51477 21.4672C1.86376 21.096 2.29443 20.3349 2.80678 19.1839L8.20872 7.13259H8.42034L13.8668 19.5181C14.3866 20.6913 14.8136 21.4301 15.1477 21.7345C15.4002 21.9647 15.7566 22.0984 16.217 22.1355V22.5476H8.91042V22.1355H9.21114C9.79775 22.1355 10.2099 22.0538 10.4475 21.8905C10.6108 21.7717 10.6925 21.6009 10.6925 21.3781C10.6925 21.2445 10.6702 21.1071 10.6257 20.966C10.6108 20.8992 10.4994 20.6207 10.2915 20.1307L9.48959 18.2483ZM9.1109 17.4241L6.86102 12.2227L4.54431 17.4241H9.1109Z" fill="black"/>
-    <rect x="15.05" y="6.08589" width="11.9" height="7" fill="white" stroke="#A13838" strokeWidth="2.1"/>
+// Sun icon for light mode
+const SunIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="8" cy="8" r="3" />
+    <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" />
+  </svg>
+);
+
+// Moon icon for dark mode
+const MoonIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 9.5A6 6 0 1 1 6.5 2 4.5 4.5 0 0 0 14 9.5Z" />
   </svg>
 );
 
@@ -77,6 +87,8 @@ export const Sidebar = ({
   onEmphasisComplete,
   hideWorkbench = false,
 }: SidebarProps) => {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
   // Filter out workbench if hideWorkbench is true
   const filteredDocumentItems = hideWorkbench
     ? generatedDocumentsItems.filter(item => item.id !== 'workbench')
@@ -126,7 +138,11 @@ export const Sidebar = ({
   return (
     <div className={`sidebarContainer ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebarLogo">
-        <LogoIcon />
+        <img
+          src={isDark ? AttainLogoDark : AttainLogoLight}
+          alt="Attain Logo"
+          className="sidebarLogoImg"
+        />
         {!collapsed && <span className="sidebarLogoText">Acme Automotive</span>}
         <button
           className={`sidebarCollapseBtn ${showEmphasis ? 'sidebarCollapseBtn--emphasis' : ''}`}
@@ -175,6 +191,10 @@ export const Sidebar = ({
 
           {/* Bottom navigation */}
           <div className="sidebarBottom">
+            <button className="sidebarBottomItem" onClick={toggleTheme}>
+              {isDark ? <SunIcon /> : <MoonIcon />}
+              <span>{isDark ? 'Light mode' : 'Dark mode'}</span>
+            </button>
             <button className="sidebarBottomItem">
               <UsersIcon />
               <span>Invite users</span>
