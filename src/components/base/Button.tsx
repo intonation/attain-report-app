@@ -7,7 +7,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', size = 'default', children, disabled, style, ...props }, ref) => {
+  ({ variant = 'primary', size = 'default', children, disabled, className, style, ...props }, ref) => {
     const baseStyles: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
@@ -25,7 +25,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       border: '1.5px solid transparent',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
-      transition: 'background-color 0.15s ease, border-color 0.15s ease',
+      transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease',
       ...style,
     };
 
@@ -33,7 +33,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant === 'primary'
         ? {
             backgroundColor: 'var(--color-accent)',
-            color: 'var(--color-white)',
+            color: 'var(--color-text-on-accent)',
             borderColor: 'var(--color-accent)',
           }
         : {
@@ -42,10 +42,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             borderColor: 'var(--color-accent)',
           };
 
+    const buttonClassName = [
+      'button',
+      `button--${variant}`,
+      size === 'small' && 'button--small',
+      className,
+    ].filter(Boolean).join(' ');
+
     return (
       <button
         ref={ref}
         disabled={disabled}
+        className={buttonClassName}
         style={{ ...baseStyles, ...variantStyles }}
         {...props}
       >

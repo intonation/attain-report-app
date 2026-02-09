@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '../base';
-import {
-  DiamondIcon,
-  DownloadIcon,
-} from '../icons';
+import { DownloadIcon } from '../icons';
 import '../../styles/toolbar.css';
 
 export type HighlightColor = 'yellow' | 'green' | 'blue' | 'pink' | 'orange';
@@ -97,49 +94,54 @@ export const Toolbar = ({
         </div>
       </div>
 
-      {/* Right section - Highlight picker, Clear highlighting, and Export */}
+      {/* Right section - Highlight tools cluster, separator, Export */}
       <div className="toolbar__right">
-        {showHighlightPicker && (
-          <div className="toolbar__highlightPicker">
-            <button
-              ref={buttonRef}
-              className={`toolbar__swatch ${activeHighlightColor ? 'toolbar__swatch--active' : ''}`}
-              onClick={handleSwatchClick}
-              aria-label={activeHighlightColor ? `Highlighting with ${activeHighlightColor}, click to deselect` : 'Select highlight color'}
-              aria-expanded={isColorPickerOpen}
-            >
-              <span
-                className="toolbar__swatchInner"
-                style={{ backgroundColor: displayColor }}
-              />
-            </button>
-            {isColorPickerOpen && (
-              <div ref={pickerRef} className="toolbar__colorDropdown">
-                <div className="toolbar__colorDropdownLabel">Highlight color</div>
-                <div className="toolbar__colorSwatches">
-                  {HIGHLIGHT_COLORS.map((color) => (
-                    <button
-                      key={color.id}
-                      className="toolbar__colorOption"
-                      style={{ backgroundColor: color.value }}
-                      onClick={() => handleColorSelect(color.id)}
-                      aria-label={color.label}
-                    />
-                  ))}
+        {/* Highlight tools cluster */}
+        <div className="toolbar__highlightCluster">
+          {showHighlightPicker && (
+            <div className="toolbar__highlightPicker">
+              <button
+                ref={buttonRef}
+                className={`toolbar__swatch ${activeHighlightColor ? 'toolbar__swatch--active' : ''}`}
+                onClick={handleSwatchClick}
+                title="Highlight colour"
+                aria-label={activeHighlightColor ? `Highlighting with ${activeHighlightColor}, click to deselect` : 'Select highlight colour'}
+                aria-expanded={isColorPickerOpen}
+              >
+                <span
+                  className="toolbar__swatchInner"
+                  style={{ backgroundColor: displayColor }}
+                />
+              </button>
+              {isColorPickerOpen && (
+                <div ref={pickerRef} className="toolbar__colorDropdown">
+                  <div className="toolbar__colorDropdownLabel">Highlight colour</div>
+                  <div className="toolbar__colorSwatches">
+                    {HIGHLIGHT_COLORS.map((color) => (
+                      <button
+                        key={color.id}
+                        className="toolbar__colorOption"
+                        style={{ backgroundColor: color.value }}
+                        onClick={() => handleColorSelect(color.id)}
+                        aria-label={color.label}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
-        <button
-          className="toolbar__outlineBtn"
-          aria-label="Clear highlight"
-          onClick={onClearHighlighting}
-        >
-          <DiamondIcon />
-          Clear highlight
-        </button>
+              )}
+            </div>
+          )}
+          <button
+            className="toolbar__outlineBtn"
+            aria-label="Clear highlights"
+            onClick={onClearHighlighting}
+          >
+            Clear highlights
+          </button>
+        </div>
+
         <div className="toolbar__divider" />
+
         <Button variant="primary" size="small" style={{ fontSize: '12px' }}>
           <DownloadIcon />
           Export

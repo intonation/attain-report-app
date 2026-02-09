@@ -22,6 +22,46 @@ export const claimsData: ClaimData[] = [
   },
 ];
 
+// Dependent claims data for Executive Summary fallback section
+export interface DependentClaimData {
+  claimNumber: number;
+  dependsOn: number;
+  addsFeature: string;
+  isNovel: 'novel' | 'likely-novel' | 'likely-not-novel' | 'not-novel';
+  chartRowId: string; // For deep linking to claim chart row
+}
+
+export const dependentClaimsData: DependentClaimData[] = [
+  {
+    claimNumber: 3,
+    dependsOn: 1,
+    addsFeature: 'Predictive headway computed using Kalman-filtered acceleration estimates',
+    isNovel: 'novel',
+    chartRowId: 'L1-8',
+  },
+  {
+    claimNumber: 5,
+    dependsOn: 1,
+    addsFeature: 'Multi-horizon prediction with 2s and 5s lookahead windows',
+    isNovel: 'likely-novel',
+    chartRowId: 'L1-10',
+  },
+  {
+    claimNumber: 19,
+    dependsOn: 18,
+    addsFeature: 'Risk category includes sensor-degradation fallback mode',
+    isNovel: 'novel',
+    chartRowId: 'L18-7',
+  },
+  {
+    claimNumber: 21,
+    dependsOn: 18,
+    addsFeature: 'Comfort threshold dynamically adjusted based on passenger count',
+    isNovel: 'likely-novel',
+    chartRowId: 'L18-8',
+  },
+];
+
 export const calloutContent = {
   title: 'Getting started with Attain',
   subtitle: 'How the analysis works',

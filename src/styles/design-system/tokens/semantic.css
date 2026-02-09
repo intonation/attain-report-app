@@ -44,6 +44,9 @@
   --color-action-primary: var(--color-brand-500);
   --color-action-primary-hover: var(--color-brand-600);
 
+  /* Text on accent/action backgrounds — always white, never inverts */
+  --color-text-on-accent: #ffffff;
+
   --color-status-success: var(--color-success-500);
   --color-status-danger: var(--color-danger-500);
   --color-status-warning: var(--color-accent-amber-500);

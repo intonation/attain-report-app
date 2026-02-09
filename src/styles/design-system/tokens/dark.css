@@ -182,9 +182,19 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+[data-theme="dark"] .toolbar__outlineBtn {
+  color: #a8a29e;
+  border-color: #44403c;
+}
+
 [data-theme="dark"] .toolbar__outlineBtn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: #78716c;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: #57534e;
+  color: #fafaf9;
+}
+
+[data-theme="dark"] .toolbar__outlineBtn:active {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Table row hover */
@@ -413,4 +423,10 @@
 
 [data-theme="dark"] .toolbar__right .button--primary:hover {
   background-color: #d95561;
+}
+
+/* Button hover states - dark mode */
+[data-theme="dark"] .button--secondary:hover:not(:disabled) {
+  background-color: #c24450 !important;
+  color: #ffffff !important;
 }

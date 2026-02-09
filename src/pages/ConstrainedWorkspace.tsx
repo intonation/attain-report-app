@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useInteractionMode } from '../contexts/InteractionModeContext';
+import { Badge, Card, Button } from '../components/base';
 import { Toolbar, type HighlightColor as ToolbarHighlightColor } from '../components/layout/Toolbar';
 import { PaneHeader } from '../components/layout/PaneHeader';
 import { Sidebar } from '../components/layout/Sidebar';
@@ -13,7 +14,7 @@ import { WorkbenchPage, WorkbenchDetailPanel } from '../components/Workbench';
 import type { WorkbenchSelection } from '../components/Workbench';
 import { SelectionContextMenu, type HighlightColor, type ViewPane } from '../components/SelectionContextMenu';
 import { useResponsiveSidebar } from '../hooks';
-import { reportData, claimsData, claimChartData } from '../data/mockData';
+import { reportData, claimsData, claimChartData, dependentClaimsData } from '../data/mockData';
 import { workbenchData } from '../data/workbenchData';
 import { StrategicReviewContent } from '../data/strategicReviewData';
 import { ScopeOfAnalysisContent } from '../data/scopeOfAnalysisData';
@@ -650,6 +651,44 @@ export const ConstrainedWorkspace = () => {
                 />
               ))}
             </section>
+
+            {/* Key dependent claim features - Option B only */}
+            {interactionMode === 'system' && (
+              <section style={{ marginTop: 'var(--space-6)' }}>
+                <h2 style={sectionHeadingStyles}>Key dependent claims</h2>
+                <div className="dependent-claims-list">
+                  {dependentClaimsData.slice(0, 4).map((dep) => (
+                    <Card key={dep.claimNumber} padded className="claim-card dependent-claim-card">
+                      <div className="claim-card__content">
+                        <div className="claim-card__header">
+                          <div className="dependent-claim-card__title-row">
+                            <h3 className="title-claim">Claim {dep.claimNumber}</h3>
+                            <span className="dependent-claim-card__depends">Depends on claim {dep.dependsOn}</span>
+                          </div>
+                          <Badge variant={dep.isNovel}>
+                            {dep.isNovel === 'novel' ? 'Novel' :
+                             dep.isNovel === 'likely-novel' ? 'Likely novel' :
+                             dep.isNovel === 'likely-not-novel' ? 'Likely not novel' : 'Not novel'}
+                          </Badge>
+                        </div>
+                        <p className="claim-card__reasoning">
+                          <strong>Adds:</strong> {dep.addsFeature}
+                        </p>
+                        <div className="claim-card__actions">
+                          <Button
+                            variant="secondary"
+                            size="small"
+                            onClick={() => handleClaimChartRefClick(dep.chartRowId)}
+                          >
+                            View in claims chart
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         );
 

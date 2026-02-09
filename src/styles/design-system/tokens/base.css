@@ -906,6 +906,41 @@ li {
 }
 
 /* ----------------------------------------
+ * Button Hover States
+ * ---------------------------------------- */
+.button--secondary:hover:not(:disabled) {
+  background-color: var(--color-accent) !important;
+  color: var(--color-white) !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ----------------------------------------
+ * Dependent Claims Section (Executive Summary)
+ * Compact cards matching claim card styling
+ * ---------------------------------------- */
+.dependent-claims-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.dependent-claim-card {
+  margin-bottom: var(--space-3);
+}
+
+.dependent-claim-card__title-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.dependent-claim-card__depends {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+/* ----------------------------------------
  * Thin Scrollbars
  * ---------------------------------------- */
 .app-shell-main {
